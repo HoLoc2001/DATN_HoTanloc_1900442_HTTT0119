@@ -11,18 +11,19 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   email String @unique
   avatar String?
   password  String
   firstName String?
   lastName  String?
   role  Role    @default(USER)
+
+  refreshToken String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   articles Article[]
-  refreshToken RefreshToken[]
 
   @@index([id])
   @@map("users")
@@ -30,12 +31,11 @@ model User {
 
 model Article {
   id        Int      @id @default(autoincrement())
-
   title       String
   content     String @db.Text
   likes Int[]
   comments Comment[]
-
+  tag String[]
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
@@ -54,13 +54,6 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([articleId])
-}
-
-model RefreshToken {
-  token String @unique
-  userId Int
-  User User @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
 }
 
 enum Role {

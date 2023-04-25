@@ -2,8 +2,6 @@ import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaClient } from '@prisma/client';
-import { Request } from 'express';
 
 type JwtPayload = {
   userId: number;

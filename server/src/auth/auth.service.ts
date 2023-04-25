@@ -13,10 +13,24 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
-    private jwt: JwtService,
-    private config: ConfigService,
+    private readonly prisma: PrismaService,
+    private readonly jwt: JwtService,
+    private readonly config: ConfigService,
   ) {}
+
+  googleLogin(req: any, res: any) {
+    if (!req.user) {
+      return 'No user from google';
+    }
+
+    return res.redirect('../../user');
+
+    return {
+      message: 'User information from google',
+      user: req.user,
+    };
+  }
+
   async signup(dto: AuthDto) {
     try {
       const emailExists = await this.prisma.user.findUnique({

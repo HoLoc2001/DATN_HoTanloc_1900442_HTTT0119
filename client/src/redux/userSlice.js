@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
 
-export const signIn = createAsyncThunk(
-  "user/signIn",
+export const signInLocal = createAsyncThunk(
+  "user/signInLocal",
   async (signInForm, thunkAPI) => {
     try {
-      const res = await axiosPublic.post("auth/signIn", signInForm);
+      const res = await axiosPublic.post("auth/signInLocal", signInForm);
       return { ...res.data, status: res.status };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response);
@@ -13,14 +13,17 @@ export const signIn = createAsyncThunk(
   }
 );
 
-export const signUp = createAsyncThunk("user/signUp", async (signUpForm) => {
-  try {
-    const res = await axiosPublic.post("auth/signUp", signUpForm);
-    return res.data;
-  } catch (error) {
-    console.log(error);
+export const signUpLocal = createAsyncThunk(
+  "user/signUpLocal",
+  async (signUpForm) => {
+    try {
+      const res = await axiosPublic.post("auth/signUpLocal", signUpForm);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -42,21 +45,21 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(signIn.fulfilled, (state, action) => {
+      .addCase(signInLocal.fulfilled, (state, action) => {
         localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
         localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
         state.isAuthenticated = action.payload?.status === 200 ? true : false;
       })
-      .addCase(signIn.rejected, (state, action) => {
+      .addCase(signInLocal.rejected, (state, action) => {
         state.isAuthenticated = action.payload.data.success;
       })
-      .addCase(signUp.fulfilled, (state, action) => {
+      .addCase(signUpLocal.fulfilled, (state, action) => {
         // state.token = action.payload?.token;
         localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
         localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
         state.isAuthenticated = action.payload?.success;
       })
-      .addCase(signUp.rejected, (state, action) => {
+      .addCase(signUpLocal.rejected, (state, action) => {
         state.isAuthenticated = action.payload.data.success;
       });
   },

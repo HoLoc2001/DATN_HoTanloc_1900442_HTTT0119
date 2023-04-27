@@ -1,14 +1,9 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
 
-export class GetArticlesDto {
+export class GetArticleById {
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  limit: number;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  offset: number;
+  id: number;
 }

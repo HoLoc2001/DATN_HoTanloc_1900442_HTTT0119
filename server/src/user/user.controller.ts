@@ -8,7 +8,7 @@ import { GoogleOAuthGuard } from 'src/auth/guards/google-oauth.guard';
 
 @Controller('api/user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @UseGuards(AccessTokenGuard)
   @Get('profile')

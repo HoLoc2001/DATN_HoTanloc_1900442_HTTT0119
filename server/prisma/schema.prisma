@@ -35,14 +35,24 @@ model Article {
   content     String @db.Text
   likes Int[]
   comments Comment[]
-  tags Int[]
   userId Int
   user   User @relation(fields: [userId], references: [id])
+  tags Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([id])
   @@map("articles")
+}
+
+
+model Tag {
+  name String @unique @id
+  description String?
+  articles Article[]
+
+  @@index([name])
+  @@map("tag")
 }
 
 model Comment {
@@ -54,15 +64,6 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@index([articleId])
-}
-
-model Tag {
-  id Int @id @default(autoincrement())
-  title String
-  description String
-
-  @@index([id])
-
 }
 
 enum Role {

@@ -15,7 +15,7 @@ import { AccessTokenGuard, RefreshTokenGuard } from 'src/auth/guards';
 import { GetUser } from './decorator';
 import { User } from '@prisma/client';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('api/auth')
 export class AuthController {
@@ -23,12 +23,17 @@ export class AuthController {
 
   @Get()
   @UseGuards(GoogleOAuthGuard)
-  async googleAuth(@Req() req: Request) {}
+  async googleAuth(@Req() req: Request) {
+    return 1;
+  }
 
   @UseGuards(GoogleOAuthGuard)
   @Get('google-redirect')
-  googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    return this.authService.googleLogin(req, res);
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = await this.authService.googleLogin(req, res);
+    res.send(user);
+
+    return user;
   }
 
   @Post('signupLocal')

@@ -6,6 +6,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { TagModule } from './tag/tag.module';
+import { LikeModule } from './like/like.module';
+import { SearchModule } from './search/search.module';
+import { CommentModule } from './comment/comment.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
 
 @Module({
   imports: [
@@ -19,6 +23,10 @@ import { TagModule } from './tag/tag.module';
     PrismaModule,
     CloudinaryModule,
     TagModule,
+    LikeModule,
+    SearchModule,
+    CommentModule,
+    BookmarkModule,
   ],
 })
 export class AppModule {}

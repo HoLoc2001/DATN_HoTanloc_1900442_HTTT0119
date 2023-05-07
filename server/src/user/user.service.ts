@@ -6,12 +6,48 @@ import { EditPassword, EditUser } from './dto';
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getProfile(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        avatar: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+      },
+    });
+    return user;
+  }
+
+  async getUserById(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        avatar: true,
+        firstName: true,
+        lastName: true,
+        createdAt: true,
+      },
+    });
+    return user;
+  }
+
   async editUser(userId: number, dto: EditUser) {
     const user = await this.prisma.user.update({
       where: {
         id: userId,
       },
       data: {
+        avatar: dto.avatar,
         lastName: dto.lastName,
         firstName: dto.firstName,
       },

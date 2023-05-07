@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AddTagDto } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TagService {
@@ -17,8 +19,35 @@ export class TagService {
           mode: 'insensitive',
         },
       },
+      include: {
+        articles: {
+          skip: 2,
+          take: 2,
+          include: {
+            tags: true,
+          },
+        },
+      },
     });
-    console.log(tag);
     return tag;
+  }
+
+  async addTag(dto: AddTagDto) {
+    try {
+      const tag = await this.prisma.tag.create({
+        data: {
+          name: dto.name,
+        },
+      });
+
+      return tag;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('Tag already exists');
+        }
+      }
+      throw error;
+    }
   }
 }

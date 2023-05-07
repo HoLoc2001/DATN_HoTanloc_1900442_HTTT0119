@@ -9,6 +9,10 @@ export class AddArticle {
   @IsNotEmpty()
   content: string;
 
+  @IsString()
+  @IsNotEmpty()
+  thumbnail: string;
+
   @IsArray()
   tags: string[];
 }

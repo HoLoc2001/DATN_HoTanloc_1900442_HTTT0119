@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -14,9 +15,11 @@ import { ArticleService } from './article.service';
 import { AccessTokenGuard } from 'src/auth/guards';
 import {
   UpdateArticleDto,
-  GetArticleById,
   GetArticlesDto,
   AddArticle,
+  DeleteArticle,
+  GetArticleByIdDto,
+  GetArticlesByUserIdDto,
 } from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
@@ -26,14 +29,33 @@ import { Response } from 'express';
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
-  @Get(':id')
-  getArticleById(@Param() params: GetArticleById) {
-    this.articleService.getArticle(params.id);
+  @Get('all')
+  async getAllArticles() {
+    return await this.articleService.getAllArticles();
+  }
+
+  @Get(':articleId')
+  async getArticleById(@Param() params: GetArticleByIdDto) {
+    return await this.articleService.getArticle(params.articleId);
   }
 
   @Get()
-  getArticles(@Query() params: GetArticlesDto) {
-    return this.articleService.getArticles(params);
+  async getArticles(@Query() params: GetArticlesDto, @Res() res: Response) {
+    const articles = await this.articleService.getArticles(params);
+    if (articles) {
+      return res.json(articles);
+    }
+    return res
+      .status(HttpStatus.NO_CONTENT)
+      .json({ statusCode: 204, msg: 'NO_CONTENT' });
+  }
+
+  @Get('user/:userId')
+  async getArticlesByUserId(
+    @Param() user: GetArticlesByUserIdDto,
+    @Query() params: GetArticlesDto,
+  ) {
+    return await this.articleService.getArticlesByUserId(user.userId, params);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -44,16 +66,16 @@ export class ArticleController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Put(':id')
+  @Put(':articleId')
   async updateArticle(
-    @Param() params: GetArticleById,
+    @Param() params: GetArticleByIdDto,
     @Body() dto: UpdateArticleDto,
     @GetUser() user: User,
     @Res() res: Response,
   ) {
     const { count } = await this.articleService.updateArticle(
       user['userId'],
-      params.id,
+      params.articleId,
       dto,
     );
 
@@ -64,5 +86,16 @@ export class ArticleController {
     return res
       .status(HttpStatus.PRECONDITION_FAILED)
       .json({ statusCode: 412, msg: 'PRECONDITION_FAILED' });
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Delete(':articleId')
+  async deleteArticle(
+    @Param() params: GetArticleByIdDto,
+    @GetUser() user: User,
+    @Res() res: Response,
+  ) {
+    await this.articleService.deleteArticle(user['userId'], params.articleId);
+    return res.status(HttpStatus.OK).json({ statusCode: 200, msg: 'OK' });
   }
 }

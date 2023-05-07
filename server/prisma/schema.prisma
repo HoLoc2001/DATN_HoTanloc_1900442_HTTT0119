@@ -11,44 +11,50 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  avatar String?
-  password  String?
-  firstName String?
-  lastName  String?
-  role  Role  @default(USER)
-  provider Provider  @default(LOCAL)
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  avatar       String?
+  password     String?
+  firstName    String?
+  lastName     String?
+  role         Role       @default(USER)
+  provider     Provider   @default(LOCAL)
+  github       String?
+  linkedin     String?
   refreshToken String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  articles Article[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  likes        Like[]
+  comments     Comment[]
+  articles     Article[]
+  bookmarks    Bookmark[]
 
   @@index([id])
   @@map("users")
 }
 
 model Article {
-  id   Int      @id @default(autoincrement())
-  title   String
-  content     String @db.Text
-  likes Int[]
-  comments Comment[]
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-  tags Tag[]
+  id        Int        @id @default(autoincrement())
+  title     String
+  content   String     @db.Text
+  thumbnail String
+  views     Int        @default(0)
+  likes     Like[]
+  comments  Comment[]
+  bookmarks Bookmark[]
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  tags      Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@index([id])
   @@map("articles")
 }
 
-
 model Tag {
-  name String @unique @id
-  description String?
+  name     String    @id @unique
   articles Article[]
 
   @@index([name])
@@ -56,14 +62,37 @@ model Tag {
 }
 
 model Comment {
-  id     Int @id @default(autoincrement())
-  content String
-  Article Article? @relation(fields: [articleId], references: [id])
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  content   String
+  Article   Article? @relation(fields: [articleId], references: [id])
   articleId Int
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   @@index([articleId])
+}
+
+model Like {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  Article   Article? @relation(fields: [articleId], references: [id])
+  articleId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, articleId])
+  @@index([articleId])
+}
+
+model Bookmark {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  Article   Article? @relation(fields: [articleId], references: [id])
+  articleId Int
+
+  @@id([userId, articleId])
 }
 
 enum Role {

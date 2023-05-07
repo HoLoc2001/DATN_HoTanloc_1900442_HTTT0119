@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Alert,
   Box,
@@ -15,12 +15,15 @@ import {
 } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { signIn } from "../redux/userSlice";
+import { article, loginGoogle, signInLocal } from "../redux/userSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
   const isSuccessAuth = useAppSelector((state) => state.user.isAuthenticated);
+  let article2 = "";
+  article2 = useAppSelector((state) => state.user.article);
+
   // const isForgetPass = useAppSelector((state) => state.user.isForgetPass);
 
   const [loadingBtnForgetPass, setLoadingBtnForgetPass] = useState({
@@ -55,7 +58,7 @@ const SignIn = () => {
     if (!email || !password) {
       return setErrMissInput(true);
     }
-    await dispatch(signIn(signinForm));
+    await dispatch(signInLocal(signinForm));
     if (!isSuccessAuth) {
       setErrSignIn(true);
     }
@@ -96,6 +99,10 @@ const SignIn = () => {
     }
   };
 
+  const handleClickGoogle = async () => {
+    await dispatch(loginGoogle());
+  };
+
   const keyPressForgetPass = async (e) => {
     if (e.key === "Enter") {
       if (validateEmailRegex(validateEmail)) {
@@ -116,8 +123,15 @@ const SignIn = () => {
     }
   };
 
+  const handleOnclick = async () => {
+    console.log(1);
+    await dispatch(article());
+  };
+
   return (
     <>
+      <div dangerouslySetInnerHTML={{ __html: article2 }}></div>
+      <Button onClick={handleOnclick}>click</Button>
       <Box
         sx={{
           width: "50%",
@@ -164,6 +178,11 @@ const SignIn = () => {
           <Button variant="contained" onClick={handleClickSignin}>
             Đăng nhập
           </Button>
+
+          <Button variant="contained" onClick={handleClickGoogle}>
+            Đăng nhập Google
+          </Button>
+
           <Button variant="contained" onClick={() => setOpenForgetPass(true)}>
             Quên mật khẩu
           </Button>

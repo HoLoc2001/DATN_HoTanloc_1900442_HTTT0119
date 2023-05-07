@@ -1,37 +1,92 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   UpdateArticleDto,
   GetArticlesDto,
-  GetArticleById,
   AddArticle,
+  GetArticlesByUserIdDto,
 } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ArticleService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getArticle(articleId: number) {
-    const article = await this.prisma.article.findUnique({
-      where: {
-        id: articleId,
-      },
-      include: {
-        tags: true,
-      },
-    });
-    return article;
+    try {
+      const article = await this.prisma.article.update({
+        data: {
+          views: {
+            increment: 1,
+          },
+        },
+        where: {
+          id: articleId,
+        },
+        include: {
+          tags: true,
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      return article;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getArticles(params: GetArticlesDto) {
-    const articles = await this.prisma.article.findMany({
-      skip: params.offset,
-      take: params.limit,
-      include: {
-        tags: true,
-      },
-    });
-    return articles;
+    try {
+      const articles = await this.prisma.article.findMany({
+        skip: params.offset,
+        take: params.limit,
+        include: {
+          tags: true,
+        },
+      });
+      return articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllArticles() {
+    try {
+      const articles = await this.prisma.article.findMany({
+        include: {
+          tags: true,
+        },
+      });
+      return articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getArticlesByUserId(userId: number, params: GetArticlesDto) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { userId: userId },
+        skip: params.offset,
+        take: params.limit,
+        include: {
+          tags: true,
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      return articles;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async addArticle(userId: number, dto: AddArticle) {
@@ -45,7 +100,8 @@ export class ArticleService {
         data: {
           title: dto.title,
           content: dto.content,
-          userId,
+          userId: userId,
+          thumbnail: dto.thumbnail,
           tags: {
             connect: tagsArr,
           },
@@ -57,7 +113,12 @@ export class ArticleService {
 
       return article;
     } catch (error) {
-      return error;
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new ForbiddenException('Tag does not exist');
+        }
+      }
+      throw error;
     }
   }
 
@@ -66,17 +127,29 @@ export class ArticleService {
     articleId: number,
     dto: UpdateArticleDto,
   ) {
-    const article = await this.prisma.article.updateMany({
-      data: {
-        title: dto.title,
-        content: dto.content,
-      },
-      where: {
-        id: articleId,
-        userId: userId,
-      },
-    });
+    try {
+      const article = await this.prisma.article.updateMany({
+        data: {
+          title: dto.title,
+          content: dto.content,
+        },
+        where: {
+          id: articleId,
+          userId: userId,
+        },
+      });
 
-    return article;
+      return article;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteArticle(userId: number, articleId: number) {
+    try {
+      await this.prisma.article.deleteMany({
+        where: { id: articleId, userId: userId },
+      });
+    } catch (error) {}
   }
 }

@@ -2,6 +2,8 @@ import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Editor from "./components/Editor";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -19,8 +21,9 @@ const App = () => {
               <Route path="/search" element={<Search />} />
               <Route path="/:id" element={<OtherUser />} />
             </Route>
-          </Route>
-          <Route path="/" element={<HomeNotSignIn />} /> */}
+          </Route>*/}
+          <Route path="/" element={<Home />} />
+          <Route path="/editor" element={<Editor />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

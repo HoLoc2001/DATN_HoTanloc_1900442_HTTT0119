@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -18,16 +19,45 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
 
-  googleLogin(req: any, res: any) {
+  async googleLogin(req: any, res: any) {
     if (!req.user) {
       return 'No user from google';
     }
+    // return res.redirect('../../user');
+    const isUser = await this.prisma.user.findUnique({
+      where: {
+        email: req.user.email,
+      },
+    });
+    if (isUser) {
+      const tokens = await this.signToken(isUser.id);
+      console.log(1);
+      return {
+        ...tokens,
 
-    return res.redirect('../../user');
+        message: 'Login from google successfully',
+      };
+    }
 
+    const user = await this.prisma.user.create({
+      data: {
+        email: req.user.email,
+        avatar: req.user.picture,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        provider: 'GOOGLE',
+      },
+    });
+
+    if (!user) {
+      throw new InternalServerErrorException('Error creating user');
+    }
+
+    const tokens = await this.signToken(user.id);
+    await this.refreshTokens(user.id, tokens.refreshToken);
     return {
-      message: 'User information from google',
-      user: req.user,
+      message: 'Login from google successfully',
+      ...tokens,
     };
   }
 

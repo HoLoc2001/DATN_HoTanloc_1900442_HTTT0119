@@ -25,6 +25,29 @@ export const signUpLocal = createAsyncThunk(
   }
 );
 
+export const article = createAsyncThunk("user/article", async () => {
+  try {
+    console.log(23);
+    const res = await axiosPublic.get("article?limit=1&offset=4");
+    console.log(res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export const loginGoogle = createAsyncThunk(
+  "user/loginGoogle",
+  async (signUpForm) => {
+    try {
+      const res = await axiosPublic.get("auth");
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -42,6 +65,7 @@ export const userSlice = createSlice({
     isAuthenticated: null,
     isPassValue: null,
     isForgetPass: null,
+    article: null,
   },
   extraReducers: (builder) => {
     builder
@@ -61,6 +85,14 @@ export const userSlice = createSlice({
       })
       .addCase(signUpLocal.rejected, (state, action) => {
         state.isAuthenticated = action.payload.data.success;
+      })
+      .addCase(article.fulfilled, (state, action) => {
+        console.log(action.payload[0]);
+        state.article = action.payload[0].content;
+      })
+      .addCase(loginGoogle.fulfilled, (state, action) => {
+        localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
+        localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
       });
   },
 });

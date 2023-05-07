@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signUp } from "../redux/userSlice";
+import { signUpLocal } from "../redux/userSlice";
 import { useAppSelector } from "../redux/store";
 // import { signUpValidate } from "../utils/validation";
 // import Alert from "../components/AlertErr";
@@ -45,7 +45,7 @@ const SignUp = () => {
       console.log(error);
       setErrMissInput(true);
     } else {
-      await dispatch(signUp(signUpForm));
+      await dispatch(signUpLocal(signUpForm));
       if (!isSuccessAuth) {
         setErrMissInput(true);
       }

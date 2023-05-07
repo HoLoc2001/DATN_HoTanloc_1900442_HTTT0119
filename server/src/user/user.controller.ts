@@ -1,10 +1,18 @@
+import { GetUserById } from './dto/getUserById.dto';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AccessTokenGuard } from 'src/auth/guards';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 import { EditPassword, EditUser } from './dto';
-import { GoogleOAuthGuard } from 'src/auth/guards/google-oauth.guard';
 
 @Controller('api/user')
 export class UserController {
@@ -12,19 +20,24 @@ export class UserController {
 
   @UseGuards(AccessTokenGuard)
   @Get('profile')
-  getMe(@GetUser() user: User) {
-    return user;
+  async getMe(@GetUser() user: User) {
+    return await this.userService.getProfile(user['userId']);
+  }
+
+  @Get(':id')
+  async getUserById(@Param() params: GetUserById) {
+    return await this.userService.getUserById(params.id);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch('edit')
-  edit(@GetUser() user: User, @Body() dto: EditUser) {
-    return this.userService.editUser(user.id, dto);
+  async edit(@GetUser() user: User, @Body() dto: EditUser) {
+    return await this.userService.editUser(user.id, dto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch('editPassword')
-  editPassword(@GetUser() user: User, @Body() dto: EditPassword) {
-    return this.userService.editPassword(user.id, dto);
+  async editPassword(@GetUser() user: User, @Body() dto: EditPassword) {
+    return await this.userService.editPassword(user.id, dto);
   }
 }

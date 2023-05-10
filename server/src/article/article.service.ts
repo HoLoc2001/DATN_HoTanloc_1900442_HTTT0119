@@ -44,8 +44,28 @@ export class ArticleService {
       const articles = await this.prisma.article.findMany({
         skip: params.offset,
         take: params.limit,
-        include: {
+
+        select: {
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
           tags: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
         },
       });
       return articles;

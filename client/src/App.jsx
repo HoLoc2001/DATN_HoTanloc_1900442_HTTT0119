@@ -4,6 +4,10 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Editor from "./components/Editor";
 import Home from "./pages/Home";
+import Article from "./components/Article";
+import Search from "./components/Search";
+import Bookmark from "./components/Bookmark";
+import ReadArticle from "./components/Article/ReadArticle";
 
 const App = () => {
   return (
@@ -22,7 +26,12 @@ const App = () => {
               <Route path="/:id" element={<OtherUser />} />
             </Route>
           </Route>*/}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />}>
+            <Route path="/" element={<Article />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/bookmarks" element={<Bookmark />} />
+            <Route path="/:articleId" element={<ReadArticle />} />
+          </Route>
           <Route path="/editor" element={<Editor />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />

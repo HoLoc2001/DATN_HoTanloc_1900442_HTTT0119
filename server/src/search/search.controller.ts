@@ -8,6 +8,6 @@ export class SearchController {
 
   @Get()
   getSearch(@Query() params: SearchDto) {
-    console.log(params);
+    return this.searchService.searchArticles();
   }
 }

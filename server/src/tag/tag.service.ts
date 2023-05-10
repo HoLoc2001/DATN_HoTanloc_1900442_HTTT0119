@@ -11,6 +11,18 @@ export class TagService {
     return tags;
   }
 
+  async getPopularTags() {
+    const tags = await this.prisma.tag.findMany({
+      orderBy: {
+        articles: {
+          _count: 'asc',
+        },
+      },
+      take: 10,
+    });
+    return tags;
+  }
+
   async getTagById(name: string) {
     const tag = await this.prisma.tag.findMany({
       where: {

@@ -11,6 +11,11 @@ export class TagController {
     return this.tagService.getTags();
   }
 
+  @Get('popular')
+  getPopularTags() {
+    return this.tagService.getPopularTags();
+  }
+
   @Get(':name')
   async getTagById(@Param() params: GetTagById) {
     return await this.tagService.getTagById(params.name);

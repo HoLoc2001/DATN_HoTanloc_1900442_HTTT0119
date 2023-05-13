@@ -31,8 +31,8 @@ const InfiniteScroll = ({ children, getMore, hasMore }) => {
         {hasMore ? (
           <CircularProgress ref={pageEndRef} />
         ) : (
-          // <h3 style={{ marginRight: "45%" }}>Không có bài viết mới</h3>
-          <CircularProgress />
+          <h3 style={{ marginRight: "45%" }}></h3>
+          // <CircularProgress />
         )}
       </div>
     </>

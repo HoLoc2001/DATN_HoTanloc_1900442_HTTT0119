@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { AccessTokenGuard } from 'src/auth/guards';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 import { Response } from 'express';
-import { GetArticleId } from './dto';
+import { GetArticleId, GetBookmarksDto } from './dto';
 
 @Controller('api/bookmark')
 export class BookmarkController {
@@ -21,8 +22,16 @@ export class BookmarkController {
 
   @UseGuards(AccessTokenGuard)
   @Get()
-  async getBookmarks(@GetUser() user: User, @Res() res: Response) {
-    const articles = await this.bookmarkService.getBookmarks(user['userId']);
+  async getBookmarks(
+    @GetUser() user: User,
+    @Res() res: Response,
+    @Query() query: GetBookmarksDto,
+  ) {
+    const articles = await this.bookmarkService.getBookmarks(
+      user['userId'],
+      query,
+    );
+
     if (articles) {
       return res.status(HttpStatus.OK).json(articles);
     }

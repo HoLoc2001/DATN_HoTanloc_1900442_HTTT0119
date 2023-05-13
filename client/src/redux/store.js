@@ -7,15 +7,16 @@ import { tagSlice } from "./tagSlice";
 import { articleSlice } from "./articleSlice";
 import { authSlice } from "./authSlice";
 import { themeSlice } from "./themeSlice";
+import { bookmarkSlice } from "./bookmarkSlice";
 
 export const store = configureStore({
   reducer: {
-    // posts: postsSlice.reducer,
     user: userSlice.reducer,
     auth: authSlice.reducer,
     tag: tagSlice.reducer,
     article: articleSlice.reducer,
     theme: themeSlice.reducer,
+    bookmark: bookmarkSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

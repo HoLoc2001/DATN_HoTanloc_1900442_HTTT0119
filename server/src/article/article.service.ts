@@ -39,11 +39,11 @@ export class ArticleService {
     }
   }
 
-  async getArticles(params: GetArticlesDto) {
+  async getArticles(query: GetArticlesDto) {
     try {
       const articles = await this.prisma.article.findMany({
-        skip: params.offset,
-        take: params.limit,
+        skip: query.offset,
+        take: query.limit,
 
         select: {
           userId: true,
@@ -87,12 +87,12 @@ export class ArticleService {
     }
   }
 
-  async getArticlesByUserId(userId: number, params: GetArticlesDto) {
+  async getArticlesByUserId(userId: number, query: GetArticlesDto) {
     try {
       const articles = await this.prisma.article.findMany({
         where: { userId: userId },
-        skip: params.offset,
-        take: params.limit,
+        skip: query.offset,
+        take: query.limit,
         include: {
           tags: true,
           _count: {

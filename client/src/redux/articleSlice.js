@@ -1,14 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
 
-export const getArticles = createAsyncThunk("article/getArticles", async () => {
-  try {
-    const res = await axiosPublic.get("article?limit=10&offset=30");
-    return res.data;
-  } catch (error) {
-    console.log(error);
+export const getArticles = createAsyncThunk(
+  "article/getArticles",
+  async (page, { getState }) => {
+    try {
+      const { articles } = getState().article;
+      const res = await axiosPublic.get(`article?limit=10&offset=${page}`);
+      const data = [...articles, ...res.data];
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const getArticleByArticleId = createAsyncThunk(
   "article/getArticleByArticleId",
@@ -25,7 +30,7 @@ export const getArticleByArticleId = createAsyncThunk(
 export const articleSlice = createSlice({
   name: "article",
   initialState: {
-    articles: null,
+    articles: [],
     article: null,
   },
   extraReducers: (builder) => {

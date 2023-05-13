@@ -1,12 +1,13 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { GetBookmarksDto } from './dto';
 
 @Injectable()
 export class BookmarkService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getBookmarks(userId: number) {
+  async getBookmarks(userId: number, query: GetBookmarksDto) {
     try {
       const articles = await this.prisma.bookmark.findMany({
         select: {
@@ -23,10 +24,20 @@ export class BookmarkService {
                   comments: true,
                 },
               },
+              user: {
+                select: {
+                  id: true,
+                  avatar: true,
+                  firstName: true,
+                  lastName: true,
+                },
+              },
               createdAt: true,
             },
           },
         },
+        skip: query.offset,
+        take: query.limit,
 
         where: {
           userId: userId,

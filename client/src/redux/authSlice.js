@@ -17,7 +17,9 @@ export const signUpLocal = createAsyncThunk(
   "auth/signUpLocal",
   async (signUpForm) => {
     try {
+      console.log(signUpForm);
       const res = await axiosPublic.post("auth/signUpLocal", signUpForm);
+      console.log(res.data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -27,7 +29,6 @@ export const signUpLocal = createAsyncThunk(
 
 export const article = createAsyncThunk("user/article", async () => {
   try {
-    console.log(23);
     const res = await axiosPublic.get("article?limit=1&offset=4");
     console.log(res);
     return res.data;
@@ -56,24 +57,24 @@ export const authSlice = createSlice({
       refreshToken: localStorage["RT"] || null,
     },
     validateEmail: false,
-    isAuthenticated: null,
+    isAuthenticated: localStorage["RT"] ? true : false,
     article: null,
     signed: false,
   },
   extraReducers: (builder) => {
     builder
       .addCase(signInLocal.fulfilled, (state, action) => {
-        localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
-        localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
-        state.isAuthenticated = action.payload?.status === 200 ? true : false;
+        localStorage.setItem("AT", action.payload?.accessToken || "");
+        localStorage.setItem("RT", action.payload?.refreshToken || "");
+        state.isAuthenticated = action.payload?.success;
       })
       .addCase(signInLocal.rejected, (state, action) => {
         state.isAuthenticated = action.payload.data.success;
       })
       .addCase(signUpLocal.fulfilled, (state, action) => {
-        // state.token = action.payload?.token;
-        localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
-        localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
+        state.token = action.payload?.token;
+        localStorage.setItem("AT", action.payload?.accessToken || "");
+        localStorage.setItem("RT", action.payload?.refreshToken || "");
         state.isAuthenticated = action.payload?.success;
       })
       .addCase(signUpLocal.rejected, (state, action) => {

@@ -21,6 +21,7 @@ export class UserController {
   @UseGuards(AccessTokenGuard)
   @Get('profile')
   async getMe(@GetUser() user: User) {
+    console.log(123, user);
     return await this.userService.getProfile(user['userId']);
   }
 

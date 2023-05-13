@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { TagService } from './tag.service';
-import { AddTagDto, GetTagById } from './dto';
+import { AddTagDto, GetTagById, GetTagDto } from './dto';
 
 @Controller('api/tags')
 export class TagController {
@@ -17,8 +17,8 @@ export class TagController {
   }
 
   @Get(':name')
-  async getTagById(@Param() params: GetTagById) {
-    return await this.tagService.getTagById(params.name);
+  async getTagById(@Param() params: GetTagById, @Query() query: GetTagDto) {
+    return await this.tagService.getTagById(params.name, query);
   }
 
   @Post()

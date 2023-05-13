@@ -9,6 +9,7 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -32,11 +33,11 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     padding: 0,
     transform: "translateX(6px)",
     "&.Mui-checked": {
-      color: "#fff",
+      color: "rgb(255 248 248)",
       transform: "translateX(22px)",
       "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          "#fff"
+          "rgb(255 248 248)"
         )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
       },
       "& + .MuiSwitch-track": {
@@ -59,7 +60,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        "#fff"
+        "rgb(255 248 248)"
       )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
     },
   },
@@ -74,6 +75,8 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
 
   const signed = useAppSelector((state) => state.auth.signed);
+  const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const user = useAppSelector((state) => state.user.user);
   const themeColor = useAppSelector((state) => state.theme.color);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -92,15 +95,17 @@ const Navbar = () => {
       dispatch(setThemeColorStore("light"));
     }
   };
+
   return (
     <>
       <AppBar
         position="fixed"
         sx={{
-          color: "while",
-          backgroundColor: "#0E1217",
+          backgroundColor: `${
+            themeColor === "light" ? "rgb(255 248 248)" : "#000000"
+          }`,
           height: "56px",
-          borderBottom: "1px solid #fff",
+          borderBottom: "1px solid rgb(255 248 248)",
         }}
       >
         <Container maxWidth="xl">
@@ -122,75 +127,95 @@ const Navbar = () => {
                     sx={{
                       mr: 2,
                       fontFamily: "monospace",
+                      color: `${
+                        themeColor === "light" ? "black" : "rgb(255 248 248)"
+                      }`,
                       fontWeight: 700,
                       letterSpacing: ".3rem",
                       textDecoration: "none",
                       fontSize: "30px",
-                      color: "whitesmoke",
                     }}
-                    // onClick={() => (window.location.href = "/")}
+                    onClick={() =>
+                      window.scroll({ top: 0, left: 0, behavior: "smooth" })
+                    }
                   >
                     Article
                   </Typography>
                 </Link>
               </Box>
 
-              {signed ? (
-                <Box>
-                  <IconButton
-                    color="white"
-                    id="basic-button"
-                    aria-controls={open ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <Avatar src="https://lh3.googleusercontent.com/a/AEdFTp62pApa_Hbzkfqy9NOGne2iMXf7Wwj93L-u9J31=s96-c" />
-                  </IconButton>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
-                  </Menu>
-                </Box>
-              ) : (
-                <Box>
-                  <Button
-                    sx={{
-                      color: "#fff",
-                      border: "1px solid #fff",
-                      ":hover": {
-                        backgroundColor: "rgba(45,50,59,255)",
-                        color: "rgba(249,242,222,255)",
-                      },
-                    }}
-                  >
-                    Sign In
-                  </Button>
-                  <FormControlLabel
-                    control={
-                      <MaterialUISwitch
-                        sx={{ m: 1 }}
-                        onChange={handleSwitch}
-                        checked={themeColor === "dark" ? true : false}
-                      />
-                    }
-                  />
-                </Box>
-              )}
+              <Box>
+                {isSuccessAuth ? (
+                  <>
+                    <Tooltip title={`${user.firstName} ${user.lastName}`}>
+                      <IconButton
+                        color="white"
+                        id="basic-button"
+                        aria-controls={open ? "basic-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                      >
+                        <Avatar src={user?.avatar} />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    </Menu>
+                  </>
+                ) : (
+                  <Link to={"./signin"} style={{ textDecoration: "none" }}>
+                    <Button
+                      sx={{
+                        color: `${
+                          themeColor === "light" ? "black" : "rgb(255 248 248)"
+                        }`,
+                        border: `1px solid ${
+                          themeColor === "light" ? "black" : "rgb(255 248 248)"
+                        }`,
+                        ":hover": {
+                          backgroundColor: `${
+                            themeColor === "light"
+                              ? "rgb(226 227 243)"
+                              : "rgba(45,50,59,255)"
+                          }`,
+                          color: `${
+                            themeColor === "light"
+                              ? "black"
+                              : "rgba(249,242,222,255)"
+                          }`,
+                        },
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
+                )}
+                <FormControlLabel
+                  control={
+                    <MaterialUISwitch
+                      sx={{ m: 1 }}
+                      onChange={handleSwitch}
+                      checked={themeColor === "dark" ? true : false}
+                    />
+                  }
+                />
+              </Box>
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-      <Toolbar color="#fff" />
+      <Toolbar color="rgb(255 248 248)" />
 
       {/* <Snackbar
       open={errMissInput}

@@ -23,6 +23,7 @@ export class AuthService {
     if (!req.user) {
       return 'No user from google';
     }
+    console.log(12);
     // return res.redirect('../../user');
     const isUser = await this.prisma.user.findUnique({
       where: {
@@ -55,10 +56,7 @@ export class AuthService {
 
     const tokens = await this.signToken(user.id);
     await this.refreshTokens(user.id, tokens.refreshToken);
-    return {
-      message: 'Login from google successfully',
-      ...tokens,
-    };
+    return tokens;
   }
 
   async signup(dto: AuthDto) {
@@ -111,8 +109,9 @@ export class AuthService {
       delete user.password;
 
       const tokens = await this.signToken(user.id);
+
       await this.updateRefreshToken(user.id, tokens.refreshToken);
-      return { tokens };
+      return tokens;
     } catch (error) {
       throw error;
     }

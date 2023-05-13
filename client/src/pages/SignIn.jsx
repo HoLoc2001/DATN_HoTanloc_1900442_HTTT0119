@@ -15,14 +15,13 @@ import {
 } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { article, loginGoogle, signInLocal } from "../redux/userSlice";
 import { useAppDispatch, useAppSelector } from "../redux/store";
+import { signInLocal } from "../redux/authSlice";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
-  const isSuccessAuth = useAppSelector((state) => state.user.isAuthenticated);
-  let article2 = "";
-  article2 = useAppSelector((state) => state.user.article);
+  const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  console.log(isSuccessAuth);
 
   // const isForgetPass = useAppSelector((state) => state.user.isForgetPass);
 
@@ -99,10 +98,6 @@ const SignIn = () => {
     }
   };
 
-  const handleClickGoogle = async () => {
-    await dispatch(loginGoogle());
-  };
-
   const keyPressForgetPass = async (e) => {
     if (e.key === "Enter") {
       if (validateEmailRegex(validateEmail)) {
@@ -123,15 +118,10 @@ const SignIn = () => {
     }
   };
 
-  const handleOnclick = async () => {
-    console.log(1);
-    await dispatch(article());
-  };
-
-  return (
+  return isSuccessAuth ? (
+    <Navigate to="/" replace />
+  ) : (
     <>
-      <div dangerouslySetInnerHTML={{ __html: article2 }}></div>
-      <Button onClick={handleOnclick}>click</Button>
       <Box
         sx={{
           width: "50%",
@@ -179,7 +169,11 @@ const SignIn = () => {
             Đăng nhập
           </Button>
 
-          <Button variant="contained" onClick={handleClickGoogle}>
+          <Button
+            variant="contained"
+            href="http://localhost:5000/api/auth/google-redirect"
+            // onClick={handleClickGoogle}
+          >
             Đăng nhập Google
           </Button>
 

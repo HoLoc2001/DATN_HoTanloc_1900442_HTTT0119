@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signUpLocal } from "../redux/userSlice";
+import { signUpLocal } from "../redux/authSlice";
 import { useAppSelector } from "../redux/store";
 // import { signUpValidate } from "../utils/validation";
 // import Alert from "../components/AlertErr";

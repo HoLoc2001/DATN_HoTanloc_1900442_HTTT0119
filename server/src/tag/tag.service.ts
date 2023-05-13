@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddTagDto } from './dto';
+import { AddTagDto, GetTagDto } from './dto';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -23,7 +23,8 @@ export class TagService {
     return tags;
   }
 
-  async getTagById(name: string) {
+  async getTagById(name: string, query: GetTagDto) {
+    console.log(name);
     const tag = await this.prisma.tag.findMany({
       where: {
         name: {
@@ -33,14 +34,28 @@ export class TagService {
       },
       include: {
         articles: {
-          skip: 2,
-          take: 2,
+          skip: query.offset,
+          take: query.limit,
           include: {
-            tags: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
+            },
           },
         },
       },
     });
+
     return tag;
   }
 

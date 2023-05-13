@@ -23,6 +23,7 @@ const Sidebar = () => {
 
   const listTags = useAppSelector((state) => state.tag.tags);
   const signed = useAppSelector((state) => state.auth.signed);
+  const themeColor = useAppSelector((state) => state.theme.color);
 
   useEffect(() => {
     (async () => {
@@ -39,8 +40,10 @@ const Sidebar = () => {
       position="fixed"
       width="15%"
       height="100%"
-      color="rgba(163,174,201,255)"
-      sx={{ borderRight: "1px solid #fff" }}
+      color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
+      sx={{
+        borderRight: `1px solid ${themeColor === "light" ? "#1A2027" : "#fff"}`,
+      }}
     >
       <Divider />
       <List>
@@ -49,7 +52,7 @@ const Sidebar = () => {
             to="/"
             style={{
               display: "flex",
-              color: "rgba(163,174,201,255)",
+              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
               textDecoration: "none",
               width: "100%",
             }}
@@ -57,19 +60,19 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: "rgba(45,50,59,255)",
-                  color: "rgba(249,242,222,255)",
+                  backgroundColor: `${
+                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+                  }`,
+                  color: `${
+                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+                  }`,
                 },
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: "#fff",
+                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
                   minWidth: "35px",
-                  ":hover": {
-                    color: "rgba(249,242,222,255)",
-                    backgroundColor: "rgba(45,50,59,255)",
-                  },
                 }}
               >
                 <HomeIcon />
@@ -83,7 +86,7 @@ const Sidebar = () => {
             to="/bookmarks"
             style={{
               display: "flex",
-              color: "rgba(163,174,201,255)",
+              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
               textDecoration: "none",
               width: "100%",
             }}
@@ -91,19 +94,19 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: "rgba(45,50,59,255)",
-                  color: "rgba(249,242,222,255)",
+                  backgroundColor: `${
+                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+                  }`,
+                  color: `${
+                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+                  }`,
                 },
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: "#fff",
+                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
                   minWidth: "35px",
-                  ":hover": {
-                    color: "rgba(249,242,222,255)",
-                    backgroundColor: "rgba(45,50,59,255)",
-                  },
                 }}
               >
                 <BookmarkIcon />
@@ -117,7 +120,7 @@ const Sidebar = () => {
             to="/search"
             style={{
               display: "flex",
-              color: "rgba(163,174,201,255)",
+              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
               textDecoration: "none",
               width: "100%",
             }}
@@ -125,20 +128,20 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: "rgba(45,50,59,255)",
-                  color: "rgba(249,242,222,255)",
+                  backgroundColor: `${
+                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+                  }`,
+                  color: `${
+                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+                  }`,
                 },
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: "#fff",
+                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
                   alignItems: "center",
                   minWidth: "35px",
-                  ":hover": {
-                    color: "rgba(249,242,222,255)",
-                    backgroundColor: "rgba(45,50,59,255)",
-                  },
                 }}
               >
                 <SearchIcon />
@@ -172,19 +175,30 @@ const Sidebar = () => {
         }}
       >
         {listTags?.map((tag) => (
-          <Typography
-            key={tag.name}
-            sx={{
-              paddingLeft: "20px",
-              ":hover": {
-                backgroundColor: "rgba(45,50,59,255)",
-                color: "rgba(249,242,222,255)",
-                cursor: "pointer",
-              },
+          <Link
+            to={`./tag/${tag.name}`}
+            style={{
+              textDecoration: "none",
+              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
             }}
+            key={tag.name}
           >
-            #{tag.name}
-          </Typography>
+            <Typography
+              sx={{
+                paddingLeft: "20px",
+                ":hover": {
+                  backgroundColor: `${
+                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+                  }`,
+                  color: `${
+                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+                  }`,
+                },
+              }}
+            >
+              #{tag.name}
+            </Typography>
+          </Link>
         ))}
       </Box>
 

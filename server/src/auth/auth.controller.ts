@@ -30,21 +30,26 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   @Get('google-redirect')
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    const user = await this.authService.googleLogin(req, res);
-    res.send(user);
-
-    return user;
+    const tokens = await this.authService.googleLogin(req, res);
+    res.cookie('auth-cookie', JSON.stringify(tokens), {
+      expires: new Date(Date.now() + 1 * 60 * 1000),
+    });
+    return res.redirect('http://localhost:5173');
   }
 
   @Post('signupLocal')
-  signup(@Body() dto: AuthDto) {
-    return this.authService.signup(dto);
+  async signup(@Body() dto: AuthDto, @Res() res: Response) {
+    const user = await this.authService.signup(dto);
+
+    return res.json({ success: true, ...user });
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('signinLocal')
-  signin(@Body() dto: AuthDto) {
-    return this.authService.signin(dto);
+  async signin(@Body() dto: AuthDto, @Res() res: Response) {
+    const user = await this.authService.signin(dto);
+
+    return res.json({ success: true, ...user });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -55,7 +60,7 @@ export class AuthController {
   }
 
   @UseGuards(RefreshTokenGuard)
-  @Get('refresh')
+  @Get('refreshToken')
   refreshTokens(@GetUser() user: User) {
     const userId = user['userId'];
     const refreshToken = user['refreshToken'];

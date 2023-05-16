@@ -20,7 +20,7 @@ export class LikeController {
     @Param() params: GetLikesByArticleId,
     @GetUser() user: User,
   ) {
-    await this.likeService.updateLikeByArticleId(
+    return await this.likeService.updateLikeByArticleId(
       params.articleId,
       user['userId'],
     );

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
 
-export const tags = createAsyncThunk("tag/tags", async () => {
+export const getTags = createAsyncThunk("tag/tags", async () => {
   try {
     const res = await axiosPublic.get("tags");
 
@@ -42,14 +42,15 @@ export const tagSlice = createSlice({
   name: "tag",
   initialState: {
     tags: [],
+    popularTags: [],
   },
   extraReducers: (builder) => {
     builder
-      .addCase(tags.fulfilled, (state, action) => {
+      .addCase(getTags.fulfilled, (state, action) => {
         state.tags = action.payload;
       })
       .addCase(popularTags.fulfilled, (state, action) => {
-        state.tags = action.payload;
+        state.popularTags = action.payload;
       })
       .addCase(getArticleByTag.fulfilled, (state, action) => {
         state[`${action.payload._tag}`] = action.payload.data;

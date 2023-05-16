@@ -16,24 +16,24 @@ import SearchIcon from "@mui/icons-material/Search";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { popularTags, tags } from "../redux/tagSlice";
+import { getTags, popularTags } from "../redux/tagSlice";
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
 
-  const listTags = useAppSelector((state) => state.tag.tags);
-  const signed = useAppSelector((state) => state.auth.signed);
+  const listTags = useAppSelector((state) => state.tag.popularTags);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const themeColor = useAppSelector((state) => state.theme.color);
 
   useEffect(() => {
     (async () => {
-      if (signed) {
-        await dispatch(tags());
+      if (isAuthenticated) {
+        await dispatch(getTags());
       } else {
         await dispatch(popularTags());
       }
     })();
-  }, [signed]);
+  }, [isAuthenticated]);
 
   return (
     <Box
@@ -42,7 +42,9 @@ const Sidebar = () => {
       height="100%"
       color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
       sx={{
-        borderRight: `1px solid ${themeColor === "light" ? "#1A2027" : "#fff"}`,
+        borderRight: `1px solid ${
+          themeColor === "light" ? "#1A2027" : "#2d3748"
+        }`,
       }}
     >
       <Divider />
@@ -153,7 +155,7 @@ const Sidebar = () => {
       </List>
       <Divider />
       <Typography variant="h6" style={{ padding: "0 0 10px 10px" }}>
-        {signed ? "My Tags" : "Popular Tags"}
+        {isAuthenticated ? "My Tags" : "Popular Tags"}
       </Typography>
 
       <Box

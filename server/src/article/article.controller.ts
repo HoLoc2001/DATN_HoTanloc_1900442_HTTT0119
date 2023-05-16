@@ -21,6 +21,7 @@ import {
   DeleteArticle,
   GetArticleByIdDto,
   GetArticlesByUserIdDto,
+  GetUserIdDto,
 } from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
@@ -35,19 +36,33 @@ export class ArticleController {
     return await this.articleService.getAllArticles();
   }
 
-  @Get(':articleId')
-  async getArticleById(@Param() params: GetArticleByIdDto) {
-    return await this.articleService.getArticle(params.articleId);
+  @UseGuards(AccessTokenGuard)
+  @Get('auth')
+  async getArticlesAuth(
+    @Query() query: GetArticlesDto,
+    @GetUser() user: User,
+    @Res() res: Response,
+    @Req() request: Request,
+  ) {
+    const articles = await this.articleService.getArticlesAuth(
+      query,
+      user['userId'],
+    );
+    if (articles) {
+      return res.json(articles);
+    }
+
+    return res
+      .status(HttpStatus.NO_CONTENT)
+      .json({ statusCode: 204, msg: 'NO_CONTENT' });
   }
 
-  // @UseGuards(AccessTokenGuard)
   @Get()
   async getArticles(
     @Query() query: GetArticlesDto,
     @Res() res: Response,
     @Req() request: Request,
   ) {
-    console.log(request.cookies);
     const articles = await this.articleService.getArticles(query);
     if (articles) {
       return res.json(articles);
@@ -105,5 +120,10 @@ export class ArticleController {
   ) {
     await this.articleService.deleteArticle(user['userId'], params.articleId);
     return res.status(HttpStatus.OK).json({ statusCode: 200, msg: 'OK' });
+  }
+
+  @Get(':articleId')
+  async getArticleById(@Param() params: GetArticleByIdDto) {
+    return await this.articleService.getArticle(params.articleId);
   }
 }

@@ -17,15 +17,24 @@ export const signUpLocal = createAsyncThunk(
   "auth/signUpLocal",
   async (signUpForm) => {
     try {
-      console.log(signUpForm);
       const res = await axiosPublic.post("auth/signUpLocal", signUpForm);
-      console.log(res.data);
+
       return res.data;
     } catch (error) {
       console.log(error);
     }
   }
 );
+
+export const signOut = createAsyncThunk("auth/signOut", async () => {
+  try {
+    const res = await axiosPrivate.get("auth/signout");
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export const article = createAsyncThunk("user/article", async () => {
   try {
@@ -37,17 +46,13 @@ export const article = createAsyncThunk("user/article", async () => {
   }
 });
 
-export const loginGoogle = createAsyncThunk(
-  "user/loginGoogle",
-  async (signUpForm) => {
-    try {
-      const res = await axiosPublic.get("auth");
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
+export const signIn = createAsyncThunk("user/signIn", async (signUpForm) => {
+  try {
+    return true;
+  } catch (error) {
+    console.log(error);
   }
-);
+});
 
 export const authSlice = createSlice({
   name: "auth",
@@ -59,7 +64,6 @@ export const authSlice = createSlice({
     validateEmail: false,
     isAuthenticated: localStorage["RT"] ? true : false,
     article: null,
-    signed: false,
   },
   extraReducers: (builder) => {
     builder
@@ -72,7 +76,6 @@ export const authSlice = createSlice({
         state.isAuthenticated = action.payload.data.success;
       })
       .addCase(signUpLocal.fulfilled, (state, action) => {
-        state.token = action.payload?.token;
         localStorage.setItem("AT", action.payload?.accessToken || "");
         localStorage.setItem("RT", action.payload?.refreshToken || "");
         state.isAuthenticated = action.payload?.success;
@@ -80,13 +83,16 @@ export const authSlice = createSlice({
       .addCase(signUpLocal.rejected, (state, action) => {
         state.isAuthenticated = action.payload.data.success;
       })
+      .addCase(signOut.fulfilled, (state, action) => {
+        localStorage.removeItem("AT");
+        localStorage.removeItem("RT");
+        state.isAuthenticated = false;
+      })
       .addCase(article.fulfilled, (state, action) => {
-        console.log(action.payload[0]);
         state.article = action.payload[0].content;
       })
-      .addCase(loginGoogle.fulfilled, (state, action) => {
-        localStorage.setItem("AT", action.payload?.tokens?.accessToken || "");
-        localStorage.setItem("RT", action.payload?.tokens?.refreshToken || "");
+      .addCase(signIn.fulfilled, (state, action) => {
+        state.isAuthenticated = action.payload;
       });
   },
 });

@@ -5,6 +5,8 @@ export const signUpValidate = (data) => {
     email: Joi.string()
       .email({ tlds: { allow: false } })
       .required(),
+    firstName: Joi.string().max(50).required(),
+    lastName: Joi.string().max(50).required(),
     password: Joi.string().min(8).max(12).required(),
     repeat_password: Joi.ref("password"),
   });

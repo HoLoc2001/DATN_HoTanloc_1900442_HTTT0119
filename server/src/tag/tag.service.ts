@@ -15,7 +15,7 @@ export class TagService {
     const tags = await this.prisma.tag.findMany({
       orderBy: {
         articles: {
-          _count: 'asc',
+          _count: 'desc',
         },
       },
       take: 10,
@@ -24,7 +24,6 @@ export class TagService {
   }
 
   async getTagById(name: string, query: GetTagDto) {
-    console.log(name);
     const tag = await this.prisma.tag.findMany({
       where: {
         name: {

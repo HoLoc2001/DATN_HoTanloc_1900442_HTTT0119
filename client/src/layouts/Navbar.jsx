@@ -23,6 +23,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import { setThemeColorStore } from "../redux/themeSlice";
+import { signOut } from "../redux/authSlice";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -74,7 +75,6 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 const Navbar = () => {
   const dispatch = useAppDispatch();
 
-  const signed = useAppSelector((state) => state.auth.signed);
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
   const user = useAppSelector((state) => state.user.user);
   const themeColor = useAppSelector((state) => state.theme.color);
@@ -85,6 +85,12 @@ const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSignOut = async () => {
+    await dispatch(signOut());
+
     setAnchorEl(null);
   };
 
@@ -147,6 +153,9 @@ const Navbar = () => {
               <Box>
                 {isSuccessAuth ? (
                   <>
+                    <Link to={"./create"}>
+                      <Button>Create article</Button>
+                    </Link>
                     <Tooltip title={`${user.firstName} ${user.lastName}`}>
                       <IconButton
                         color="white"
@@ -168,9 +177,17 @@ const Navbar = () => {
                         "aria-labelledby": "basic-button",
                       }}
                     >
-                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <Link
+                        to={"/profile"}
+                        style={{
+                          textDecoration: "none",
+                          color: "rgb(74 74 74)",
+                        }}
+                      >
+                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      </Link>
                       <MenuItem onClick={handleClose}>My account</MenuItem>
-                      <MenuItem onClick={handleClose}>Logout</MenuItem>
+                      <MenuItem onClick={handleSignOut}>SignOut</MenuItem>
                     </Menu>
                   </>
                 ) : (
@@ -206,7 +223,7 @@ const Navbar = () => {
                     <MaterialUISwitch
                       sx={{ m: 1 }}
                       onChange={handleSwitch}
-                      checked={themeColor === "dark" ? true : false}
+                      checked={themeColor === "light" ? false : true}
                     />
                   }
                 />

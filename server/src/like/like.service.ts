@@ -41,21 +41,55 @@ export class LikeService {
       });
 
       if (hasLike) {
-        await this.prisma.like.delete({
+        const {
+          Article: {
+            _count: { likes },
+          },
+        } = await this.prisma.like.delete({
           where: {
             userId_articleId: {
               userId: userId,
               articleId: articleId,
             },
           },
+          select: {
+            Article: {
+              select: {
+                _count: {
+                  select: {
+                    likes: true,
+                  },
+                },
+              },
+            },
+          },
         });
+
+        return { isLiked: false, likes: likes - 1 };
       } else {
-        await this.prisma.like.create({
+        const {
+          Article: {
+            _count: { likes },
+          },
+        } = await this.prisma.like.create({
           data: {
             userId: userId,
             articleId: articleId,
           },
+          select: {
+            Article: {
+              select: {
+                _count: {
+                  select: {
+                    likes: true,
+                  },
+                },
+              },
+            },
+          },
         });
+
+        return { isLiked: true, likes };
       }
     } catch (error) {
       throw error;

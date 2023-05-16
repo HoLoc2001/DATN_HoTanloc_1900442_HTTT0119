@@ -7,7 +7,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as argon from 'argon2';
-import { AuthDto } from './dto';
+import { AuthDto, SignUpAuthDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -23,21 +23,21 @@ export class AuthService {
     if (!req.user) {
       return 'No user from google';
     }
-    console.log(12);
-    // return res.redirect('../../user');
+
     const isUser = await this.prisma.user.findUnique({
       where: {
         email: req.user.email,
       },
+      select: {
+        id: true,
+      },
     });
     if (isUser) {
       const tokens = await this.signToken(isUser.id);
-      console.log(1);
-      return {
-        ...tokens,
 
-        message: 'Login from google successfully',
-      };
+      await this.updateRefreshToken(isUser.id, tokens.refreshToken);
+
+      return tokens;
     }
 
     const user = await this.prisma.user.create({
@@ -55,11 +55,11 @@ export class AuthService {
     }
 
     const tokens = await this.signToken(user.id);
-    await this.refreshTokens(user.id, tokens.refreshToken);
+    await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
 
-  async signup(dto: AuthDto) {
+  async signup(dto: SignUpAuthDto) {
     try {
       const emailExists = await this.prisma.user.findUnique({
         where: {
@@ -74,6 +74,8 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           email: dto.email,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
           password: hashPass,
         },
         select: {
@@ -117,7 +119,7 @@ export class AuthService {
     }
   }
 
-  async logout(userId: number) {
+  async signout(userId: number) {
     return this.updateRefreshToken(userId, null);
   }
 

@@ -23,8 +23,23 @@ export class ArticleService {
         where: {
           id: articleId,
         },
-        include: {
+        select: {
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          views: true,
+          content: true,
           tags: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
           _count: {
             select: {
               likes: true,
@@ -34,6 +49,59 @@ export class ArticleService {
         },
       });
       return article;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getArticlesAuth(query: GetArticlesDto, userId: number) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        skip: query.offset,
+        take: query.limit,
+
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+
+      const Articles = articles.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
     } catch (error) {
       throw error;
     }
@@ -49,6 +117,8 @@ export class ArticleService {
           userId: true,
           id: true,
           title: true,
+          views: true,
+
           thumbnail: true,
           tags: true,
           createdAt: true,

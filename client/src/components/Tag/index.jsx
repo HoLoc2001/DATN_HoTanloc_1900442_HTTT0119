@@ -7,13 +7,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import CommentIcon from "@mui/icons-material/Comment";
-import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import React, { useEffect, useState } from "react";
 import Article from "../Article";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getArticles } from "../../redux/articleSlice";
 import { Link, useParams } from "react-router-dom";
 import { getArticleByTag } from "../../redux/tagSlice";
 
@@ -22,13 +18,16 @@ const index = () => {
   const { tag } = useParams();
   const articles = useAppSelector((state) => state.tag[tag] || []);
   const [page, setPage] = useState(articles?.length || 0);
-
   const [hasPost, setHasPost] = useState(() => {
     if (articles?.length % 5 === 0 && articles?.length !== 0) {
       return true;
     }
     return false;
   });
+
+  useEffect(() => {
+    setPage(0);
+  }, [tag]);
 
   useEffect(() => {
     (async () => {
@@ -40,7 +39,7 @@ const index = () => {
         return false;
       });
     })();
-  }, [page]);
+  }, [page, tag]);
 
   return (
     <Box>

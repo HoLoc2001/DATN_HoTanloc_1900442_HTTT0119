@@ -9,15 +9,21 @@ export class BookmarkService {
 
   async getBookmarks(userId: number, query: GetBookmarksDto) {
     try {
-      const articles = await this.prisma.bookmark.findMany({
+      let articles = await this.prisma.bookmark.findMany({
         select: {
           userId: true,
           Article: {
             select: {
               id: true,
               title: true,
+              views: true,
               thumbnail: true,
               tags: true,
+              likes: {
+                where: {
+                  userId: userId,
+                },
+              },
               _count: {
                 select: {
                   likes: true,
@@ -42,16 +48,17 @@ export class BookmarkService {
         where: {
           userId: userId,
         },
-
-        // include: {
-        //   Article: {
-        //     include: {
-        //       tags: true,
-        //     },
-        //   },
-        // },
       });
-      return articles;
+
+      const Articles = articles.map((article) => {
+        article.Article['isBookmarked'] =
+          userId === article.userId ? true : false;
+        article.Article['isLiked'] =
+          article.Article.likes.length === 1 ? true : false;
+        return { ...article.Article };
+      });
+
+      return Articles;
     } catch (error) {
       throw error;
     }
@@ -64,15 +71,43 @@ export class BookmarkService {
           articleId: articleId,
           userId: userId,
         },
-        include: {
+        select: {
           Article: {
-            include: {
+            select: {
+              id: true,
+              views: true,
+              title: true,
+              thumbnail: true,
               tags: true,
+              likes: {
+                where: {
+                  userId: userId,
+                },
+              },
+              _count: {
+                select: {
+                  likes: true,
+                  comments: true,
+                },
+              },
+              user: {
+                select: {
+                  id: true,
+                  avatar: true,
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+              createdAt: true,
             },
           },
         },
       });
-      return article;
+      article.Article['isBookmarked'] = true;
+      article.Article['isLiked'] =
+        article.Article.likes.length === 1 ? true : false;
+
+      return article.Article;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {

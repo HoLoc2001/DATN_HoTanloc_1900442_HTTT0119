@@ -4,15 +4,14 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../layouts/Sidebar";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { getUser } from "../redux/userSlice";
+import { signIn } from "../redux/authSlice";
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const themeColor = useAppSelector((state) => state.theme.color);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(getUser());
-    })();
     function getCookie(name) {
       const value = `; ${document.cookie}`;
       const parts = value.split(`; ${name}=`);
@@ -30,6 +29,14 @@ const Home = () => {
         "RT",
         JSON.parse(decodeURIComponent(tokens)).refreshToken
       );
+      (async () => {
+        await dispatch(signIn());
+      })();
+    }
+    if (localStorage["RT"]) {
+      (async () => {
+        await dispatch(getUser());
+      })();
     }
   }, []);
 
@@ -46,7 +53,7 @@ const Home = () => {
     >
       <Navbar />
       <Sidebar />
-      <div style={{ padding: "0 0 0 18%" }}>
+      <div style={{ padding: "0 0 0 16%" }}>
         <Outlet />
       </div>
     </div>

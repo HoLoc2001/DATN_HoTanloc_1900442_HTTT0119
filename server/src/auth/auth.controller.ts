@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, SignUpAuthDto } from './dto';
 import { AccessTokenGuard, RefreshTokenGuard } from 'src/auth/guards';
 import { GetUser } from './decorator';
 import { User } from '@prisma/client';
@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @Post('signupLocal')
-  async signup(@Body() dto: AuthDto, @Res() res: Response) {
+  async signup(@Body() dto: SignUpAuthDto, @Res() res: Response) {
     const user = await this.authService.signup(dto);
 
     return res.json({ success: true, ...user });
@@ -54,9 +54,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @UseGuards(AccessTokenGuard)
-  @Get('logout')
-  logout(@Req() req: Request) {
-    this.authService.logout(req.user['userId']);
+  @Get('signout')
+  signout(@Req() req: Request) {
+    this.authService.signout(req.user['userId']);
   }
 
   @UseGuards(RefreshTokenGuard)

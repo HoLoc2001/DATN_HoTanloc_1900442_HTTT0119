@@ -4,22 +4,25 @@ import { Link, Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signUpLocal } from "../redux/authSlice";
 import { useAppSelector } from "../redux/store";
-// import { signUpValidate } from "../utils/validation";
+import { signUpValidate } from "../utils/validation";
 // import Alert from "../components/AlertErr";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const validateEmail = useAppSelector((state) => state.user.validateEmail);
-  const isSuccessAuth = useAppSelector((state) => state.user.isAuthenticated);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  console.log(isAuthenticated);
 
   const [signUpForm, setSignUpForm] = useState({
     email: "",
+    firstName: "",
+    lastName: "",
     password: "",
     repeat_password: "",
   });
   const [errMissInput, setErrMissInput] = useState(false);
 
-  const { email, password, repeat_password } = signUpForm;
+  const { email, firstName, lastName, password, repeat_password } = signUpForm;
 
   const onChangeSignUpForm = (e) => {
     return setSignUpForm({
@@ -38,6 +41,8 @@ const SignUp = () => {
     const { error } = signUpValidate({
       email,
       password,
+      firstName,
+      lastName,
       repeat_password: password,
     });
 
@@ -46,13 +51,13 @@ const SignUp = () => {
       setErrMissInput(true);
     } else {
       await dispatch(signUpLocal(signUpForm));
-      if (!isSuccessAuth) {
+      if (!isAuthenticated) {
         setErrMissInput(true);
       }
     }
   };
 
-  return isSuccessAuth ? (
+  return isAuthenticated ? (
     <Navigate to="/" replace />
   ) : (
     <>
@@ -72,7 +77,7 @@ const SignUp = () => {
         <Stack
           component="form"
           sx={{
-            width: "400px",
+            width: "50%",
             margin: "40px auto",
           }}
           spacing={3}
@@ -89,6 +94,18 @@ const SignUp = () => {
             onBlur={handleValidateEmail}
             error={validateEmail}
             helperText={validateEmail ? "Email đã được sử dụng" : ""}
+          />
+          <TextField
+            name="firstName"
+            label="First Name"
+            value={firstName}
+            onChange={onChangeSignUpForm}
+          />
+          <TextField
+            name="lastName"
+            label="Last Name"
+            value={lastName}
+            onChange={onChangeSignUpForm}
           />
           <TextField
             name="password"

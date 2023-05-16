@@ -7,8 +7,8 @@ export const getBookmark = createAsyncThunk(
     try {
       const { bookmarks } = getState().bookmark;
       const res = await axiosPrivate.get(`bookmark?limit=10&offset=${page}`);
-      console.log(res.data[0].Article);
-      const data = [...bookmarks, res.data[0].Article];
+
+      const data = [...bookmarks, ...res.data];
       return data;
     } catch (error) {
       console.log(error);
@@ -29,6 +29,19 @@ export const addBookmark = createAsyncThunk(
   }
 );
 
+export const removeBookmark = createAsyncThunk(
+  "bookmark/removeBookmark",
+  async (articleId) => {
+    try {
+      const res = await axiosPrivate.delete(`bookmark/${articleId}`);
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
@@ -40,6 +53,9 @@ export const bookmarkSlice = createSlice({
         state.bookmarks = action.payload;
       })
       .addCase(addBookmark.fulfilled, (state, action) => {
+        state.bookmarks.push(action.payload);
+      })
+      .addCase(removeBookmark.fulfilled, (state, action) => {
         state.bookmarks.push(action.payload);
       });
   },

@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Grid,
   IconButton,
   Paper,
@@ -8,18 +9,24 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import moment from "moment";
+
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
+import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getArticles } from "../../redux/articleSlice";
+import { getArticles, updateLike } from "../../redux/articleSlice";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
-import { addBookmark } from "../../redux/bookmarkSlice";
+import { addBookmark, removeBookmark } from "../../redux/articleSlice";
+import SetTags from "../SetTags";
 
 const index = ({ _articles, _setPage, _hasPost }) => {
+  moment().format();
   const dispatch = useAppDispatch();
   const articles =
     _articles || useAppSelector((state) => state.article.articles);
@@ -31,7 +38,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const [page, setPage] = useState(articles?.length || 0);
 
   const [hasPost, setHasPost] = useState(() => {
-    if (articles.length % 5 === 0 && articles.length !== 0) {
+    if (articles.length % 6 === 0 && articles.length !== 0) {
       return true;
     }
     return false;
@@ -42,7 +49,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
       (async () => {
         await dispatch(getArticles(page));
         setHasPost(() => {
-          if (articles.length % 5 === 0 && articles.length >= page) {
+          if (articles.length % 6 === 0 && articles.length >= page) {
             return true;
           }
           return false;
@@ -51,10 +58,11 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     }, [page]);
   }
 
-  const handleClickLike = (e) => {
+  const handleLike = async (e, { articleId }) => {
     e.preventDefault();
 
-    if (!isSuccessAuth) setErrMissInput(true);
+    if (!isSuccessAuth) return setErrMissInput(true);
+    await dispatch(updateLike(articleId));
   };
 
   const handleClickComment = (e) => {
@@ -63,25 +71,35 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     if (!isSuccessAuth) setErrMissInput(true);
   };
 
-  const handleClickBookmark = async (event, { articleId }) => {
+  const handleAddBookmark = async (event, { articleId, index }) => {
     event.preventDefault();
 
     if (!isSuccessAuth) {
       return setErrMissInput(true);
     }
-    await dispatch(addBookmark(articleId));
+    await dispatch(addBookmark({ articleId, index }));
+  };
+
+  const handleRemoveBookmark = async (event, { articleId, article }) => {
+    event.preventDefault();
+
+    if (!isSuccessAuth) {
+      return setErrMissInput(true);
+    }
+    await dispatch(removeBookmark({ articleId, article }));
   };
 
   return (
     <Box>
+      {!_articles ? <SetTags /> : ""}
       <InfiniteScroll
         getMore={() => {
-          _setPage ? _setPage((prev) => prev + 5) : setPage((prev) => prev + 5);
+          _setPage ? _setPage((prev) => prev + 6) : setPage((prev) => prev + 6);
         }}
         hasMore={articles.length && (hasPost || _hasPost)}
       >
         <Grid container spacing={10}>
-          {articles.map((article) => (
+          {articles.map((article, index) => (
             <Grid
               item
               columns={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}
@@ -146,13 +164,16 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       <Typography
                         p={"10px 0 0 10px"}
                         variant="h5"
-                        height={"100px"}
+                        height={"80px"}
                       >
                         {article.title?.length <= 40
                           ? article.title
                           : article.title?.substr(0, 40) + "..."}
                       </Typography>
                     </Tooltip>
+                    <Typography paddingLeft={"10px"}>
+                      {moment(article.createdAt, "YYYYMMDD").fromNow()}
+                    </Typography>
                     <img
                       style={{
                         width: "100%",
@@ -188,9 +209,17 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                                 }`,
                               },
                             }}
-                            onClick={handleClickLike}
+                            onClick={(event) =>
+                              handleLike(event, {
+                                articleId: article.id,
+                              })
+                            }
                           >
-                            <FavoriteBorderIcon />
+                            {article.isLiked ? (
+                              <FavoriteIcon sx={{ color: "red" }} />
+                            ) : (
+                              <FavoriteBorderIcon />
+                            )}
                           </IconButton>
                         </Tooltip>
                         <Typography>{article._count?.likes}</Typography>
@@ -221,32 +250,72 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         <Typography>{article._count?.comments}</Typography>
                       </Grid>
                       <Grid key={3} item>
-                        <Tooltip title="Bookmark">
-                          <IconButton
-                            sx={{
-                              color: `${
-                                themeColor === "light" ? "" : "rgb(245 245 245)"
-                              }`,
-                              ":hover": {
-                                backgroundColor: `${
-                                  themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                                }`,
+                        {article.isBookmarked ? (
+                          <Tooltip title="Remove bookmark">
+                            <IconButton
+                              sx={{
                                 color: `${
                                   themeColor === "light"
                                     ? ""
-                                    : "rgba(249,242,222,255)"
+                                    : "rgb(245 245 245)"
                                 }`,
-                              },
-                            }}
-                            onClick={(event) =>
-                              handleClickBookmark(event, {
-                                articleId: article.id,
-                              })
-                            }
-                          >
-                            <BookmarkAddIcon />
-                          </IconButton>
-                        </Tooltip>
+                                ":hover": {
+                                  backgroundColor: `${
+                                    themeColor === "light"
+                                      ? "#e2e3f3"
+                                      : "#5c5d5f"
+                                  }`,
+                                  color: `${
+                                    themeColor === "light"
+                                      ? ""
+                                      : "rgba(249,242,222,255)"
+                                  }`,
+                                },
+                              }}
+                              onClick={(event) =>
+                                handleRemoveBookmark(event, {
+                                  articleId: article.id,
+
+                                  article,
+                                })
+                              }
+                            >
+                              <BookmarkRemoveIcon />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="Add bookmark">
+                            <IconButton
+                              sx={{
+                                color: `${
+                                  themeColor === "light"
+                                    ? ""
+                                    : "rgb(245 245 245)"
+                                }`,
+                                ":hover": {
+                                  backgroundColor: `${
+                                    themeColor === "light"
+                                      ? "#e2e3f3"
+                                      : "#5c5d5f"
+                                  }`,
+                                  color: `${
+                                    themeColor === "light"
+                                      ? ""
+                                      : "rgba(249,242,222,255)"
+                                  }`,
+                                },
+                              }}
+                              onClick={(event) =>
+                                handleAddBookmark(event, {
+                                  articleId: article.id,
+                                  index,
+                                })
+                              }
+                            >
+                              <BookmarkAddIcon />
+                            </IconButton>
+                          </Tooltip>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>

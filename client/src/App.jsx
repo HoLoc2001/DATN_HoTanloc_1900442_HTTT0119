@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Article from "./components/Article";
 import Search from "./components/Search";
 import Tag from "./components/Tag";
+import Profile from "./components/Profile";
 import Bookmark from "./components/Bookmark";
 import ReadArticle from "./components/Article/ReadArticle";
 
@@ -29,12 +30,13 @@ const App = () => {
           </Route>*/}
           <Route path="/" element={<Home />}>
             <Route path="/" element={<Article />} />
+            <Route path="/create" element={<Editor />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<Search />} />
             <Route path="/tag/:tag" element={<Tag />} />
             <Route path="/bookmarks" element={<Bookmark />} />
             <Route path="/:articleId" element={<ReadArticle />} />
           </Route>
-          <Route path="/editor" element={<Editor />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

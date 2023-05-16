@@ -16,7 +16,7 @@ export const setThemeColorStore = createAsyncThunk(
 export const themeSlice = createSlice({
   name: "theme",
   initialState: {
-    color: localStorage.getItem("themeColor") || "light",
+    color: localStorage.getItem("themeColor") || "dark",
   },
   extraReducers: (builder) => {
     builder.addCase(setThemeColorStore.fulfilled, (state, action) => {

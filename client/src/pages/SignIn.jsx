@@ -13,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
 import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -20,8 +21,7 @@ import { signInLocal } from "../redux/authSlice";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
-  const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
-  console.log(isSuccessAuth);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   // const isForgetPass = useAppSelector((state) => state.user.isForgetPass);
 
@@ -58,7 +58,7 @@ const SignIn = () => {
       return setErrMissInput(true);
     }
     await dispatch(signInLocal(signinForm));
-    if (!isSuccessAuth) {
+    if (!isAuthenticated) {
       setErrSignIn(true);
     }
   };
@@ -69,7 +69,7 @@ const SignIn = () => {
         return setErrMissInput(true);
       }
       await dispatch(signin(signinForm));
-      if (!isSuccessAuth) {
+      if (!isAuthenticated) {
         setErrSignIn(true);
       }
     }
@@ -118,14 +118,14 @@ const SignIn = () => {
     }
   };
 
-  return isSuccessAuth ? (
+  return isAuthenticated ? (
     <Navigate to="/" replace />
   ) : (
     <>
       <Box
         sx={{
           width: "50%",
-          height: "500px",
+          height: "100%",
           backgroundColor: "#E7E9EB",
           margin: "60px auto",
           borderRadius: "10px",
@@ -138,7 +138,7 @@ const SignIn = () => {
         <Stack
           component="form"
           sx={{
-            width: "400px",
+            width: "50%",
             margin: "40px auto",
           }}
           spacing={3}
@@ -174,7 +174,8 @@ const SignIn = () => {
             href="http://localhost:5000/api/auth/google-redirect"
             // onClick={handleClickGoogle}
           >
-            Đăng nhập Google
+            <GoogleIcon />
+            &ensp; Đăng nhập Google
           </Button>
 
           <Button variant="contained" onClick={() => setOpenForgetPass(true)}>

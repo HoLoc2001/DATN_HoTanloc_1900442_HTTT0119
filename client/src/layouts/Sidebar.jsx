@@ -13,27 +13,41 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SearchIcon from "@mui/icons-material/Search";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { getTags, popularTags } from "../redux/tagSlice";
+import { getMyTags, popularTags } from "../redux/tagSlice";
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
 
   const listTags = useAppSelector((state) => state.tag.popularTags);
+  const myTags = useAppSelector((state) => state.tag.myTags);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const themeColor = useAppSelector((state) => state.theme.color);
+  const [active, setActive] = useState("home");
 
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
-        await dispatch(getTags());
+        await dispatch(getMyTags());
       } else {
         await dispatch(popularTags());
       }
     })();
   }, [isAuthenticated]);
+
+  const handleClickHome = () => {
+    setActive("home");
+  };
+
+  const handleClickBookmark = () => {
+    setActive("bookmark");
+  };
+
+  const handleClickSearch = () => {
+    setActive("search");
+  };
 
   return (
     <Box
@@ -43,7 +57,7 @@ const Sidebar = () => {
       color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
       sx={{
         borderRight: `1px solid ${
-          themeColor === "light" ? "#1A2027" : "#2d3748"
+          themeColor === "light" ? "#a6aeb8" : "#2d3748"
         }`,
       }}
     >
@@ -58,6 +72,7 @@ const Sidebar = () => {
               textDecoration: "none",
               width: "100%",
             }}
+            onClick={handleClickHome}
           >
             <ListItemButton
               sx={{
@@ -69,6 +84,20 @@ const Sidebar = () => {
                     themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
                   }`,
                 },
+                ...(active === "home"
+                  ? {
+                      backgroundColor: `${
+                        themeColor === "light"
+                          ? "#e2e3f3"
+                          : "rgba(45,50,59,255)"
+                      }`,
+                      color: `${
+                        themeColor === "light"
+                          ? "#1A2027"
+                          : "rgba(249,242,222,255)"
+                      }`,
+                    }
+                  : ""),
               }}
             >
               <ListItemIcon
@@ -92,6 +121,7 @@ const Sidebar = () => {
               textDecoration: "none",
               width: "100%",
             }}
+            onClick={handleClickBookmark}
           >
             <ListItemButton
               sx={{
@@ -103,6 +133,20 @@ const Sidebar = () => {
                     themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
                   }`,
                 },
+                ...(active === "bookmark"
+                  ? {
+                      backgroundColor: `${
+                        themeColor === "light"
+                          ? "#e2e3f3"
+                          : "rgba(45,50,59,255)"
+                      }`,
+                      color: `${
+                        themeColor === "light"
+                          ? "#1A2027"
+                          : "rgba(249,242,222,255)"
+                      }`,
+                    }
+                  : ""),
               }}
             >
               <ListItemIcon
@@ -126,6 +170,7 @@ const Sidebar = () => {
               textDecoration: "none",
               width: "100%",
             }}
+            onClick={handleClickSearch}
           >
             <ListItemButton
               sx={{
@@ -137,6 +182,21 @@ const Sidebar = () => {
                     themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
                   }`,
                 },
+
+                ...(active === "search"
+                  ? {
+                      backgroundColor: `${
+                        themeColor === "light"
+                          ? "#e2e3f3"
+                          : "rgba(45,50,59,255)"
+                      }`,
+                      color: `${
+                        themeColor === "light"
+                          ? "#1A2027"
+                          : "rgba(249,242,222,255)"
+                      }`,
+                    }
+                  : ""),
               }}
             >
               <ListItemIcon
@@ -153,7 +213,11 @@ const Sidebar = () => {
           </Link>
         </ListItem>
       </List>
-      <Divider />
+      <Divider
+        sx={{
+          borderColor: `${themeColor === "light" ? "#a6aeb8" : "#2d3748"}`,
+        }}
+      />
       <Typography variant="h6" style={{ padding: "0 0 10px 10px" }}>
         {isAuthenticated ? "My Tags" : "Popular Tags"}
       </Typography>
@@ -176,32 +240,71 @@ const Sidebar = () => {
           },
         }}
       >
-        {listTags?.map((tag) => (
-          <Link
-            to={`./tag/${tag.name}`}
-            style={{
-              textDecoration: "none",
-              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
-            }}
-            key={tag.name}
-          >
-            <Typography
-              sx={{
-                paddingLeft: "20px",
-                ":hover": {
-                  backgroundColor: `${
-                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
-                  }`,
-                  color: `${
-                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-                  }`,
-                },
-              }}
-            >
-              #{tag.name}
-            </Typography>
-          </Link>
-        ))}
+        {isAuthenticated
+          ? myTags?.map((tag) => {
+              if (tag.isFollowed) {
+                return (
+                  <Link
+                    to={`./tag/${tag.name}`}
+                    style={{
+                      textDecoration: "none",
+                      color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                    }}
+                    key={tag.name}
+                  >
+                    <Typography
+                      sx={{
+                        paddingLeft: "20px",
+                        ":hover": {
+                          backgroundColor: `${
+                            themeColor === "light"
+                              ? "#e2e3f3"
+                              : "rgba(45,50,59,255)"
+                          }`,
+                          color: `${
+                            themeColor === "light"
+                              ? "#1A2027"
+                              : "rgba(249,242,222,255)"
+                          }`,
+                        },
+                      }}
+                    >
+                      #{tag.name}
+                    </Typography>
+                  </Link>
+                );
+              }
+            })
+          : listTags?.map((tag) => (
+              <Link
+                to={`./tag/${tag.name}`}
+                style={{
+                  textDecoration: "none",
+                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                }}
+                key={tag.name}
+              >
+                <Typography
+                  sx={{
+                    paddingLeft: "20px",
+                    ":hover": {
+                      backgroundColor: `${
+                        themeColor === "light"
+                          ? "#e2e3f3"
+                          : "rgba(45,50,59,255)"
+                      }`,
+                      color: `${
+                        themeColor === "light"
+                          ? "#1A2027"
+                          : "rgba(249,242,222,255)"
+                      }`,
+                    },
+                  }}
+                >
+                  #{tag.name}
+                </Typography>
+              </Link>
+            ))}
       </Box>
 
       {/* <Link

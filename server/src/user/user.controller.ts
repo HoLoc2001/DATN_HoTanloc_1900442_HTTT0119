@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -32,12 +33,24 @@ export class UserController {
   @UseGuards(AccessTokenGuard)
   @Patch('edit')
   async edit(@GetUser() user: User, @Body() dto: EditUser) {
-    return await this.userService.editUser(user.id, dto);
+    return await this.userService.editUser(user['userId'], dto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch('editPassword')
   async editPassword(@GetUser() user: User, @Body() dto: EditPassword) {
-    return await this.userService.editPassword(user.id, dto);
+    return await this.userService.editPassword(user['userId'], dto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('follow/:id')
+  async follow(@GetUser() user: User, @Param() params: GetUserById) {
+    return await this.userService.follow(user['userId'], params.id);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('follow/:id')
+  async getHasFollow(@GetUser() user: User, @Param() params: GetUserById) {
+    return await this.userService.getHasFollow(user['userId'], params.id);
   }
 }

@@ -7,6 +7,7 @@ import { getBookmark } from "../../redux/articleSlice";
 
 const index = () => {
   const dispatch = useAppDispatch();
+  const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
   const bookmarks = useAppSelector((state) => state.article.bookmarks);
   const [page, setPage] = useState(bookmarks?.length || 0);
 
@@ -18,6 +19,10 @@ const index = () => {
   });
 
   useEffect(() => {
+    setPage(0);
+  }, [isSuccessAuth]);
+
+  useEffect(() => {
     (async () => {
       await dispatch(getBookmark({ page }));
       setHasPost(() => {
@@ -27,12 +32,12 @@ const index = () => {
         return false;
       });
     })();
-  }, [page]);
+  }, [page, isSuccessAuth]);
   return (
     <>
       <Box sx={{ color: "#fff" }} justifyContent={"center"}>
         <Typography height={"36.5px"}>Bookmark</Typography>
-        {bookmarks.length ? (
+        {bookmarks?.length ? (
           <Article _articles={bookmarks} _setPage={setPage} hasPost={hasPost} />
         ) : (
           <Typography sx={{ margin: "25px 0 0 0" }}>

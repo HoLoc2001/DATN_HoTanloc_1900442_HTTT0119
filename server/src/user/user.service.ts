@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { EditPassword, EditUser } from './dto';
+import { fail } from 'assert';
 
 @Injectable()
 export class UserService {
@@ -80,5 +81,54 @@ export class UserService {
     });
 
     return { success: true };
+  }
+
+  async follow(userId: number, followingId: number) {
+    const hasFollow = await this.prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: followingId,
+        },
+      },
+    });
+
+    if (hasFollow) {
+      await this.prisma.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId: followingId,
+          },
+        },
+      });
+
+      return { userId: userId, isFollowed: false };
+    } else {
+      await this.prisma.follows.create({
+        data: {
+          followerId: userId,
+          followingId: followingId,
+        },
+      });
+
+      return { userId: userId, isFollowed: true };
+    }
+  }
+
+  async getHasFollow(userId: number, followingId: number) {
+    const hasFollow = await this.prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: userId,
+          followingId: followingId,
+        },
+      },
+    });
+
+    if (hasFollow) {
+      return { userId, isFollowed: true };
+    }
+    return { userId, isFollowed: false };
   }
 }

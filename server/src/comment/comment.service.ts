@@ -37,6 +37,16 @@ export class CommentService {
           articleId: articleId,
           userId: userId,
         },
+
+        include: {
+          user: {
+            select: {
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
       });
 
       return comment;

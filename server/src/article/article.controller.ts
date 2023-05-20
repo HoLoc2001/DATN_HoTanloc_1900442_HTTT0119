@@ -121,6 +121,17 @@ export class ArticleController {
     await this.articleService.deleteArticle(user['userId'], params.articleId);
     return res.status(HttpStatus.OK).json({ statusCode: 200, msg: 'OK' });
   }
+  @UseGuards(AccessTokenGuard)
+  @Get('auth/:articleId')
+  async getArticleByIdAuth(
+    @Param() params: GetArticleByIdDto,
+    @GetUser() user: User,
+  ) {
+    return await this.articleService.getArticleAuth(
+      params.articleId,
+      user['userId'],
+    );
+  }
 
   @Get(':articleId')
   async getArticleById(@Param() params: GetArticleByIdDto) {

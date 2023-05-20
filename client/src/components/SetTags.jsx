@@ -12,12 +12,27 @@ import Dialog from "@mui/material/Dialog";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
+import TuneIcon from "@mui/icons-material/Tune";
 import { blue } from "@mui/material/colors";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { Box, Grid } from "@mui/material";
+import { addMyTag, getTags, removeMyTag } from "../redux/tagSlice";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
 function SimpleDialog(props) {
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    (async () => {
+      await dispatch(getTags());
+    })();
+  }, []);
+
   const { onClose, selectedValue, open } = props;
+  const tags = useAppSelector((state) => state.tag.tags);
+  const myTags = useAppSelector((state) => state.tag.myTags);
+  const themeColor = useAppSelector((state) => state.theme.color);
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -27,26 +42,94 @@ function SimpleDialog(props) {
     onClose(value);
   };
 
+  const handleAddTag = async (tag, index) => {
+    await dispatch(addMyTag({ tag, index }));
+  };
+
+  const handleRemoveTag = async (tag, index) => {
+    await dispatch(removeMyTag({ tag, index }));
+  };
+
+  const handleMyTags = async (tag) => {
+    await dispatch(addMyTag({ tag }));
+  };
+
   return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Set backup account</DialogTitle>
-      <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
-          <ListItem disableGutters>
-            <ListItemButton
-              onClick={() => handleListItemClick(email)}
-              key={email}
+    <Dialog onClose={handleClose} open={open} maxWidth="md">
+      <Box
+        sx={{
+          ...(themeColor === "light"
+            ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+            : { backgroundColor: "#0E1217", color: "rgb(255 242 242)" }),
+        }}
+      >
+        <DialogTitle>My Feed</DialogTitle>
+
+        <Grid container spacing={1}>
+          {myTags?.map((tag, index) => (
+            <Grid
+              item
+              columns={12}
+              key={tag.name}
+              sx={{
+                margin: "5px",
+              }}
             >
-              <ListItemAvatar>
-                <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={email} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+              <Button
+                sx={{
+                  marginRight: "2%",
+                  border: "0.2px solid white",
+                  ...(themeColor === "light"
+                    ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+                    : {
+                        backgroundColor: "#0E1217",
+                        color: "rgb(255 242 242)",
+                      }),
+                  ...(tag.isFollowed
+                    ? {
+                        backgroundColor: "red",
+                        color: "#171717",
+                        ":hover": {
+                          backgroundColor: `${
+                            themeColor === "light" ? "#e2e3f3" : "red"
+                          }`,
+                          color: `${
+                            themeColor === "light"
+                              ? "#1A2027"
+                              : "rgba(249,242,222,0.5)"
+                          }`,
+                        },
+                      }
+                    : {
+                        backgroundColor: "#0E1217",
+                        color: "rgb(255 242 242)",
+                        ":hover": {
+                          backgroundColor: `${
+                            themeColor === "light"
+                              ? "#e2e3f3"
+                              : "rgba(45,50,59,255)"
+                          }`,
+                          color: `${
+                            themeColor === "light"
+                              ? "#1A2027"
+                              : "rgba(249,242,222,0.5)"
+                          }`,
+                        },
+                      }),
+                }}
+                onClick={
+                  tag.isFollowed
+                    ? () => handleRemoveTag(tag.name, index)
+                    : () => handleAddTag(tag.name, index)
+                }
+                background="url('https://res.cloudinary.com/dxlsponnf/image/upload/v1684289527/63747_dyzpck.png')"
+              >
+                {tag.name}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Dialog>
   );
 }
@@ -58,6 +141,8 @@ SimpleDialog.propTypes = {
 };
 
 export default function SetTags() {
+  const themeColor = useAppSelector((state) => state.theme.color);
+
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(emails[1]);
 
@@ -72,8 +157,28 @@ export default function SetTags() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open simple dialog
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        sx={{
+          textTransform: "none",
+          border: "none",
+          color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+          ":hover": {
+            border: "none",
+
+            backgroundColor: `${
+              themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+            }`,
+            color: `${
+              themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+            }`,
+          },
+          textAlign: "center",
+        }}
+      >
+        <TuneIcon />
+        <Typography>&ensp;My feed</Typography>
       </Button>
       <SimpleDialog
         selectedValue={selectedValue}

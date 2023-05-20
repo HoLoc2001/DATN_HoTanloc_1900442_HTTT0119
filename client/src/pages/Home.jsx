@@ -5,6 +5,7 @@ import Sidebar from "../layouts/Sidebar";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { getUser } from "../redux/userSlice";
 import { signIn } from "../redux/authSlice";
+import { Box } from "@mui/material";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -41,8 +42,8 @@ const Home = () => {
   }, []);
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         height: "100%",
         minHeight: "100vh",
 
@@ -56,7 +57,7 @@ const Home = () => {
       <div style={{ padding: "0 0 0 16%" }}>
         <Outlet />
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -25,13 +25,25 @@ model User {
   refreshToken String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  tags         Tag[]
   likes        Like[]
   comments     Comment[]
   articles     Article[]
   bookmarks    Bookmark[]
+  followers    Follows[]  @relation("following")
+  following    Follows[]  @relation("follower")
 
   @@index([id])
   @@map("users")
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 }
 
 model Article {
@@ -57,6 +69,7 @@ model Article {
 model Tag {
   name     String    @id @unique
   articles Article[]
+  users    User[]
 
   @@index([name])
   @@map("tag")

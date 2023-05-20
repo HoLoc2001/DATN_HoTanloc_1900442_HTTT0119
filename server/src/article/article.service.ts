@@ -12,6 +12,62 @@ import { Prisma } from '@prisma/client';
 export class ArticleService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getArticleAuth(articleId: number, userId: number) {
+    try {
+      const article = await this.prisma.article.update({
+        data: {
+          views: {
+            increment: 1,
+          },
+        },
+        where: {
+          id: articleId,
+        },
+        select: {
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          views: true,
+          content: true,
+          tags: true,
+          createdAt: true,
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+
+      article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+      article['isLiked'] = article.likes.length === 1 ? true : false;
+
+      return article;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getArticle(articleId: number) {
     try {
       const article = await this.prisma.article.update({
@@ -32,6 +88,7 @@ export class ArticleService {
           content: true,
           tags: true,
           createdAt: true,
+
           user: {
             select: {
               id: true,

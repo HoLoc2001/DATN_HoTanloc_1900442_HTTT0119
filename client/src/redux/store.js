@@ -9,6 +9,7 @@ import { authSlice } from "./authSlice";
 import { themeSlice } from "./themeSlice";
 import { bookmarkSlice } from "./bookmarkSlice";
 import { likeSlice } from "./likeSlice";
+import { commentSlice } from "./commentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     theme: themeSlice.reducer,
     bookmark: bookmarkSlice.reducer,
     like: likeSlice.reducer,
+    comment: commentSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

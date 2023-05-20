@@ -8,6 +8,7 @@ import Article from "./components/Article";
 import Search from "./components/Search";
 import Tag from "./components/Tag";
 import Profile from "./components/Profile";
+import OtherUser from "./components/Profile/OtherUser";
 import Bookmark from "./components/Bookmark";
 import ReadArticle from "./components/Article/ReadArticle";
 
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/" element={<Article />} />
             <Route path="/create" element={<Editor />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/user/:userId" element={<OtherUser />} />
             <Route path="/search" element={<Search />} />
             <Route path="/tag/:tag" element={<Tag />} />
             <Route path="/bookmarks" element={<Bookmark />} />

@@ -44,6 +44,10 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     return false;
   });
 
+  useEffect(() => {
+    setPage(0);
+  }, [isSuccessAuth]);
+
   if (!_articles) {
     useEffect(() => {
       (async () => {
@@ -55,7 +59,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           return false;
         });
       })();
-    }, [page]);
+    }, [page, isSuccessAuth]);
   }
 
   const handleLike = async (e, { articleId }) => {
@@ -80,18 +84,22 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     await dispatch(addBookmark({ articleId, index }));
   };
 
-  const handleRemoveBookmark = async (event, { articleId, article }) => {
+  const handleRemoveBookmark = async (event, { articleId }) => {
     event.preventDefault();
 
     if (!isSuccessAuth) {
       return setErrMissInput(true);
     }
-    await dispatch(removeBookmark({ articleId, article }));
+    await dispatch(removeBookmark({ articleId }));
+  };
+
+  const handleClick = (e) => {
+    e.preventDefault();
   };
 
   return (
     <Box>
-      {!_articles ? <SetTags /> : ""}
+      {!_articles && isSuccessAuth ? <SetTags /> : ""}
       <InfiniteScroll
         getMore={() => {
           _setPage ? _setPage((prev) => prev + 6) : setPage((prev) => prev + 6);
@@ -275,8 +283,6 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                               onClick={(event) =>
                                 handleRemoveBookmark(event, {
                                   articleId: article.id,
-
-                                  article,
                                 })
                               }
                             >

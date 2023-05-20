@@ -11,6 +11,32 @@ export class TagService {
     return tags;
   }
 
+  async getMyTags(userId: number) {
+    const tags = await this.prisma.tag.findMany();
+    const { tags: myTags } = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        tags: true,
+      },
+    });
+    tags.forEach((tag) => {
+      tag['isFollowed'] = false;
+      myTags.forEach((myTag) => {
+        if (myTag.name === tag.name) {
+          tag['isFollowed'] = true;
+        }
+      });
+    });
+
+    // myTags.forEach((tag) => {
+    //   tag['isFollowed'] = true;
+    // });
+
+    return tags;
+  }
+
   async getPopularTags() {
     const tags = await this.prisma.tag.findMany({
       orderBy: {
@@ -73,6 +99,44 @@ export class TagService {
           throw new ForbiddenException('Tag already exists');
         }
       }
+      throw error;
+    }
+  }
+
+  async addMyTag(userId: number, tag: string) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          tags: {
+            connect: [{ name: tag }],
+          },
+        },
+      });
+
+      return tag;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeMyTag(userId: number, tag: string) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          tags: {
+            disconnect: [{ name: tag }],
+          },
+        },
+      });
+
+      return tag;
+    } catch (error) {
       throw error;
     }
   }

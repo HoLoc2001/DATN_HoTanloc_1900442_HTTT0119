@@ -1,11 +1,21 @@
 import { Avatar, Box, Card, CardHeader, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useParams } from "react-router-dom";
+import { getUserByUserId } from "../../redux/userSlice";
 
 const index = () => {
   const dispatch = useAppDispatch();
+  const { userId } = useParams();
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getUserByUserId({ userId }));
+    })();
+  }, [userId]);
+
   const themeColor = useAppSelector((state) => state.theme.color);
-  const user = useAppSelector((state) => state.user.user);
+  const user = useAppSelector((state) => state.user.otherUser);
   return (
     <Box>
       <Card

@@ -19,7 +19,7 @@ const index = () => {
   const articles = useAppSelector((state) => state.tag[tag] || []);
   const [page, setPage] = useState(articles?.length || 0);
   const [hasPost, setHasPost] = useState(() => {
-    if (articles?.length % 5 === 0 && articles?.length !== 0) {
+    if (articles?.length % 6 === 0 && articles?.length !== 0) {
       return true;
     }
     return false;
@@ -33,7 +33,7 @@ const index = () => {
     (async () => {
       await dispatch(getArticleByTag({ tag, page }));
       setHasPost(() => {
-        if (articles?.length % 5 === 0 && articles?.length >= page) {
+        if (articles?.length % 6 === 0 && articles?.length >= page) {
           return true;
         }
         return false;

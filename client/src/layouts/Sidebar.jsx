@@ -52,7 +52,7 @@ const Sidebar = () => {
   return (
     <Box
       position="fixed"
-      width="15%"
+      width="13%"
       height="100%"
       color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
       sx={{
@@ -108,7 +108,9 @@ const Sidebar = () => {
               >
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText>Home</ListItemText>
+              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+                Home
+              </ListItemText>
             </ListItemButton>
           </Link>
         </ListItem>
@@ -157,7 +159,9 @@ const Sidebar = () => {
               >
                 <BookmarkIcon />
               </ListItemIcon>
-              <ListItemText>Bookmarks</ListItemText>
+              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+                Bookmarks
+              </ListItemText>
             </ListItemButton>
           </Link>
         </ListItem>
@@ -208,7 +212,9 @@ const Sidebar = () => {
               >
                 <SearchIcon />
               </ListItemIcon>
-              <ListItemText>Search</ListItemText>
+              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+                Search
+              </ListItemText>
             </ListItemButton>
           </Link>
         </ListItem>

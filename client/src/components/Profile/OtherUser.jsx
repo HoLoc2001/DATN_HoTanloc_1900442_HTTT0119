@@ -1,12 +1,37 @@
-import { Avatar, Box, Card, CardHeader, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardHeader,
+  Divider,
+  Typography,
+} from "@mui/material";
+import Article from "../Article";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { useParams } from "react-router-dom";
-import { getUserByUserId } from "../../redux/userSlice";
+import { Link, useParams } from "react-router-dom";
+import { follow, getUserByUserId } from "../../redux/userSlice";
+import { getArticleByUserId } from "../../redux/articleSlice";
 
-const index = () => {
+const OtherUser = () => {
   const dispatch = useAppDispatch();
   const { userId } = useParams();
+
+  const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const themeColor = useAppSelector((state) => state.theme.color);
+  const { isFollowed } = useAppSelector((state) => state.user.authorPost);
+  const user = useAppSelector((state) => state.user.otherUser);
+  const userArticles = useAppSelector((state) => state.article.userArticles);
+
+  const [page, setPage] = useState(userArticles?.length || 0);
+
+  const [hasPost, setHasPost] = useState(() => {
+    if (userArticles?.length % 6 === 0 && userArticles?.length !== 0) {
+      return true;
+    }
+    return false;
+  });
 
   useEffect(() => {
     (async () => {
@@ -14,77 +39,108 @@ const index = () => {
     })();
   }, [userId]);
 
-  const themeColor = useAppSelector((state) => state.theme.color);
-  const user = useAppSelector((state) => state.user.otherUser);
+  useEffect(() => {
+    setPage(0);
+  }, [isSuccessAuth]);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getArticleByUserId({ userId, page }));
+      setHasPost(() => {
+        if (userArticles?.length % 6 === 0 && userArticles?.length >= page) {
+          return true;
+        }
+        return false;
+      });
+    })();
+  }, [page, isSuccessAuth]);
+
+  const handleFollow = async (userId) => {
+    if (!isSuccessAuth) return setErrMissInput(true);
+
+    await dispatch(follow({ userId }));
+  };
+
   return (
-    <Box>
-      <Card
+    <>
+      <Box>
+        <Box
+          textAlign={"center"}
+          sx={{
+            width: "1",
+            ...(themeColor === "light"
+              ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+              : { backgroundColor: "#0E1217", color: "#fff2f2" }),
+          }}
+        >
+          <Avatar
+            src={user?.avatar}
+            aria-label="recipe"
+            sx={{
+              marginLeft: "calc(50vw - 14vw - 40px)",
+              height: "80px",
+              width: "80px",
+            }}
+          />
+
+          <Typography
+            sx={{
+              marginTop: "15px",
+              width: "500px",
+              marginLeft: "calc(50vw - 14vw - 250px)",
+            }}
+            zIndex={"2000"}
+            variant="h5"
+            component="div"
+          >
+            {user?.firstName + " " + user?.lastName}
+          </Typography>
+        </Box>
+      </Box>
+      <Button
+        onClick={() => handleFollow(userId)}
         sx={{
-          marginBottom: "20px",
-          ...(themeColor === "light"
-            ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
-            : { backgroundColor: "#0E1217", color: "#fff2f2" }),
+          marginTop: "30px",
+          marginBottom: "30px",
+          marginLeft: "calc(50vw - 14vw - 100px)",
+          width: "200px",
+          textTransform: "none",
+
+          backgroundColor: `${isFollowed ? "#ffffff" : "#3b49df"}`,
+          border: `${isFollowed ? "1px solid #a3a3a3" : "1px solid #3b49df"}`,
+          ...(isFollowed
+            ? {
+                color: `${themeColor === "light" ? "#3d3d3d" : "#3d3d3d"}`,
+              }
+            : {
+                color: `${themeColor === "light" ? "#f9f9f9" : "#090909"}`,
+              }),
+          ":hover": {
+            backgroundColor: `${isFollowed ? "#a3a3a3" : "#2f3ab2"}`,
+          },
         }}
       >
-        <CardHeader
-          avatar={
-            <Avatar
-              src={user?.avatar}
-              aria-label="recipe"
-              sx={{ height: "50px", width: "50px", position: "relative" }}
-            />
-          }
-          title={
-            <Typography sx={{ marginTop: "15px" }} variant="h5" component="div">
-              {user?.firstName + " " + user?.lastName}
-            </Typography>
-          }
-          subheader={
-            <div
-              style={{
-                display: "flex",
-                ...(themeColor === "light"
-                  ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
-                  : { backgroundColor: "#0E1217", color: "#fff2f2" }),
-              }}
-            >
-              <h5>
-                Follower:{" "}
-                <span
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                  onClick={() => handleOpenFollowing(user.id)}
-                >
-                  {user?.totalFollowers}
-                </span>{" "}
-                &emsp;
-              </h5>
-              <h5>
-                Following:{" "}
-                <span
-                  style={{ cursor: "pointer", fontWeight: "bold" }}
-                  onClick={() => setOpenModalFollower(true)}
-                >
-                  {user?.totalFollowings}
-                </span>
-              </h5>
-            </div>
-          }
-          // action={
-          // <div className="mui-dropdown mui-dropdown--left">
-          //   <IconButton aria-label="settings" data-mui-toggle="dropdown">
-          //     <MoreVertIcon />
-          //   </IconButton>
-          //   <ul className="mui-dropdown__menu">
-          //     <li>
-          //       <Link to="/EditProfile">Thông tin tài khoản</Link>
-          //     </li>
-          //   </ul>
-          // </div>
-          // }
+        {isFollowed ? "Following" : "Follow"}
+      </Button>
+      <Divider
+        sx={{
+          width: "98%",
+          borderColor: `${themeColor === "light" ? "#a6aeb8" : "#2d3748"}`,
+        }}
+      />
+      {userArticles.length ? (
+        <Article
+          _articles={userArticles}
+          _setPage={setPage}
+          hasPost={hasPost}
         />
-      </Card>
-    </Box>
+      ) : (
+        <Typography sx={{ margin: "25px 0 0 0" }}>
+          Your bookmark list is empty.
+        </Typography>
+      )}
+    </>
   );
 };
 
-export default index;
+export default OtherUser;

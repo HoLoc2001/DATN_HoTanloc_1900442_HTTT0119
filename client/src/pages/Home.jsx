@@ -54,7 +54,7 @@ const Home = () => {
     >
       <Navbar />
       <Sidebar />
-      <div style={{ padding: "0 0 0 16%" }}>
+      <div style={{ padding: "0 0 0 14%" }}>
         <Outlet />
       </div>
     </Box>

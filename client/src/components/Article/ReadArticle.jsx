@@ -32,6 +32,7 @@ const ReadArticle = () => {
   const { articleId } = useParams();
   const themeColor = useAppSelector((state) => state.theme.color);
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const { id: userId } = useAppSelector((state) => state.user.user);
   const article = useAppSelector((state) => state.article.article);
   const { isFollowed } = useAppSelector((state) => state.user.authorPost);
   const [errMissInput, setErrMissInput] = useState(false);
@@ -95,13 +96,13 @@ const ReadArticle = () => {
     if (!isSuccessAuth) return setErrMissInput(true);
   };
 
-  const handleAddBookmark = async (event, { articleId, index }) => {
+  const handleAddBookmark = async (event, { articleId }) => {
     event.preventDefault();
 
     if (!isSuccessAuth) {
       return setErrMissInput(true);
     }
-    await dispatch(addBookmark({ articleId, index }));
+    await dispatch(addBookmark({ articleId }));
   };
 
   const handleRemoveBookmark = async (event, { articleId, article }) => {
@@ -162,6 +163,7 @@ const ReadArticle = () => {
               );
             })}
           </Box>
+
           <div
             style={{ overflow: "hidden" }}
             dangerouslySetInnerHTML={{ __html: article?.content }}
@@ -190,19 +192,36 @@ const ReadArticle = () => {
             }}
           >
             <Box p={"10px 0 0 10px"} m={`0 calc(50% - 35px )`}>
-              <Tooltip
-                title={article.user?.firstName + " " + article.user?.lastName}
+              <Link
+                to={
+                  userId === article.userId
+                    ? "/profile"
+                    : `../user/${article.userId}`
+                }
               >
-                <Avatar
-                  sx={{ marginRight: "5px", width: "50px", height: "50px" }}
-                  src={article.user?.avatar}
-                />
-              </Tooltip>
+                <Tooltip
+                  title={article.user?.firstName + " " + article.user?.lastName}
+                >
+                  <Avatar
+                    sx={{ marginRight: "5px", width: "50px", height: "50px" }}
+                    src={article.user?.avatar}
+                  />
+                </Tooltip>
+              </Link>
             </Box>
             <Box textAlign={"center"}>
-              <Typography variant="h6">
-                {`${article.user?.firstName} ${article.user?.lastName}`}
-              </Typography>
+              <Link
+                to={
+                  userId === article.userId
+                    ? "/profile"
+                    : `../user/${article.userId}`
+                }
+                style={{ textDecoration: "none", color: "#fff2f2" }}
+              >
+                <Typography variant="h6">
+                  {`${article.user?.firstName} ${article.user?.lastName}`}
+                </Typography>
+              </Link>
               <Button
                 onClick={() => handleFollow(article.user.id)}
                 sx={{

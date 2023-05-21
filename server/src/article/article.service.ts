@@ -214,6 +214,114 @@ export class ArticleService {
     }
   }
 
+  async getMyArticles(userId: number, query: GetArticlesDto) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { userId: userId },
+        skip: query.offset,
+        take: query.limit,
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      const Articles = articles.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getArticlesByUserIdAuth(
+    userId: number,
+    myUserId: number,
+    query: GetArticlesDto,
+  ) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { userId: userId },
+        skip: query.offset,
+        take: query.limit,
+        select: {
+          bookmarks: {
+            where: {
+              userId: myUserId,
+            },
+          },
+          likes: {
+            where: {
+              userId: myUserId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      const Articles = articles.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getArticlesByUserId(userId: number, query: GetArticlesDto) {
     try {
       const articles = await this.prisma.article.findMany({

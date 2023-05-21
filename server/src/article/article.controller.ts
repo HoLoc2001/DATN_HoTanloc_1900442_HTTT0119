@@ -73,6 +73,26 @@ export class ArticleController {
       .json({ statusCode: 204, msg: 'NO_CONTENT' });
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Get('auth/user/:userId')
+  async getArticlesByUserIdAuth(
+    @Param() param: GetArticlesByUserIdDto,
+    @Query() query: GetArticlesDto,
+    @GetUser() user: User,
+  ) {
+    return await this.articleService.getArticlesByUserIdAuth(
+      param.userId,
+      user['userId'],
+      query,
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/myUser')
+  async getMyArticles(@Query() query: GetArticlesDto, @GetUser() user: User) {
+    return await this.articleService.getMyArticles(user['userId'], query);
+  }
+
   @Get('user/:userId')
   async getArticlesByUserId(
     @Param() user: GetArticlesByUserIdDto,

@@ -11,6 +11,7 @@ import Profile from "./components/Profile";
 import OtherUser from "./components/Profile/OtherUser";
 import Bookmark from "./components/Bookmark";
 import ReadArticle from "./components/Article/ReadArticle";
+import EditProfile from "./components/Profile/EditProfile";
 
 const App = () => {
   return (
@@ -33,10 +34,11 @@ const App = () => {
             <Route path="/" element={<Article />} />
             <Route path="/create" element={<Editor />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/user/:userId" element={<OtherUser />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/editProfile" element={<EditProfile />} />
             <Route path="/tag/:tag" element={<Tag />} />
             <Route path="/bookmarks" element={<Bookmark />} />
+            <Route path="/user/:userId" element={<OtherUser />} />
             <Route path="/:articleId" element={<ReadArticle />} />
           </Route>
           <Route path="/signin" element={<SignIn />} />

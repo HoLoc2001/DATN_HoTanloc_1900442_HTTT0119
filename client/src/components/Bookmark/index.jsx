@@ -8,6 +8,7 @@ import { getBookmark } from "../../redux/articleSlice";
 const index = () => {
   const dispatch = useAppDispatch();
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const themeColor = useAppSelector((state) => state.theme.color);
   const bookmarks = useAppSelector((state) => state.article.bookmarks);
   const [page, setPage] = useState(bookmarks?.length || 0);
 
@@ -35,7 +36,14 @@ const index = () => {
   }, [page, isSuccessAuth]);
   return (
     <>
-      <Box sx={{ color: "#fff" }} justifyContent={"center"}>
+      <Box
+        sx={{
+          color: `${
+            themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+          }`,
+        }}
+        justifyContent={"center"}
+      >
         <Typography height={"36.5px"}>Bookmark</Typography>
         {bookmarks?.length ? (
           <Article _articles={bookmarks} _setPage={setPage} hasPost={hasPost} />

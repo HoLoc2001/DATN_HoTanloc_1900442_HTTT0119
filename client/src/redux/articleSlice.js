@@ -36,21 +36,78 @@ export const getArticleByArticleId = createAsyncThunk(
   }
 );
 
+export const getMyArticles = createAsyncThunk(
+  "article/getMyArticle",
+  async ({ page }, { getState }) => {
+    try {
+      const { myArticles } = getState().article;
+      const res = await axiosPrivate.get(
+        `article/MyUser?limit=6&offset=${page}`
+      );
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...myArticles, ...res.data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getArticleByUserId = createAsyncThunk(
+  "article/getArticleByUserId",
+  async ({ userId, page }, { getState }) => {
+    try {
+      const { isAuthenticated } = getState().auth;
+      const { userArticles } = getState().article;
+
+      const res = isAuthenticated
+        ? await axiosPrivate.get(
+            `article/auth/user/${userId}?limit=6&offset=${page}`
+          )
+        : await axiosPublic.get(
+            `article/user/${userId}?limit=6&offset=${page}`
+          );
+
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...userArticles, ...res.data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const updateLike = createAsyncThunk(
   "article/updateLike",
   async (articleId, { getState }) => {
     try {
-      const { bookmarks, articles } = getState().article;
+      const { bookmarks, articles, userArticles, myArticles } =
+        getState().article;
 
       const res = await axiosPrivate.post(`like/${articleId}`);
       const indexBookmark = bookmarks.findIndex(
         (bookmark) => bookmark.id === articleId
       );
       const indexArticle = articles.findIndex(
-        (bookmark) => bookmark.id === articleId
+        (article) => article.id === articleId
+      );
+      const indexUserArticle = userArticles.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexMyArticle = myArticles.findIndex(
+        (article) => article.id === articleId
       );
 
-      return { ...res.data, indexBookmark, indexArticle, articleId };
+      return {
+        ...res.data,
+        indexBookmark,
+        indexArticle,
+        articleId,
+        indexUserArticle,
+        indexMyArticle,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -63,9 +120,10 @@ export const getBookmark = createAsyncThunk(
     try {
       const { bookmarks } = getState().article;
       const res = await axiosPrivate.get(`bookmark?limit=6&offset=${page}`);
-
-      const data = [...bookmarks, ...res.data];
-      return data;
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...bookmarks, ...res.data];
     } catch (error) {
       console.log(error);
     }
@@ -74,14 +132,14 @@ export const getBookmark = createAsyncThunk(
 
 export const addBookmark = createAsyncThunk(
   "article/addBookmark",
-  async ({ articleId, index = null }, { getState }) => {
+  async ({ articleId }, { getState }) => {
     try {
       const { articles } = getState().article;
       const res = await axiosPrivate.post(`bookmark/${articleId}`);
-      if (!index) {
-        index = articles.findIndex((article) => article.id === articleId);
-      }
-      return { ...res.data, index, articleId };
+      const indexArticle = articles.findIndex(
+        (article) => article.id === articleId
+      );
+      return { ...res.data, indexArticle, articleId };
     } catch (error) {
       console.log(error);
     }
@@ -168,13 +226,36 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+export const articleSearch = createAsyncThunk(
+  "article/articleSearch",
+  async ({ page, query }, { getState }) => {
+    try {
+      const { articles } = getState().article;
+      const { isAuthenticated } = getState().auth;
+      console.log(query);
+      const res = isAuthenticated
+        ? await axiosPrivate.get(
+            `search/auth?q=${query}&limit=6&offset=${page}`
+          )
+        : await axiosPublic.get(`search?q=${query}&limit=6&offset=${page}`);
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const articleSlice = createSlice({
   name: "article",
   initialState: {
     articles: [],
+    myArticles: [],
+    userArticles: [],
     bookmarks: [],
     comments: [],
     article: null,
+    articleSearch: [],
   },
   extraReducers: (builder) => {
     builder
@@ -183,6 +264,12 @@ export const articleSlice = createSlice({
       })
       .addCase(getArticleByArticleId.fulfilled, (state, action) => {
         state.article = action.payload;
+      })
+      .addCase(getMyArticles.fulfilled, (state, action) => {
+        state.myArticles = action.payload;
+      })
+      .addCase(getArticleByUserId.fulfilled, (state, action) => {
+        state.userArticles = action.payload;
       })
       .addCase(updateLike.fulfilled, (state, action) => {
         if (state.articles[action.payload.indexArticle]) {
@@ -197,6 +284,18 @@ export const articleSlice = createSlice({
           state.bookmarks[action.payload.indexBookmark]._count.likes =
             action.payload?.likes;
         }
+        if (state.userArticles[action.payload.indexUserArticle]) {
+          state.userArticles[action.payload.indexUserArticle].isLiked =
+            action.payload?.isLiked;
+          state.userArticles[action.payload.indexUserArticle]._count.likes =
+            action.payload?.likes;
+        }
+        if (state.myArticles[action.payload.indexMyArticle]) {
+          state.myArticles[action.payload.indexMyArticle].isLiked =
+            action.payload?.isLiked;
+          state.myArticles[action.payload.indexMyArticle]._count.likes =
+            action.payload?.likes;
+        }
         if (state.article?.id === action.payload.articleId) {
           state.article.isLiked = action.payload?.isLiked;
           state.article._count.likes = action.payload?.likes;
@@ -206,9 +305,9 @@ export const articleSlice = createSlice({
         state.bookmarks = action.payload;
       })
       .addCase(addBookmark.fulfilled, (state, action) => {
-        state.bookmarks.push(action.payload);
-        if (state.articles[action.payload.index]) {
-          state.articles[action.payload.index].isBookmarked = true;
+        state.bookmarks.unshift(action.payload);
+        if (state.articles[action.payload.indexArticle]) {
+          state.articles[action.payload.indexArticle].isBookmarked = true;
         }
         if (state.article?.id === action.payload.articleId) {
           state.article.isBookmarked = true;
@@ -239,6 +338,9 @@ export const articleSlice = createSlice({
       .addCase(updateComment.fulfilled, (state, action) => {})
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.bookmarks.push(action.payload);
+      })
+      .addCase(articleSearch.fulfilled, (state, action) => {
+        state.articleSearch = action.payload;
       });
   },
 });

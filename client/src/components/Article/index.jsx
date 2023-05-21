@@ -81,7 +81,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     if (!isSuccessAuth) {
       return setErrMissInput(true);
     }
-    await dispatch(addBookmark({ articleId, index }));
+    await dispatch(addBookmark({ articleId }));
   };
 
   const handleRemoveBookmark = async (event, { articleId }) => {
@@ -106,14 +106,16 @@ const index = ({ _articles, _setPage, _hasPost }) => {
         }}
         hasMore={articles.length && (hasPost || _hasPost)}
       >
-        <Grid container spacing={10}>
+        <Grid container spacing={0}>
           {articles.map((article, index) => (
             <Grid
               item
               columns={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}
               key={article.id}
+              padding={"0"}
               sx={{
-                marginTop: "10px",
+                margin: "10px 5% 2% 0",
+                height: "410px",
               }}
             >
               <Link to={`/${article.id}`} style={{ textDecoration: "none" }}>
@@ -314,7 +316,6 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                               onClick={(event) =>
                                 handleAddBookmark(event, {
                                   articleId: article.id,
-                                  index,
                                 })
                               }
                             >

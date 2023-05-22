@@ -18,10 +18,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { styled } from "@mui/material/styles";
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import Stack from "@mui/material/Stack";
 import { setThemeColorStore } from "../redux/themeSlice";
 import { signOut } from "../redux/authSlice";
 

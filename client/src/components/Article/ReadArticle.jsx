@@ -172,10 +172,10 @@ const ReadArticle = () => {
         </Box>
         <Box
           position={"fixed"}
-          right={"0"}
-          // left={"5%"}
+          // right={"0"}
+          left={"70vw"}
           sx={{
-            width: "29%",
+            width: "29vw",
             // marginLeft: "20px",
             borderLeft: `0.1px solid ${
               themeColor === "light" ? "#a6aeb8" : "#2d3748"

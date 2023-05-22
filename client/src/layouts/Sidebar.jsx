@@ -27,15 +27,15 @@ const Sidebar = () => {
   const themeColor = useAppSelector((state) => state.theme.color);
   const [active, setActive] = useState("home");
 
-  useEffect(() => {
-    (async () => {
-      if (isAuthenticated) {
-        await dispatch(getMyTags());
-      } else {
-        await dispatch(popularTags());
-      }
-    })();
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (isAuthenticated) {
+  //       await dispatch(getMyTags());
+  //     } else {
+  //       await dispatch(popularTags());
+  //     }
+  //   })();
+  // }, [isAuthenticated]);
 
   const handleClickHome = () => {
     setActive("home");

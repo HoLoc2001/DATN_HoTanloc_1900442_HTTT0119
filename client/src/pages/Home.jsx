@@ -5,7 +5,8 @@ import Sidebar from "../layouts/Sidebar";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { getUser } from "../redux/userSlice";
 import { signIn } from "../redux/authSlice";
-import { Box } from "@mui/material";
+import { getMyTags, getTags } from "../redux/tagSlice";
+// import { Box } from "@mui/material";
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -34,16 +35,23 @@ const Home = () => {
         await dispatch(signIn());
       })();
     }
-    if (localStorage["RT"]) {
-      (async () => {
-        await dispatch(getUser());
-      })();
-    }
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      if (isAuthenticated) {
+        await dispatch(getUser());
+        await dispatch(getTags());
+        await dispatch(getMyTags());
+      } else {
+        await dispatch(popularTags());
+      }
+    })();
+  }, [isAuthenticated]);
+
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         height: "100%",
         minHeight: "100vh",
 
@@ -57,7 +65,7 @@ const Home = () => {
       <div style={{ padding: "0 0 0 14%" }}>
         <Outlet />
       </div>
-    </Box>
+    </div>
   );
 };
 

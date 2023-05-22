@@ -98,7 +98,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   };
 
   return (
-    <Box>
+    <>
       {!_articles && isSuccessAuth ? <SetTags /> : ""}
       <InfiniteScroll
         getMore={() => {
@@ -341,7 +341,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
         severity="info"
         content="Please login"
       />
-    </Box>
+    </>
   );
 };
 

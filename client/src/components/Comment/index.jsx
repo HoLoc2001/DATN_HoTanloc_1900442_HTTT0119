@@ -1,9 +1,23 @@
 import SendIcon from "@mui/icons-material/Send";
-import { Avatar, Box, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Icon,
+  IconButton,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { Link } from "react-router-dom";
-import { addComment, getComments } from "../../redux/articleSlice";
+import {
+  addComment,
+  getComments,
+  updatingComment,
+} from "../../redux/articleSlice";
 
 const index = ({ articleId }) => {
   const dispatch = useAppDispatch();
@@ -17,24 +31,42 @@ const index = ({ articleId }) => {
   }, [articleId]);
   const [comment, setComment] = useState("");
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openMenu, setOpenMenu] = useState({
+    commentId: null,
+    content: "",
+    indexComment: null,
+  });
+
+  const open = Boolean(anchorEl);
   const onChangeComment = (e) => {
     setComment(e.target.value);
   };
-
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleClick = (event, { index, comment }) => {
+    setAnchorEl(event.currentTarget);
+    setOpenMenu({ ...openMenu, indexComment: index, content: comment.content });
+  };
   const keyPress = async (e) => {
     if (e.key === "Enter" && comment) {
       await dispatch(addComment({ articleId, content: comment }));
-      // await dispatch(getCommentPost(postId));
+
       setComment("");
     }
   };
 
   const handleSendComment = async () => {
     await dispatch(addComment({ articleId, content: comment }));
-    // await dispatch(getCommentPost(postId));
+
     setComment("");
   };
 
+  const handleUpdate = async (commentId, content, index) => {
+    await dispatch(updatingComment(index));
+  };
+  console.log(openMenu.content);
   return (
     <>
       <Box
@@ -59,13 +91,14 @@ const index = ({ articleId }) => {
           },
         }}
       >
-        {comments.map((comment) => {
+        {comments.map((comment, index) => {
           return (
             <div
               key={comment.id}
               style={{
                 display: "flex",
                 margin: "10px",
+                maxWidth: "80%",
               }}
             >
               <Link
@@ -84,6 +117,7 @@ const index = ({ articleId }) => {
               </Link>
               <div
                 style={{
+                  position: "relative",
                   backgroundColor: "#E4E6EB",
                   width: "auto",
                   padding: "0px 10px",
@@ -118,16 +152,62 @@ const index = ({ articleId }) => {
                     {comment.user?.firstName + " " + comment.user?.lastName}
                   </Typography>
                 </Link>
-                <Typography
-                  variant="body2"
-                  sx={{ fontSize: "15px", color: "black" }}
+                {comment?.updatingComment ? (
+                  <TextField
+                    variant="standard"
+                    sx={{ display: "block" }}
+                    defaultValue={openMenu.content}
+                  />
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{ fontSize: "15px", color: "black" }}
+                  >
+                    {comment.content}
+                  </Typography>
+                )}
+
+                <Box
+                  position={"absolute"}
+                  right={"-50px"}
+                  top={"0"}
+                  sx={{
+                    display: `${comment.userId === userId ? "block" : "none"}`,
+                  }}
                 >
-                  {comment.content}
-                </Typography>
+                  <IconButton
+                    onClick={(event) =>
+                      handleClick(event, {
+                        index,
+                        comment,
+                      })
+                    }
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                </Box>
               </div>
             </div>
           );
         })}
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem
+            onClick={() =>
+              handleUpdate(comment.id, comment.content, openMenu.indexComment)
+            }
+          >
+            Update
+          </MenuItem>
+          <MenuItem onClick={handleClose}>Remove</MenuItem>
+        </Menu>
       </Box>
       <Box
         sx={{

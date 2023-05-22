@@ -200,6 +200,19 @@ export const addComment = createAsyncThunk(
   }
 );
 
+export const updatingComment = createAsyncThunk(
+  "article/updatingComment",
+  async (indexComment, { getState }) => {
+    try {
+      const { comments } = getState().article;
+      console.log(indexComment);
+      return { indexComment, comment: comments[indexComment] };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const updateComment = createAsyncThunk(
   "article/updateComment",
   async (articleId) => {
@@ -232,7 +245,7 @@ export const articleSearch = createAsyncThunk(
     try {
       const { articles } = getState().article;
       const { isAuthenticated } = getState().auth;
-      console.log(query);
+
       const res = isAuthenticated
         ? await axiosPrivate.get(
             `search/auth?q=${query}&limit=6&offset=${page}`
@@ -334,6 +347,12 @@ export const articleSlice = createSlice({
         if (state.articles[action.payload.indexBookmark]) {
           state.articles[action.payload.indexBookmark]._count.comments += 1;
         }
+      })
+      .addCase(updatingComment.fulfilled, (state, action) => {
+        state.comments[action.payload.indexComment] = {
+          ...action.payload.comment,
+          updatingComment: true,
+        };
       })
       .addCase(updateComment.fulfilled, (state, action) => {})
       .addCase(deleteComment.fulfilled, (state, action) => {

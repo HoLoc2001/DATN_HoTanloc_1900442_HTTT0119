@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Box, Grid } from "@mui/material";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
@@ -15,7 +16,6 @@ import Typography from "@mui/material/Typography";
 import TuneIcon from "@mui/icons-material/Tune";
 import { blue } from "@mui/material/colors";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { Box, Grid } from "@mui/material";
 import { addMyTag, getTags, removeMyTag } from "../redux/tagSlice";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
@@ -25,7 +25,7 @@ function SimpleDialog(props) {
 
   React.useEffect(() => {
     (async () => {
-      await dispatch(getTags());
+      // await dispatch(getTags());
     })();
   }, []);
 

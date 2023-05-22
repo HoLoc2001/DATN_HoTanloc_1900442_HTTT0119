@@ -34,6 +34,7 @@ const index = () => {
       });
     })();
   }, [page, isSuccessAuth]);
+
   return (
     <>
       <Box

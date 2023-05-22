@@ -26,6 +26,7 @@ const Editor = () => {
   const dispatch = useAppDispatch();
   const tags = useAppSelector((state) => state.tag.tags);
   const themeColor = useAppSelector((state) => state.theme.color);
+  const article = useAppSelector((state) => state.article.article);
 
   useEffect(() => {
     (async () => {
@@ -121,6 +122,7 @@ const Editor = () => {
             ],
           }}
           onChange={handleChange}
+          defaultValue={article.content}
           onImageUploadBefore={handleImageUploadBefore}
         />
         <Autocomplete

@@ -22,6 +22,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { setThemeColorStore } from "../redux/themeSlice";
 import { signOut } from "../redux/authSlice";
+import AlertInfo from "../components/AlertInfo";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -78,6 +79,7 @@ const Navbar = () => {
   const themeColor = useAppSelector((state) => state.theme.color);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [error, setError] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -152,7 +154,17 @@ const Navbar = () => {
                 {isSuccessAuth ? (
                   <>
                     <Link to={"./create"}>
-                      <Button>Create article</Button>
+                      <Button
+                        sx={{
+                          textTransform: "none",
+                          border: "1px solid #a3a3a3",
+                          color: `${
+                            themeColor === "light" ? "#171717" : "#fff2f2"
+                          }`,
+                        }}
+                      >
+                        Create article
+                      </Button>
                     </Link>
                     <Tooltip title={`${user.firstName} ${user.lastName}`}>
                       <IconButton
@@ -232,13 +244,12 @@ const Navbar = () => {
       </AppBar>
       <Toolbar color="rgb(255 248 248)" />
 
-      {/* <Snackbar
-      open={errMissInput}
-      autoHideDuration={4000}
-      onClose={() => setErrMissInput(false)}
-    >
-      <Alert severity="warning">Vui lòng nhập đầy đủ!!!</Alert>
-    </Snackbar> */}
+      <AlertInfo
+        err={error}
+        setErr={setError}
+        severity="info"
+        content="Please login"
+      />
     </>
   );
 };

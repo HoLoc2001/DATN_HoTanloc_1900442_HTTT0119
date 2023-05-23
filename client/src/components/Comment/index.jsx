@@ -2,6 +2,7 @@ import SendIcon from "@mui/icons-material/Send";
 import {
   Avatar,
   Box,
+  Button,
   Icon,
   IconButton,
   Menu,
@@ -15,7 +16,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { Link } from "react-router-dom";
 import {
   addComment,
+  cancelUpdatingComment,
+  deleteComment,
   getComments,
+  updateComment,
   updatingComment,
 } from "../../redux/articleSlice";
 
@@ -47,7 +51,12 @@ const index = ({ articleId }) => {
   };
   const handleClick = (event, { index, comment }) => {
     setAnchorEl(event.currentTarget);
-    setOpenMenu({ ...openMenu, indexComment: index, content: comment.content });
+    setOpenMenu({
+      ...openMenu,
+      commentId: comment.id,
+      indexComment: index,
+      content: comment.content,
+    });
   };
   const keyPress = async (e) => {
     if (e.key === "Enter" && comment) {
@@ -63,10 +72,33 @@ const index = ({ articleId }) => {
     setComment("");
   };
 
-  const handleUpdate = async (commentId, content, index) => {
+  const handleUpdateComment = async (index) => {
     await dispatch(updatingComment(index));
+    handleClose();
   };
-  console.log(openMenu.content);
+
+  const handleCloseUpdating = async (index) => {
+    await dispatch(cancelUpdatingComment(index));
+  };
+
+  const handleOKUpdating = async (commentId, content, index) => {
+    if (content) {
+      await dispatch(updateComment({ commentId, content, index }));
+    }
+  };
+
+  const handleEnterUpdating = async (e, { commentId, content, index }) => {
+    if (content) {
+      if (e.key === "Enter" && content) {
+        await dispatch(updateComment({ commentId, content, index }));
+      }
+    }
+  };
+
+  const handleDeleteComment = async (commentId, index) => {
+    handleClose();
+    await dispatch(deleteComment({ commentId, articleId, index }));
+  };
   return (
     <>
       <Box
@@ -153,11 +185,46 @@ const index = ({ articleId }) => {
                   </Typography>
                 </Link>
                 {comment?.updatingComment ? (
-                  <TextField
-                    variant="standard"
-                    sx={{ display: "block" }}
-                    defaultValue={openMenu.content}
-                  />
+                  <>
+                    <TextField
+                      variant="standard"
+                      sx={{ display: "block" }}
+                      defaultValue={openMenu.content}
+                      value={openMenu.content}
+                      onChange={(e) => {
+                        setOpenMenu({ ...openMenu, content: e.target.value });
+                      }}
+                      onKeyDown={(e) => {
+                        handleEnterUpdating(e, {
+                          commentId: comment.id,
+                          content: openMenu.content,
+                          index: openMenu.indexComment,
+                        });
+                      }}
+                    />
+                    <Box display={"flex"}>
+                      <Button
+                        sx={{ textTransform: "none", color: "black" }}
+                        onClick={() =>
+                          handleCloseUpdating(openMenu.indexComment)
+                        }
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        sx={{}}
+                        onClick={() =>
+                          handleOKUpdating(
+                            comment.id,
+                            openMenu.content,
+                            openMenu.indexComment
+                          )
+                        }
+                      >
+                        OK
+                      </Button>
+                    </Box>
+                  </>
                 ) : (
                   <Typography
                     variant="body2"
@@ -199,14 +266,16 @@ const index = ({ articleId }) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem
-            onClick={() =>
-              handleUpdate(comment.id, comment.content, openMenu.indexComment)
-            }
-          >
+          <MenuItem onClick={() => handleUpdateComment(openMenu.indexComment)}>
             Update
           </MenuItem>
-          <MenuItem onClick={handleClose}>Remove</MenuItem>
+          <MenuItem
+            onClick={() =>
+              handleDeleteComment(openMenu.commentId, openMenu.indexComment)
+            }
+          >
+            Delete
+          </MenuItem>
         </Menu>
       </Box>
       <Box

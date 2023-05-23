@@ -190,7 +190,7 @@ export const addComment = createAsyncThunk(
         (bookmark) => bookmark.id === articleId
       );
       const indexArticle = articles.findIndex(
-        (bookmark) => bookmark.id === articleId
+        (article) => article.id === articleId
       );
 
       return { data: res.data, indexBookmark, indexArticle };
@@ -205,8 +205,19 @@ export const updatingComment = createAsyncThunk(
   async (indexComment, { getState }) => {
     try {
       const { comments } = getState().article;
-      console.log(indexComment);
+
       return { indexComment, comment: comments[indexComment] };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const cancelUpdatingComment = createAsyncThunk(
+  "article/cancelUpdatingComment",
+  async (indexComment, { getState }) => {
+    try {
+      return { indexComment };
     } catch (error) {
       console.log(error);
     }
@@ -215,11 +226,11 @@ export const updatingComment = createAsyncThunk(
 
 export const updateComment = createAsyncThunk(
   "article/updateComment",
-  async (articleId) => {
+  async ({ commentId, content, index }) => {
     try {
-      const res = await axiosPrivate.post(`comment/${articleId}`);
+      const res = await axiosPrivate.patch(`comment/${commentId}`, { content });
 
-      return res.data;
+      return { data: res.data, index };
     } catch (error) {
       console.log(error);
     }
@@ -228,11 +239,17 @@ export const updateComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   "article/deleteComment",
-  async (articleId) => {
+  async ({ commentId, articleId, index }, { getState }) => {
     try {
-      const res = await axiosPrivate.delete(`comment/${articleId}`);
-
-      return res.data;
+      const { bookmarks, articles } = getState().article;
+      await axiosPrivate.delete(`comment/${commentId}`);
+      const indexBookmark = bookmarks.findIndex(
+        (bookmark) => bookmark.id === articleId
+      );
+      const indexArticle = articles.findIndex(
+        (article) => article.id === articleId
+      );
+      return { index, indexBookmark, indexArticle };
     } catch (error) {
       console.log(error);
     }
@@ -354,9 +371,21 @@ export const articleSlice = createSlice({
           updatingComment: true,
         };
       })
-      .addCase(updateComment.fulfilled, (state, action) => {})
+      .addCase(cancelUpdatingComment.fulfilled, (state, action) => {
+        state.comments[action.payload.indexComment].updatingComment = false;
+      })
+      .addCase(updateComment.fulfilled, (state, action) => {
+        state.comments[action.payload.index] = action.payload.data;
+      })
       .addCase(deleteComment.fulfilled, (state, action) => {
-        state.bookmarks.push(action.payload);
+        state.comments.splice(action.payload.index, 1);
+        state.article._count.comments -= 1;
+        if (state.articles[action.payload.indexArticle]) {
+          state.articles[action.payload.indexArticle]._count.comments -= 1;
+        }
+        if (state.articles[action.payload.indexBookmark]) {
+          state.articles[action.payload.indexBookmark]._count.comments -= 1;
+        }
       })
       .addCase(articleSearch.fulfilled, (state, action) => {
         state.articleSearch = action.payload;

@@ -10,6 +10,7 @@ import { themeSlice } from "./themeSlice";
 import { bookmarkSlice } from "./bookmarkSlice";
 import { likeSlice } from "./likeSlice";
 import { commentSlice } from "./commentSlice";
+import { followSlice } from "./followSlice";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     bookmark: bookmarkSlice.reducer,
     like: likeSlice.reducer,
     comment: commentSlice.reducer,
+    follow: followSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

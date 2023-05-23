@@ -31,7 +31,7 @@ model User {
   articles     Article[]
   bookmarks    Bookmark[]
   followers    Follows[]  @relation("following")
-  following    Follows[]  @relation("follower")
+  followings   Follows[]  @relation("follower")
 
   @@index([id])
   @@map("users")

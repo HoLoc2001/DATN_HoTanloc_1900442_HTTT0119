@@ -25,6 +25,18 @@ export class UserController {
     return await this.userService.getProfile(user['userId']);
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Get('followers')
+  async getFollowers(@GetUser() user: User) {
+    return await this.userService.getFollowers(user['userId']);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('followings')
+  async getFollowings(@GetUser() user: User) {
+    return await this.userService.getFollowings(user['userId']);
+  }
+
   @Get(':id')
   async getUserById(@Param() params: GetUserById) {
     return await this.userService.getUserById(params.id);

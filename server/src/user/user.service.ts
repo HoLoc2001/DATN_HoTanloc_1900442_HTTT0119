@@ -20,6 +20,12 @@ export class UserService {
         firstName: true,
         lastName: true,
         createdAt: true,
+        _count: {
+          select: {
+            followers: true,
+            followings: true,
+          },
+        },
       },
     });
     return user;
@@ -130,5 +136,72 @@ export class UserService {
       return { userId, isFollowed: true };
     }
     return { userId, isFollowed: false };
+  }
+
+  async getFollowers(userId: number) {
+    const followers = await this.prisma.user.findMany({
+      where: {
+        id: userId,
+      },
+      select: {
+        followers: {
+          select: {
+            followerId: true,
+            follower: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return followers;
+  }
+
+  async getFollowings(userId: number) {
+    // const {
+    //   [0]: { followings },
+    // } = await this.prisma.user.findMany({
+    //   where: {
+    //     id: userId,
+    //   },
+    //   select: {
+    //     followings: {
+    //       select: {
+    //         following: {
+    //           select: {
+    //             id: true,
+    //             avatar: true,
+    //             firstName: true,
+    //             lastName: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    const followings = await this.prisma.follows.findMany({
+      where: {
+        followerId: userId,
+      },
+      select: {
+        following: {
+          select: {
+            id: true,
+            avatar: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+
+    return followings;
   }
 }

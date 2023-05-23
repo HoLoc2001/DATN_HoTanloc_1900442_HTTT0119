@@ -216,7 +216,10 @@ const ReadArticle = () => {
                     ? "/profile"
                     : `../user/${article.userId}`
                 }
-                style={{ textDecoration: "none", color: "#fff2f2" }}
+                style={{
+                  textDecoration: "none",
+                  color: `${themeColor === "light" ? "#2d3748" : "#fff2f2"}`,
+                }}
               >
                 <Typography variant="h6">
                   {`${article.user?.firstName} ${article.user?.lastName}`}

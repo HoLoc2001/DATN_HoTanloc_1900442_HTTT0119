@@ -7,7 +7,7 @@ export class CommentService {
 
   async getCommentsByArticleId(articleId: number) {
     try {
-      const listLike = await this.prisma.comment.findMany({
+      const listComment = await this.prisma.comment.findMany({
         where: {
           articleId: articleId,
         },
@@ -23,7 +23,7 @@ export class CommentService {
         },
       });
 
-      return listLike;
+      return listComment;
     } catch (error) {
       throw error;
     }
@@ -71,6 +71,15 @@ export class CommentService {
         comment = await this.prisma.comment.findUnique({
           where: {
             id: commentId,
+          },
+          include: {
+            user: {
+              select: {
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
           },
         });
       }

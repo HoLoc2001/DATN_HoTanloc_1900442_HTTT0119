@@ -4,12 +4,15 @@ import {
   Button,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Skeleton,
   Tooltip,
   Typography,
 } from "@mui/material";
 import moment from "moment";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -36,6 +39,12 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const [errMissInput, setErrMissInput] = useState(false);
 
   const [page, setPage] = useState(articles?.length || 0);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const [hasPost, setHasPost] = useState(() => {
     if (articles.length % 6 === 0 && articles.length !== 0) {
@@ -95,6 +104,11 @@ const index = ({ _articles, _setPage, _hasPost }) => {
 
   const handleClick = (e) => {
     e.preventDefault();
+  };
+
+  const handleClickMore = (event) => {
+    event.preventDefault();
+    setAnchorEl(event.currentTarget);
   };
 
   return (
@@ -169,6 +183,11 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       <Typography>
                         {article.user?.firstName + " " + article.user?.lastName}
                       </Typography>
+                      <Box marginLeft={"12vw"} sx={{}}>
+                        <IconButton onClick={(event) => handleClickMore(event)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                      </Box>
                     </Box>
                     <Tooltip title={article.title}>
                       <Typography
@@ -335,6 +354,18 @@ const index = ({ _articles, _setPage, _hasPost }) => {
       {/* <Typography sx={{ textAlign: "center", color: "rgba(163,174,201,255)" }}>
         End Load
       </Typography> */}
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem>Update</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      </Menu>
       <AlertInfo
         err={errMissInput}
         setErr={setErrMissInput}

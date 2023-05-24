@@ -3,6 +3,11 @@ import {
   Avatar,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   Menu,
@@ -34,7 +39,7 @@ const index = ({ articleId }) => {
     })();
   }, [articleId]);
   const [comment, setComment] = useState("");
-
+  const [openDeleteComment, setOpenDeleteComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState({
     commentId: null,
@@ -95,10 +100,17 @@ const index = ({ articleId }) => {
     }
   };
 
-  const handleDeleteComment = async (commentId, index) => {
-    handleClose();
-    await dispatch(deleteComment({ commentId, articleId, index }));
+  const handleDeleteComment = async () => {
+    await dispatch(
+      deleteComment({
+        articleId,
+        commentId: openMenu.commentId,
+        index: openMenu.indexComment,
+      })
+    );
+    setOpenDeleteComment(false);
   };
+
   return (
     <>
       <Box
@@ -270,9 +282,10 @@ const index = ({ articleId }) => {
             Update
           </MenuItem>
           <MenuItem
-            onClick={() =>
-              handleDeleteComment(openMenu.commentId, openMenu.indexComment)
-            }
+            onClick={() => {
+              setOpenDeleteComment(true);
+              handleClose();
+            }}
           >
             Delete
           </MenuItem>
@@ -306,6 +319,30 @@ const index = ({ articleId }) => {
           <SendIcon sx={{ color: "#1976d2" }} />
         </IconButton>
       </Box>
+      <Dialog
+        open={openDeleteComment}
+        onClose={() => !openDeleteComment}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Article</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete the comment?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenDeleteComment(false)}
+            sx={{ textTransform: "none" }}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteComment} sx={{ textTransform: "none" }}>
+            Yes, delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

@@ -11,6 +11,7 @@ import { bookmarkSlice } from "./bookmarkSlice";
 import { likeSlice } from "./likeSlice";
 import { commentSlice } from "./commentSlice";
 import { followSlice } from "./followSlice";
+import { cloudSlice } from "./cloudSlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     like: likeSlice.reducer,
     comment: commentSlice.reducer,
     follow: followSlice.reducer,
+    cloud: cloudSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

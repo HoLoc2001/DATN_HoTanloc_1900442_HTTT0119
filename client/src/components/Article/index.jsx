@@ -35,6 +35,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     _articles || useAppSelector((state) => state.article.articles);
   const themeColor = useAppSelector((state) => state.theme.color);
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const { id: userId } = useAppSelector((state) => state.user.user);
 
   const [errMissInput, setErrMissInput] = useState(false);
 
@@ -180,10 +181,16 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                           src={article.user?.avatar}
                         />
                       </Tooltip>
-                      <Typography>
+                      <Typography minWidth={"200px"}>
                         {article.user?.firstName + " " + article.user?.lastName}
                       </Typography>
-                      <Box marginLeft={"12vw"} sx={{}}>
+                      <Box
+                        marginLeft={"3vw"}
+                        display={`${
+                          article.userId === userId ? "block" : "none"
+                        }`}
+                        sx={{}}
+                      >
                         <IconButton onClick={(event) => handleClickMore(event)}>
                           <MoreVertIcon />
                         </IconButton>

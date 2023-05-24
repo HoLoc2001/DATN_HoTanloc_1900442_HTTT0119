@@ -4,6 +4,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Icon,
   IconButton,
   Menu,
@@ -78,6 +83,7 @@ const Navbar = () => {
   const user = useAppSelector((state) => state.user.user);
   const themeColor = useAppSelector((state) => state.theme.color);
 
+  const [openSignOut, setOpenSignOut] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [error, setError] = useState(false);
   const open = Boolean(anchorEl);
@@ -90,8 +96,7 @@ const Navbar = () => {
 
   const handleSignOut = async () => {
     await dispatch(signOut());
-
-    setAnchorEl(null);
+    setOpenSignOut(false);
   };
 
   const handleSwitch = (e) => {
@@ -197,7 +202,14 @@ const Navbar = () => {
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                       </Link>
                       <MenuItem onClick={handleClose}>My account</MenuItem>
-                      <MenuItem onClick={handleSignOut}>SignOut</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setOpenSignOut(true);
+                          setAnchorEl(null);
+                        }}
+                      >
+                        SignOut
+                      </MenuItem>
                     </Menu>
                   </>
                 ) : (
@@ -250,6 +262,31 @@ const Navbar = () => {
         severity="info"
         content="Please login"
       />
+
+      <Dialog
+        open={openSignOut}
+        onClose={() => !openSignOut}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Article</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to sign out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenSignOut(false)}
+            sx={{ textTransform: "none" }}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSignOut} sx={{ textTransform: "none" }}>
+            Yes, sign out
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

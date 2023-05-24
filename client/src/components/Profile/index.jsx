@@ -161,9 +161,7 @@ const index = () => {
       {myArticles.length ? (
         <Article _articles={myArticles} _setPage={setPage} hasPost={hasPost} />
       ) : (
-        <Typography sx={{ margin: "25px 0 0 0" }}>
-          Your bookmark list is empty.
-        </Typography>
+        <Typography sx={{ margin: "25px 0 0 0" }}></Typography>
       )}
 
       <Modal

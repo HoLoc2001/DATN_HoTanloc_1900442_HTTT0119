@@ -59,26 +59,47 @@ const ReadArticle = () => {
   if (articleId != article?.id) {
     return (
       <>
-        <Stack spacing={1}>
-          {/* For variant="text", adjust the height via font-size */}
-          <Skeleton
-            variant="text"
-            sx={{
-              fontSize: "3.75rem",
-              backgroundColor: "whitesmoke",
-              width: "800px",
-            }}
-          />
+        <Box display={"flex"}>
+          <Stack spacing={1}>
+            <Skeleton
+              variant="text"
+              sx={{
+                fontSize: "3.75rem",
+                backgroundColor: "#293241",
+                width: "55vw",
+              }}
+            />
 
-          <Skeleton
-            variant="rounded"
-            sx={{
-              height: "1000px",
-              width: "800px",
-              backgroundColor: "whitesmoke",
-            }}
-          />
-        </Stack>
+            <Skeleton
+              variant="rounded"
+              sx={{
+                height: "1000px",
+                width: "55vw",
+                backgroundColor: "#293241",
+              }}
+            />
+          </Stack>
+          <Stack spacing={1} marginLeft={"40px"} marginTop={"20px"}>
+            <Skeleton
+              variant="rounded"
+              sx={{
+                height: "25vh",
+                backgroundColor: "#293241",
+                width: "26vw",
+                marginBottom: "22.225px",
+              }}
+            />
+
+            <Skeleton
+              variant="rounded"
+              sx={{
+                height: "53vh",
+                width: "26vw",
+                backgroundColor: "#293241",
+              }}
+            />
+          </Stack>
+        </Box>
       </>
     );
   }

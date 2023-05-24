@@ -8,8 +8,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from './cloudinary.service';
 // ... other imports
 
-@Controller('image')
-export class AppController {
+@Controller('api/image')
+export class CloudinaryController {
   constructor(private cloudinaryService: CloudinaryService) {}
 
   @Post('upload')

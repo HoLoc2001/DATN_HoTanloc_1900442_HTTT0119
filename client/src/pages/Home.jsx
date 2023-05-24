@@ -40,8 +40,8 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
-        await dispatch(getUser());
         await dispatch(getTags());
+        await dispatch(getUser());
         await dispatch(getMyTags());
       } else {
         await dispatch(popularTags());

@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { styled } from "@mui/material/styles";
@@ -28,6 +28,7 @@ import Switch from "@mui/material/Switch";
 import { setThemeColorStore } from "../redux/themeSlice";
 import { signOut } from "../redux/authSlice";
 import AlertInfo from "../components/AlertInfo";
+import { getUser } from "../redux/userSlice";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -86,6 +87,15 @@ const Navbar = () => {
   const [openSignOut, setOpenSignOut] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isSuccessAuth) {
+        await dispatch(getUser());
+      }
+    })();
+  }, [isSuccessAuth]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

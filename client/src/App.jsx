@@ -32,7 +32,6 @@ const App = () => {
           </Route>*/}
           <Route path="/" element={<Home />}>
             <Route path="/" element={<Article />} />
-            <Route path="/create" element={<Editor />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<Search />} />
             <Route path="/editProfile" element={<EditProfile />} />
@@ -41,6 +40,7 @@ const App = () => {
             <Route path="/user/:userId" element={<OtherUser />} />
             <Route path="/:articleId" element={<ReadArticle />} />
           </Route>
+          <Route path="/create" element={<Editor />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

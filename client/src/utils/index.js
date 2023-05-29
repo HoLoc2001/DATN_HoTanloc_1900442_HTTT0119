@@ -59,6 +59,8 @@ axiosPrivate.interceptors.request.use(
     return config;
   },
   (error) => {
+    localStorage.removeItem("AT");
+    localStorage.removeItem("RT");
     return Promise.reject(error);
   }
 );

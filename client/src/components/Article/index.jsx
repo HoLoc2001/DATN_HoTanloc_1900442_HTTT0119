@@ -8,6 +8,7 @@ import {
   MenuItem,
   Paper,
   Skeleton,
+  Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -21,7 +22,11 @@ import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getArticles, updateLike } from "../../redux/articleSlice";
+import {
+  deleteArticle,
+  getArticles,
+  updateLike,
+} from "../../redux/articleSlice";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
@@ -40,6 +45,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const [errMissInput, setErrMissInput] = useState(false);
 
   const [page, setPage] = useState(articles?.length || 0);
+  const [articleId, setArticleId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -107,10 +113,68 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     e.preventDefault();
   };
 
-  const handleClickMore = (event) => {
+  const handleClickMore = (event, { articleId }) => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
+    setArticleId(articleId);
   };
+
+  const handleDeleteArticle = async () => {
+    setAnchorEl(null);
+    await dispatch(deleteArticle({ articleId }));
+  };
+
+  if (articles.length === 0) {
+    return (
+      <>
+        <Grid container spacing={0} marginTop={"34px"}>
+          {[1, 2, 3, 4, 5, 6].map((index) => (
+            <Grid
+              item
+              columns={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}
+              key={index}
+              padding={"0"}
+              sx={{
+                margin: "10px 5% 2% 0",
+                height: "410px",
+              }}
+            >
+              <Skeleton
+                variant="rounded"
+                sx={{
+                  height: "410px",
+                  width: "350px",
+                  color: `${
+                    themeColor === "light" ? "rgb(8 9 10)" : "rgb(245 245 245)"
+                  }`,
+                  border: `1px solid ${
+                    themeColor === "light"
+                      ? "rgb(245 245 245)"
+                      : "rgba(45,50,59,255)"
+                  } `,
+                  backgroundColor: `${
+                    themeColor === "light"
+                      ? "rgb(245 245 245)"
+                      : "rgba(45,50,59,255)"
+                  }`,
+
+                  borderRadius: "10px",
+                  ":hover": {
+                    border: `1px solid ${
+                      themeColor === "light"
+                        ? "rgba(45,50,59,255)"
+                        : "rgb(245 245 245)"
+                    }`,
+                    cursor: "pointer",
+                  },
+                }}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </>
+    );
+  }
 
   return (
     <>
@@ -191,7 +255,11 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         }`}
                         sx={{}}
                       >
-                        <IconButton onClick={(event) => handleClickMore(event)}>
+                        <IconButton
+                          onClick={(event) =>
+                            handleClickMore(event, { articleId: article.id })
+                          }
+                        >
                           <MoreVertIcon />
                         </IconButton>
                       </Box>
@@ -358,9 +426,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           ))}
         </Grid>
       </InfiniteScroll>
-      {/* <Typography sx={{ textAlign: "center", color: "rgba(163,174,201,255)" }}>
-        End Load
-      </Typography> */}
+
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -370,8 +436,15 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem>Update</MenuItem>
-        <MenuItem>Delete</MenuItem>
+        <MenuItem>
+          <Link
+            to={`../update/${articleId}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            Update
+          </Link>
+        </MenuItem>
+        <MenuItem onClick={handleDeleteArticle}>Delete</MenuItem>
       </Menu>
       <AlertInfo
         err={errMissInput}

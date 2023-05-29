@@ -151,6 +151,9 @@ export class ArticleService {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
 
       const Articles = articles.map((article) => {
@@ -194,6 +197,9 @@ export class ArticleService {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
       return articles;
     } catch (error) {
@@ -220,6 +226,9 @@ export class ArticleService {
         where: { userId: userId },
         skip: query.offset,
         take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
         select: {
           bookmarks: {
             where: {
@@ -276,6 +285,9 @@ export class ArticleService {
         where: { userId: userId },
         skip: query.offset,
         take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
         select: {
           bookmarks: {
             where: {
@@ -328,6 +340,9 @@ export class ArticleService {
         where: { userId: userId },
         skip: query.offset,
         take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
         include: {
           tags: true,
           _count: {
@@ -361,10 +376,43 @@ export class ArticleService {
             connect: tagsArr,
           },
         },
-        include: {
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
           tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
         },
       });
+      article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+      article['isLiked'] = article.likes.length === 1 ? true : false;
 
       return article;
     } catch (error) {
@@ -383,16 +431,69 @@ export class ArticleService {
     dto: UpdateArticleDto,
   ) {
     try {
-      const article = await this.prisma.article.updateMany({
-        data: {
-          title: dto.title,
-          content: dto.content,
-        },
+      const tagsArr = [];
+      dto.tags.forEach((tag) => {
+        tagsArr.push({ name: tag });
+      });
+      const hasArticle = await this.prisma.article.findMany({
         where: {
           id: articleId,
           userId: userId,
         },
       });
+      if (!hasArticle) {
+        throw new ForbiddenException();
+      }
+      const article = await this.prisma.article.update({
+        data: {
+          title: dto.title,
+          content: dto.content,
+          thumbnail: dto.thumbnail,
+          tags: {
+            connect: tagsArr,
+          },
+        },
+        where: {
+          id: articleId,
+        },
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+
+      article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+      article['isLiked'] = article.likes.length === 1 ? true : false;
 
       return article;
     } catch (error) {
@@ -405,6 +506,9 @@ export class ArticleService {
       await this.prisma.article.deleteMany({
         where: { id: articleId, userId: userId },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 }

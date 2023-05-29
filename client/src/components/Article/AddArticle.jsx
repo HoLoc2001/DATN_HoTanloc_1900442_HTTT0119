@@ -26,10 +26,15 @@ import {
   TextField,
   styled,
 } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../redux/store";
-import { getTags } from "../redux/tagSlice";
-import { addImage } from "../redux/cloudSlice";
-import Navbar from "../layouts/Navbar";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { getTags } from "../../redux/tagSlice";
+import { addImage } from "../../redux/cloudSlice";
+import Navbar from "../../layouts/Navbar";
+import { getBase64 } from "../../utils";
+import { articleValidate } from "../../utils/validation";
+import { addArticle } from "../../redux/articleSlice";
+import { Link } from "react-router-dom";
+import AlertInfo from "../AlertInfo";
 
 const CssTextField = styled(TextField)({
   root: {
@@ -53,18 +58,20 @@ const CssTextField = styled(TextField)({
   },
 });
 
-const Editor = () => {
+const AddArticle = () => {
   const dispatch = useAppDispatch();
   const tagsList = useAppSelector((state) => state.tag.tags);
   const themeColor = useAppSelector((state) => state.theme.color);
   const article = useAppSelector((state) => state.article.article);
+  const [content, setContent] = useState("");
+  const [errMissInput, setErrMissInput] = useState(false);
   const [articleForm, setArticleForm] = useState({
     title: "",
-    thumbnail: "",
+    thumbnailUrl: "",
+    thumbnailBase64: "",
     tags: [],
-    content: "",
   });
-  const { title, thumbnail, tags, content } = articleForm;
+  const { title, thumbnailUrl, thumbnailBase64, tags } = articleForm;
 
   useEffect(() => {
     (async () => {
@@ -73,11 +80,11 @@ const Editor = () => {
   }, []);
 
   function handleChange(content) {
-    return setArticleForm({ ...articleForm, content });
+    setContent(content);
   }
 
   function handleChangeTitle(e) {
-    return setArticleForm({ ...articleForm, title: e.target.value });
+    setArticleForm({ ...articleForm, title: e.target.value });
   }
 
   function handleChangeTags(e, tags) {
@@ -107,24 +114,53 @@ const Editor = () => {
     uploadHandler(response);
   };
 
-  const handleAddArticle = async () => {
-    // await dispatch(addAr)
+  const handleAddArticle = async (e) => {
+    const { error } = articleValidate({
+      title,
+      thumbnail: thumbnailUrl,
+      tags,
+      content,
+    });
+
+    if (error) {
+      console.log(error);
+      e.preventDefault();
+      setErrMissInput(true);
+    } else {
+      await dispatch(
+        addArticle({ title, thumbnail: thumbnailUrl, tags, content })
+      );
+    }
   };
 
   const handleFileUpload = async (e) => {
     try {
-      let uploadData = new FormData();
-      let urlImages = [...postForm.urlImages];
+      let thumbnail = new FormData();
+      thumbnail.append("file", e.target.files[0], "file");
 
-      uploadData.append("file", e.target.files[0], "file");
-      urlImages.push(await getBase64(e.target.files[i]));
+      const base64 = await getBase64(e.target.files[0]);
+      setArticleForm({
+        ...articleForm,
+        thumbnailBase64: base64,
+      });
+
+      const {
+        payload: {
+          data: { url },
+        },
+      } = await dispatch(addImage(thumbnail));
+
+      setArticleForm({
+        ...articleForm,
+        thumbnailBase64: base64,
+        thumbnailUrl: url,
+      });
     } catch (error) {}
   };
-  console.log(articleForm);
 
   return (
     <>
-      <Navbar />
+      <Navbar notShowCreate={true} />
 
       <Stack
         component="form"
@@ -161,6 +197,16 @@ const Editor = () => {
             Add thumbnail
           </Button>
         </Box>
+        <img
+          style={{
+            display: `${thumbnailBase64 ? "block" : "none"}`,
+            width: "320px",
+            height: "200px",
+            objectFit: "contain",
+            borderRadius: "5px",
+          }}
+          src={thumbnailBase64}
+        />
 
         <Autocomplete
           multiple
@@ -258,24 +304,33 @@ const Editor = () => {
           // defaultValue={article.content}
           onImageUploadBefore={handleImageUploadBefore}
         />
-
+      </Stack>
+      <Link
+        to={"../profile"}
+        style={{ textDecoration: "none" }}
+        onClick={handleAddArticle}
+      >
         <Button
           sx={{
             width: "200px",
-            marginTop: "20px",
-            marginLeft: "calc(50vw -  100px)",
+            margin: "20px 0 20px calc(50vw - 100px)",
             textTransform: "none",
             backgroundColor: "rgb(255 248 248)",
             border: "1px solid #a3a3a3",
             color: "#171717",
           }}
-          onClick={handleAddArticle}
         >
           Add Article
         </Button>
-      </Stack>
+      </Link>
+      <AlertInfo
+        err={errMissInput}
+        setErr={setErrMissInput}
+        severity="warning"
+        content="Please fill it out completely"
+      />
     </>
   );
 };
 
-export default Editor;
+export default AddArticle;

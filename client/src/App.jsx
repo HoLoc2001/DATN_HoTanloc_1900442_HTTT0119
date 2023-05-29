@@ -2,7 +2,7 @@ import { CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import Editor from "./components/Editor";
+
 import Home from "./pages/Home";
 import Article from "./components/Article";
 import Search from "./components/Search";
@@ -12,6 +12,8 @@ import OtherUser from "./components/Profile/OtherUser";
 import Bookmark from "./components/Bookmark";
 import ReadArticle from "./components/Article/ReadArticle";
 import EditProfile from "./components/Profile/EditProfile";
+import AddArticle from "./components/Article/AddArticle";
+import UpdateArticle from "./components/Article/UpdateArticle";
 
 const App = () => {
   return (
@@ -34,13 +36,14 @@ const App = () => {
             <Route path="/" element={<Article />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/editProfile" element={<EditProfile />} />
             <Route path="/tag/:tag" element={<Tag />} />
             <Route path="/bookmarks" element={<Bookmark />} />
             <Route path="/user/:userId" element={<OtherUser />} />
             <Route path="/:articleId" element={<ReadArticle />} />
           </Route>
-          <Route path="/create" element={<Editor />} />
+          <Route path="/editProfile" element={<EditProfile />} />
+          <Route path="/create" element={<AddArticle />} />
+          <Route path="/update/:articleId" element={<UpdateArticle />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

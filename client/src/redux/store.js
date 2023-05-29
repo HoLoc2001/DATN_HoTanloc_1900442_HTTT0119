@@ -28,8 +28,9 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      immutableCheck: { warnAfter: 128 },
-      serializableCheck: { warnAfter: 128 },
+      serializableCheck: false,
+      // immutableCheck: { warnAfter: 680 },
+      // serializableCheck: { warnAfter: 680 },
     }),
 });
 

@@ -73,9 +73,46 @@ export class SearchService {
         },
       },
       select: {
+        userId: true,
         id: true,
-        thumbnail: true,
         title: true,
+        thumbnail: true,
+        tags: true,
+        views: true,
+
+        createdAt: true,
+        user: {
+          select: {
+            id: true,
+            avatar: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
+
+  async searchUser(query: SearchDto) {
+    const searchQuery = query.q.trim().replaceAll(/\s+/g, ' | ');
+
+    const result = await this.prisma.user.findMany({
+      skip: query.offset,
+      take: query.limit,
+      where: {
+        firstName: {
+          search: searchQuery,
+        },
+        lastName: {
+          search: searchQuery,
+        },
       },
     });
     return result;

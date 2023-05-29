@@ -16,11 +16,22 @@ export const signUpValidate = (data) => {
 
 export const updateInfoValidate = (data) => {
   const updateInfoSchema = Joi.object({
-    first_name: Joi.string().max(50).required(),
-    last_name: Joi.string().max(50).required(),
-    birthday: Joi.date().required(),
-    gender: Joi.string().valid("M", "F").required(),
+    firstName: Joi.string().max(50).required(),
+    lastName: Joi.string().max(50).required(),
+    // birthday: Joi.date().required(),
+    // gender: Joi.string().valid("M", "F").required(),
   });
 
   return updateInfoSchema.validate(data);
+};
+
+export const articleValidate = (data) => {
+  const articleSchema = Joi.object({
+    title: Joi.string().min(1).required(),
+    thumbnail: Joi.string().min(1).required(),
+    tags: Joi.array().required(),
+    content: Joi.string().min(1).required(),
+  });
+
+  return articleSchema.validate(data);
 };

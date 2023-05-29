@@ -18,4 +18,9 @@ export class SearchController {
   async getSearch(@Query() query: SearchDto) {
     return await this.searchService.searchArticles(query);
   }
+
+  @Get('user')
+  async getUserSearch(@Query() query: SearchDto) {
+    return await this.searchService.searchUser(query);
+  }
 }

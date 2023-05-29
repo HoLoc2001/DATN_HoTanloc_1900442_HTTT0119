@@ -246,34 +246,38 @@ const ReadArticle = () => {
                   {`${article.user?.firstName} ${article.user?.lastName}`}
                 </Typography>
               </Link>
-              <Button
-                onClick={() => handleFollow(article.user.id)}
-                sx={{
-                  marginTop: "30px",
-                  marginBottom: "30px",
-                  minWidth: "60%",
-                  textTransform: "none",
+              {userId === article.userId ? (
+                ""
+              ) : (
+                <Button
+                  onClick={() => handleFollow(article.user.id)}
+                  sx={{
+                    marginTop: "30px",
+                    marginBottom: "30px",
+                    minWidth: "60%",
+                    textTransform: "none",
 
-                  backgroundColor: `${isFollowed ? "#ffffff" : "#3b49df"}`,
-                  border: `${isFollowed ? "1px solid #a3a3a3" : ""}`,
-                  ...(isFollowed
-                    ? {
-                        color: `${
-                          themeColor === "light" ? "#3d3d3d" : "#3d3d3d"
-                        }`,
-                      }
-                    : {
-                        color: `${
-                          themeColor === "light" ? "#f9f9f9" : "#090909"
-                        }`,
-                      }),
-                  ":hover": {
-                    backgroundColor: `${isFollowed ? "#a3a3a3" : "#2f3ab2"}`,
-                  },
-                }}
-              >
-                {isFollowed ? "Following" : "Follow"}
-              </Button>
+                    backgroundColor: `${isFollowed ? "#ffffff" : "#3b49df"}`,
+                    border: `${isFollowed ? "1px solid #a3a3a3" : ""}`,
+                    ...(isFollowed
+                      ? {
+                          color: `${
+                            themeColor === "light" ? "#3d3d3d" : "#3d3d3d"
+                          }`,
+                        }
+                      : {
+                          color: `${
+                            themeColor === "light" ? "#f9f9f9" : "#090909"
+                          }`,
+                        }),
+                    ":hover": {
+                      backgroundColor: `${isFollowed ? "#a3a3a3" : "#2f3ab2"}`,
+                    },
+                  }}
+                >
+                  {isFollowed ? "Following" : "Follow"}
+                </Button>
+              )}
             </Box>
           </Box>
           <Box

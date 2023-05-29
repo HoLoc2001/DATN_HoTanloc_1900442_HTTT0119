@@ -79,6 +79,86 @@ export const getArticleByUserId = createAsyncThunk(
   }
 );
 
+export const addArticle = createAsyncThunk(
+  "article/addArticle",
+  async (data) => {
+    try {
+      const res = await axiosPrivate.post(`article`, data);
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const updateArticle = createAsyncThunk(
+  "article/updateArticle",
+  async ({ articleId, title, thumbnail, tags, content }, { getState }) => {
+    try {
+      const { bookmarks, articles, userArticles, myArticles } =
+        getState().article;
+
+      const res = await axiosPrivate.put(`article/${articleId}`, {
+        title,
+        thumbnail,
+        tags,
+        content,
+      });
+
+      const indexBookmark = bookmarks.findIndex(
+        (bookmark) => bookmark.id === articleId
+      );
+      const indexArticle = articles.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexUserArticle = userArticles.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexMyArticle = myArticles.findIndex(
+        (article) => article.id === articleId
+      );
+
+      return {
+        article: res.data,
+        indexBookmark,
+        indexArticle,
+        indexUserArticle,
+        indexMyArticle,
+        articleId,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const deleteArticle = createAsyncThunk(
+  "article/deleteArticle",
+  async ({ articleId }, { getState }) => {
+    try {
+      const { bookmarks, articles, userArticles, myArticles } =
+        getState().article;
+      await axiosPrivate.delete(`article/${articleId}`);
+      const indexBookmark = bookmarks.findIndex(
+        (bookmark) => bookmark.id === articleId
+      );
+      const indexArticle = articles.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexUserArticle = userArticles.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexMyArticle = myArticles.findIndex(
+        (article) => article.id === articleId
+      );
+      return { indexBookmark, indexArticle, indexUserArticle, indexMyArticle };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const updateLike = createAsyncThunk(
   "article/updateLike",
   async (articleId, { getState }) => {
@@ -260,7 +340,6 @@ export const articleSearch = createAsyncThunk(
   "article/articleSearch",
   async ({ page, query }, { getState }) => {
     try {
-      const { articles } = getState().article;
       const { isAuthenticated } = getState().auth;
 
       const res = isAuthenticated
@@ -300,6 +379,47 @@ export const articleSlice = createSlice({
       })
       .addCase(getArticleByUserId.fulfilled, (state, action) => {
         state.userArticles = action.payload;
+      })
+      .addCase(addArticle.fulfilled, (state, action) => {
+        state.userArticles.unshift(action.payload);
+        state.articles.unshift(action.payload);
+        state.myArticles.unshift(action.payload);
+      })
+      .addCase(updateArticle.fulfilled, (state, action) => {
+        if (state.articles[action.payload.indexArticle]) {
+          state.articles[action.payload.indexArticle] = action.payload.article;
+        }
+        if (state.bookmarks[action.payload.indexBookmark]) {
+          state.bookmarks[action.payload.indexBookmark] =
+            action.payload.article;
+        }
+        if (state.userArticles[action.payload.indexUserArticle]) {
+          state.userArticles[action.payload.indexUserArticle] =
+            action.payload.article;
+        }
+        if (state.myArticles[action.payload.indexMyArticle]) {
+          state.myArticles[action.payload.indexMyArticle] =
+            action.payload.article;
+        }
+        if (state.article?.id === action.payload.articleId) {
+          state.article = action.payload.article;
+        }
+      })
+      .addCase(deleteArticle.fulfilled, (state, action) => {
+        if (state.articles[action.payload.indexArticle]) {
+          state.articles[action.payload.indexArticle] = action.payload.article;
+          state.articles.splice(action.payload.indexArticle, 1);
+        }
+        if (state.bookmarks[action.payload.indexBookmark]) {
+          state.bookmarks[action.payload.indexBookmark] =
+            state.bookmarks.splice(action.payload.indexBookmark, 1);
+        }
+        if (state.userArticles[action.payload.indexUserArticle]) {
+          state.userArticles.splice(action.payload.indexUserArticle, 1);
+        }
+        if (state.myArticles[action.payload.indexMyArticle]) {
+          state.myArticles.splice(action.payload.indexMyArticle, 1);
+        }
       })
       .addCase(updateLike.fulfilled, (state, action) => {
         if (state.articles[action.payload.indexArticle]) {

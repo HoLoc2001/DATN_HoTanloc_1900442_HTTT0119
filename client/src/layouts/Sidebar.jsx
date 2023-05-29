@@ -25,14 +25,27 @@ const Sidebar = () => {
   const myTags = useAppSelector((state) => state.tag.myTags);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const themeColor = useAppSelector((state) => state.theme.color);
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState("");
+  var { pathname } = window.location;
+
+  useEffect(() => {
+    if (pathname === "/") {
+      setActive("home");
+    } else if (pathname === "/bookmarks") {
+      setActive("bookmarks");
+    } else if (pathname === "/search") {
+      setActive("search");
+    } else {
+      setActive("");
+    }
+  }, [pathname]);
 
   const handleClickHome = () => {
     setActive("home");
   };
 
-  const handleClickBookmark = () => {
-    setActive("bookmark");
+  const handleClickBookmarks = () => {
+    setActive("bookmarks");
   };
 
   const handleClickSearch = () => {
@@ -98,7 +111,9 @@ const Sidebar = () => {
               >
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
                 Home
               </ListItemText>
             </ListItemButton>
@@ -113,7 +128,7 @@ const Sidebar = () => {
               textDecoration: "none",
               width: "100%",
             }}
-            onClick={handleClickBookmark}
+            onClick={handleClickBookmarks}
           >
             <ListItemButton
               sx={{
@@ -125,7 +140,7 @@ const Sidebar = () => {
                     themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
                   }`,
                 },
-                ...(active === "bookmark"
+                ...(active === "bookmarks"
                   ? {
                       backgroundColor: `${
                         themeColor === "light"
@@ -149,7 +164,9 @@ const Sidebar = () => {
               >
                 <BookmarkIcon />
               </ListItemIcon>
-              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
                 Bookmarks
               </ListItemText>
             </ListItemButton>
@@ -202,7 +219,9 @@ const Sidebar = () => {
               >
                 <SearchIcon />
               </ListItemIcon>
-              <ListItemText sx={{ display: { xs: "none", md: "block" } }}>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
                 Search
               </ListItemText>
             </ListItemButton>

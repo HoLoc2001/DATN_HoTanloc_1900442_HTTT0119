@@ -22,6 +22,18 @@ export const getUserByUserId = createAsyncThunk(
   }
 );
 
+export const updateInfoUser = createAsyncThunk(
+  "user/updateInfoUser",
+  async (data) => {
+    try {
+      const res = await axiosPrivate.patch(`user/edit`, data);
+      return res.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
 export const follow = createAsyncThunk("user/follow", async ({ userId }) => {
   try {
     const res = await axiosPrivate.post(`user/follow/${userId}`);
@@ -44,12 +56,26 @@ export const getHasFollow = createAsyncThunk(
   }
 );
 
+export const userSearch = createAsyncThunk(
+  "user/userSearch",
+  async ({ query }) => {
+    try {
+      const res = await axiosPublic.get(`search/user?q=${query}`);
+
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
     user: {},
     otherUser: {},
     authorPost: {},
+    userSearch: [],
   },
   extraReducers: (builder) => {
     builder
@@ -59,11 +85,17 @@ export const userSlice = createSlice({
       .addCase(getUserByUserId.fulfilled, (state, action) => {
         state.otherUser = action.payload;
       })
+      .addCase(updateInfoUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
       .addCase(follow.fulfilled, (state, action) => {
         state.authorPost = { ...action.payload };
       })
       .addCase(getHasFollow.fulfilled, (state, action) => {
         state.authorPost = { ...action.payload };
+      })
+      .addCase(userSearch.fulfilled, (state, action) => {
+        state.userSearch = action.payload;
       });
   },
 });

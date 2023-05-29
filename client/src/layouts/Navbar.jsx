@@ -77,7 +77,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Navbar = () => {
+const Navbar = ({ notShowCreate }) => {
   const dispatch = useAppDispatch();
 
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
@@ -168,19 +168,24 @@ const Navbar = () => {
               <Box>
                 {isSuccessAuth ? (
                   <>
-                    <Link to={"./create"}>
-                      <Button
-                        sx={{
-                          textTransform: "none",
-                          border: "1px solid #a3a3a3",
-                          color: `${
-                            themeColor === "light" ? "#171717" : "#fff2f2"
-                          }`,
-                        }}
-                      >
-                        Create article
-                      </Button>
-                    </Link>
+                    {notShowCreate ? (
+                      ""
+                    ) : (
+                      <Link to={"./create"}>
+                        <Button
+                          sx={{
+                            textTransform: "none",
+                            border: "1px solid #a3a3a3",
+                            color: `${
+                              themeColor === "light" ? "#171717" : "#fff2f2"
+                            }`,
+                          }}
+                        >
+                          Create article
+                        </Button>
+                      </Link>
+                    )}
+
                     <Tooltip title={`${user.firstName} ${user.lastName}`}>
                       <IconButton
                         color="white"
@@ -211,7 +216,7 @@ const Navbar = () => {
                       >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                       </Link>
-                      <MenuItem onClick={handleClose}>My account</MenuItem>
+
                       <MenuItem
                         onClick={() => {
                           setOpenSignOut(true);

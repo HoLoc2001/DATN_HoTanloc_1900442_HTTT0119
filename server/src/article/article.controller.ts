@@ -116,13 +116,13 @@ export class ArticleController {
     @GetUser() user: User,
     @Res() res: Response,
   ) {
-    const { count } = await this.articleService.updateArticle(
+    const article = await this.articleService.updateArticle(
       user['userId'],
       params.articleId,
       dto,
     );
 
-    if (count === 1) {
+    if (article) {
       return res.status(HttpStatus.OK).json({ statusCode: 200, msg: 'OK' });
     }
 
@@ -141,6 +141,7 @@ export class ArticleController {
     await this.articleService.deleteArticle(user['userId'], params.articleId);
     return res.status(HttpStatus.OK).json({ statusCode: 200, msg: 'OK' });
   }
+
   @UseGuards(AccessTokenGuard)
   @Get('auth/:articleId')
   async getArticleByIdAuth(

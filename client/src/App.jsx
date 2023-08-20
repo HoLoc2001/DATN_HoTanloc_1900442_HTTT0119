@@ -14,8 +14,10 @@ import ReadArticle from "./components/Article/ReadArticle";
 import EditProfile from "./components/Profile/EditProfile";
 import AddArticle from "./components/Article/AddArticle";
 import UpdateArticle from "./components/Article/UpdateArticle";
+import ProtectedRoute from "./routing/Protected";
 
 const App = () => {
+  localStorage.setItem("themeColor", "light");
   return (
     <>
       <BrowserRouter>
@@ -32,18 +34,20 @@ const App = () => {
               <Route path="/:id" element={<OtherUser />} />
             </Route>
           </Route>*/}
-          <Route path="/" element={<Home />}>
-            <Route path="/" element={<Article />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/tag/:tag" element={<Tag />} />
-            <Route path="/bookmarks" element={<Bookmark />} />
-            <Route path="/user/:userId" element={<OtherUser />} />
-            <Route path="/:articleId" element={<ReadArticle />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/" element={<Home />}>
+              <Route path="/" element={<Article />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/tag/:tag" element={<Tag />} />
+              <Route path="/bookmarks" element={<Bookmark />} />
+              <Route path="/user/:userId" element={<OtherUser />} />
+              <Route path="/:articleId" element={<ReadArticle />} />
+            </Route>
+            <Route path="/editProfile" element={<EditProfile />} />
+            <Route path="/create" element={<AddArticle />} />
+            <Route path="/update/:articleId" element={<UpdateArticle />} />
           </Route>
-          <Route path="/editProfile" element={<EditProfile />} />
-          <Route path="/create" element={<AddArticle />} />
-          <Route path="/update/:articleId" element={<UpdateArticle />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

@@ -255,7 +255,7 @@ const Navbar = ({ notShowCreate }) => {
                     </Button>
                   </Link>
                 )}
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={
                     <MaterialUISwitch
                       sx={{ m: 1 }}
@@ -263,7 +263,7 @@ const Navbar = ({ notShowCreate }) => {
                       checked={themeColor === "light" ? false : true}
                     />
                   }
-                />
+                /> */}
               </Box>
             </Box>
           </Toolbar>

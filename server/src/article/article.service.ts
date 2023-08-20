@@ -156,7 +156,7 @@ export class ArticleService {
         },
       });
 
-      const Articles = articles.map((article) => {
+      const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;
         return { ...article };
@@ -264,7 +264,7 @@ export class ArticleService {
           },
         },
       });
-      const Articles = articles.map((article) => {
+      const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;
         return { ...article };
@@ -323,7 +323,7 @@ export class ArticleService {
           },
         },
       });
-      const Articles = articles.map((article) => {
+      const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;
         return { ...article };

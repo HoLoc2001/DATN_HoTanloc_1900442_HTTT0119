@@ -54,7 +54,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   };
 
   const [hasPost, setHasPost] = useState(() => {
-    if (articles.length % 6 === 0 && articles.length !== 0) {
+    if (articles?.length % 6 === 0 && articles?.length !== 0) {
       return true;
     }
     return false;
@@ -69,7 +69,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
       (async () => {
         await dispatch(getArticles(page));
         setHasPost(() => {
-          if (articles.length % 6 === 0 && articles.length >= page) {
+          if (articles?.length % 6 === 0 && articles?.length >= page) {
             return true;
           }
           return false;
@@ -124,7 +124,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     await dispatch(deleteArticle({ articleId }));
   };
 
-  if (articles.length === 0) {
+  if (articles?.length === 0) {
     return (
       <>
         <Grid container spacing={0} marginTop={"34px"}>
@@ -183,10 +183,10 @@ const index = ({ _articles, _setPage, _hasPost }) => {
         getMore={() => {
           _setPage ? _setPage((prev) => prev + 6) : setPage((prev) => prev + 6);
         }}
-        hasMore={articles.length && (hasPost || _hasPost)}
+        hasMore={articles?.length && (hasPost || _hasPost)}
       >
         <Grid container spacing={0}>
-          {articles.map((article, index) => (
+          {articles?.map((article, index) => (
             <Grid
               item
               columns={{ xs: 12, sm: 6, md: 4, lg: 4, xl: 3 }}

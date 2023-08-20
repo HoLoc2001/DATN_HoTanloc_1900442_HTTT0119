@@ -50,7 +50,7 @@ export class BookmarkService {
         },
       });
 
-      const Articles = articles.map((article) => {
+      const Articles = articles?.map((article) => {
         article.Article['isBookmarked'] =
           userId === article.userId ? true : false;
         article.Article['isLiked'] =

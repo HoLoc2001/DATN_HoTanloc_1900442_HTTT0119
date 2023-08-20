@@ -128,7 +128,7 @@ const OtherUser = () => {
           borderColor: `${themeColor === "light" ? "#a6aeb8" : "#2d3748"}`,
         }}
       />
-      {userArticles.length ? (
+      {userArticles?.length ? (
         <Article
           _articles={userArticles}
           _setPage={setPage}

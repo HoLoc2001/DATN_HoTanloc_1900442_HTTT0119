@@ -158,7 +158,7 @@ const index = () => {
           borderColor: `${themeColor === "light" ? "#a6aeb8" : "#2d3748"}`,
         }}
       />
-      {myArticles.length ? (
+      {myArticles?.length ? (
         <Article _articles={myArticles} _setPage={setPage} hasPost={hasPost} />
       ) : (
         <Typography sx={{ margin: "25px 0 0 0" }}></Typography>

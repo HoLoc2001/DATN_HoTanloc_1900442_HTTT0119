@@ -178,7 +178,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
 
   return (
     <>
-      {!_articles && isSuccessAuth ? <SetTags /> : ""}
+      {/* {!_articles && isSuccessAuth ? <SetTags /> : ""} */}
       <InfiniteScroll
         getMore={() => {
           _setPage ? _setPage((prev) => prev + 6) : setPage((prev) => prev + 6);

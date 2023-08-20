@@ -228,7 +228,7 @@ const Sidebar = () => {
           </Link>
         </ListItem>
       </List>
-      <Divider
+      {/* <Divider
         sx={{
           borderColor: `${themeColor === "light" ? "#a6aeb8" : "#2d3748"}`,
         }}
@@ -320,7 +320,7 @@ const Sidebar = () => {
                 </Typography>
               </Link>
             ))}
-      </Box>
+      </Box> */}
 
       {/* <Link
         to={`/profile`}

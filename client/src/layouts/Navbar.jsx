@@ -129,133 +129,132 @@ const Navbar = ({ notShowCreate }) => {
           borderBottom: "1px solid rgb(255 248 248)",
         }}
       >
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-                paddingBottom: "10px",
-              }}
-            >
-              <Box>
-                <Link to="/" style={{ textDecoration: "none" }}>
-                  <Typography
-                    variant="h6"
-                    noWrap
+        <Toolbar disableGutters>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              paddingBottom: "10px",
+            }}
+          >
+            <Box>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Typography
+                  variant="h6"
+                  noWrap
+                  sx={{
+                    ml: 2,
+                    fontFamily: "monospace",
+                    color: `${
+                      themeColor === "light" ? "black" : "rgb(255 248 248)"
+                    }`,
+                    fontWeight: 700,
+                    letterSpacing: ".3rem",
+                    textDecoration: "none",
+                    fontSize: "30px",
+                  }}
+                  onClick={() =>
+                    window.scroll({ top: 0, left: 0, behavior: "smooth" })
+                  }
+                >
+                  Article
+                </Typography>
+              </Link>
+            </Box>
+
+            <Box sx={{ mr: 5 }}>
+              {isSuccessAuth ? (
+                <>
+                  {notShowCreate ? (
+                    ""
+                  ) : (
+                    <Link to={"./create"}>
+                      <Button
+                        sx={{
+                          textTransform: "none",
+                          border: "1px solid #a3a3a3",
+                          color: `${
+                            themeColor === "light" ? "#171717" : "#fff2f2"
+                          }`,
+                        }}
+                      >
+                        Create article
+                      </Button>
+                    </Link>
+                  )}
+
+                  <Tooltip title={`${user.firstName} ${user.lastName}`}>
+                    <IconButton
+                      color="white"
+                      id="basic-button"
+                      aria-controls={open ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                      onClick={handleClick}
+                    >
+                      <Avatar src={user?.avatar} />
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    <Link
+                      to={"/profile"}
+                      style={{
+                        textDecoration: "none",
+                        color: "rgb(74 74 74)",
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    </Link>
+
+                    <MenuItem
+                      onClick={() => {
+                        setOpenSignOut(true);
+                        setAnchorEl(null);
+                      }}
+                    >
+                      SignOut
+                    </MenuItem>
+                  </Menu>
+                </>
+              ) : (
+                <Link to={"./signin"} style={{ textDecoration: "none" }}>
+                  <Button
                     sx={{
-                      mr: 2,
-                      fontFamily: "monospace",
                       color: `${
                         themeColor === "light" ? "black" : "rgb(255 248 248)"
                       }`,
-                      fontWeight: 700,
-                      letterSpacing: ".3rem",
-                      textDecoration: "none",
-                      fontSize: "30px",
-                    }}
-                    onClick={() =>
-                      window.scroll({ top: 0, left: 0, behavior: "smooth" })
-                    }
-                  >
-                    Article
-                  </Typography>
-                </Link>
-              </Box>
-
-              <Box>
-                {isSuccessAuth ? (
-                  <>
-                    {notShowCreate ? (
-                      ""
-                    ) : (
-                      <Link to={"./create"}>
-                        <Button
-                          sx={{
-                            textTransform: "none",
-                            border: "1px solid #a3a3a3",
-                            color: `${
-                              themeColor === "light" ? "#171717" : "#fff2f2"
-                            }`,
-                          }}
-                        >
-                          Create article
-                        </Button>
-                      </Link>
-                    )}
-
-                    <Tooltip title={`${user.firstName} ${user.lastName}`}>
-                      <IconButton
-                        color="white"
-                        id="basic-button"
-                        aria-controls={open ? "basic-menu" : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                      >
-                        <Avatar src={user?.avatar} />
-                      </IconButton>
-                    </Tooltip>
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                      }}
-                    >
-                      <Link
-                        to={"/profile"}
-                        style={{
-                          textDecoration: "none",
-                          color: "rgb(74 74 74)",
-                        }}
-                      >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
-                      </Link>
-
-                      <MenuItem
-                        onClick={() => {
-                          setOpenSignOut(true);
-                          setAnchorEl(null);
-                        }}
-                      >
-                        SignOut
-                      </MenuItem>
-                    </Menu>
-                  </>
-                ) : (
-                  <Link to={"./signin"} style={{ textDecoration: "none" }}>
-                    <Button
-                      sx={{
+                      border: `1px solid ${
+                        themeColor === "light" ? "black" : "rgb(255 248 248)"
+                      }`,
+                      ":hover": {
+                        backgroundColor: `${
+                          themeColor === "light"
+                            ? "rgb(226 227 243)"
+                            : "rgba(45,50,59,255)"
+                        }`,
                         color: `${
-                          themeColor === "light" ? "black" : "rgb(255 248 248)"
+                          themeColor === "light"
+                            ? "black"
+                            : "rgba(249,242,222,255)"
                         }`,
-                        border: `1px solid ${
-                          themeColor === "light" ? "black" : "rgb(255 248 248)"
-                        }`,
-                        ":hover": {
-                          backgroundColor: `${
-                            themeColor === "light"
-                              ? "rgb(226 227 243)"
-                              : "rgba(45,50,59,255)"
-                          }`,
-                          color: `${
-                            themeColor === "light"
-                              ? "black"
-                              : "rgba(249,242,222,255)"
-                          }`,
-                        },
-                      }}
-                    >
-                      Sign In
-                    </Button>
-                  </Link>
-                )}
-                {/* <FormControlLabel
+                      },
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )}
+              {/* <FormControlLabel
                   control={
                     <MaterialUISwitch
                       sx={{ m: 1 }}
@@ -264,10 +263,9 @@ const Navbar = ({ notShowCreate }) => {
                     />
                   }
                 /> */}
-              </Box>
             </Box>
-          </Toolbar>
-        </Container>
+          </Box>
+        </Toolbar>
       </AppBar>
       <Toolbar color="rgb(255 248 248)" />
 

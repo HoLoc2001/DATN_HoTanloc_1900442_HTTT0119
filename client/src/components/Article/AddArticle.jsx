@@ -174,7 +174,7 @@ const AddArticle = () => {
       >
         <CssTextField
           onChange={handleChangeTitle}
-          label="Title"
+          label="Tiêu đề"
           fullWidth={true}
           value={title}
         />
@@ -194,7 +194,7 @@ const AddArticle = () => {
               hidden
               onChange={handleFileUpload}
             />
-            Add thumbnail
+            Ảnh chủ đề
           </Button>
         </Box>
         <img
@@ -245,7 +245,7 @@ const AddArticle = () => {
             maxWidth: "100%",
             maxHeight: "60vh",
 
-            placeholder: "Enter your text here!!!",
+            placeholder: "Nội dung bài viết",
 
             plugins: [
               align,

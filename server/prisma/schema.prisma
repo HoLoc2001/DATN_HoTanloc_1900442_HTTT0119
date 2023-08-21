@@ -19,7 +19,7 @@ model User {
   firstName    String?
   lastName     String?
   role         Role       @default(USER)
-  provider     Provider   @default(LOCAL)
+  provider     Provider   
   github       String?
   linkedin     String?
   refreshToken String?
@@ -115,6 +115,7 @@ enum Role {
 }
 
 enum Provider {
-  LOCAL
+  STUDENT
+  TEACHER
   GOOGLE
 }

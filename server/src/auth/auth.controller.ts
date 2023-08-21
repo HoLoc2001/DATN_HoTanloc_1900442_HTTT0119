@@ -34,7 +34,7 @@ export class AuthController {
     res.cookie('auth-cookie', JSON.stringify(tokens), {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });
-    return res.redirect('http://localhost:5174');
+    return res.redirect('http://localhost:5173');
   }
 
   @Post('signupLocal')

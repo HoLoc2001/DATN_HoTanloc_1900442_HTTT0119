@@ -32,7 +32,20 @@ export class AuthService {
         id: true,
       },
     });
-    if (isUser) {
+
+    function checkEmailTeacher(email: any) {
+      const tail = email.substring(email.indexOf('@') + 1);
+      return tail === 'ctuet.edu.vn';
+    }
+
+    function checkEmailStudent(email: any) {
+      const tail = email.substring(email.indexOf('@') + 1);
+      return tail === 'student.ctuet.edu.vn';
+    }
+
+    let isStuentEmail = checkEmailStudent(req.user.email) ? "student" : checkEmailTeacher(req.user.email) ? "teacher" : "null"
+    console.log(isStuentEmail);
+    if (isUser && isStuentEmail !== "null") {
       const tokens = await this.signToken(isUser.id);
 
       await this.updateRefreshToken(isUser.id, tokens.refreshToken);
@@ -46,7 +59,7 @@ export class AuthService {
         avatar: req.user.picture,
         firstName: req.user.firstName,
         lastName: req.user.lastName,
-        provider: 'GOOGLE',
+        provider: isStuentEmail === "student" ? "STUDENT" : isStuentEmail === "teacher" ? "TEACHER" : "GOOGLE",
       },
     });
 
@@ -77,6 +90,7 @@ export class AuthService {
           firstName: dto.firstName,
           lastName: dto.lastName,
           password: hashPass,
+          provider: "GOOGLE"
         },
         select: {
           id: true,

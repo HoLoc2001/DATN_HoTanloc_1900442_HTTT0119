@@ -40,11 +40,11 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
-        await dispatch(getTags());
+        // await dispatch(getTags());
         await dispatch(getUser());
-        await dispatch(getMyTags());
+        // await dispatch(getMyTags());
       } else {
-        await dispatch(popularTags());
+        // await dispatch(popularTags());
       }
     })();
   }, [isAuthenticated]);
@@ -56,7 +56,7 @@ const Home = () => {
         minHeight: "100vh",
 
         ...(themeColor === "light"
-          ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+          ? { backgroundColor: "#fff", color: "#171717" }
           : { backgroundColor: "#0E1217", color: "rgb(255 242 242)" }),
       }}
     >

@@ -1,29 +1,29 @@
 
 
 services:
-  frontend:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    depends_on:
-      - backend
-    image: social-network-client
-    ports:
-      - "3000:3000"
-    networks:
-      - postgres
+  # frontend:
+  #   build:
+  #     context: ./client
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - backend
+  #   image: social-network-client
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - postgres
   
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    image: social-network-server
-    depends_on:
-      - postgres
-    ports:
-      - "5000:5000"
-    networks:
-      - postgres
+  # backend:
+  #   build:
+  #     context: ./server
+  #     dockerfile: Dockerfile
+  #   image: social-network-server
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "5000:5000"
+  #   networks:
+  #     - postgres
 
   postgres:
     container_name: postgres_container
@@ -56,6 +56,34 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
+  directus:
+    image: directus/directus
+    volumes:
+      - ./uploads:/directus/uploads
+    
+      - ./extensions:/directus/extensions
+    depends_on:
+      - postgres
+    # env_file: .env
+    environment:
+      KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
+      SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
+
+      DB_CLIENT: 'pg'
+      DB_HOST: 'postgres'
+      DB_PORT: '5432'
+      DB_DATABASE: 'article'
+      DB_USER: 'postgres'
+      DB_PASSWORD: '123123'
+
+      ADMIN_EMAIL: 'holoc22102001@gmail.com'
+      ADMIN_PASSWORD: 'locvtc123'
+
+    ports:
+      - 8057:8055
+    networks:
+      - postgres
 
 networks:
   postgres:

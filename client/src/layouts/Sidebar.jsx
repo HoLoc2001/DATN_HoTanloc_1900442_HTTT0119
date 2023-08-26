@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkIcon from "@mui/icons-material/Bookmark";import NewspaperIcon from '@mui/icons-material/Newspaper';import WorkIcon from '@mui/icons-material/Work';
 import SearchIcon from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -32,7 +32,9 @@ const Sidebar = () => {
     if (pathname === "/") {
       setActive("home");
     } else if (pathname === "/bookmarks") {
-      setActive("bookmarks");
+      setActive("bookmarks");} else if (pathname === "/tintuc") {
+        setActive("tintuc");} else if (pathname === "/tuyen-dung") {
+          setActive("tuyen-dung");
     } else if (pathname === "/search") {
       setActive("search");
     } else {
@@ -48,6 +50,14 @@ const Sidebar = () => {
     setActive("bookmarks");
   };
 
+  const handleClickTinTuc = () => {
+    setActive("tintuc");
+  };
+
+  const handleClickTuyenDung = () => {
+    setActive("tuyen-dung");
+  };
+
   const handleClickSearch = () => {
     setActive("search");
   };
@@ -57,11 +67,9 @@ const Sidebar = () => {
       position="fixed"
       width="13%"
       height="100%"
-      color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
+      color="#1A2027"
       sx={{
-        borderRight: `1px solid ${
-          themeColor === "light" ? "#a6aeb8" : "#2d3748"
-        }`,
+        borderRight: `1px solid "#a6aeb8"`,
       }}
     >
       <Divider />
@@ -71,7 +79,7 @@ const Sidebar = () => {
             to="/"
             style={{
               display: "flex",
-              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+              color: "#1A2027",
               textDecoration: "none",
               width: "100%",
             }}
@@ -80,32 +88,20 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: `${
-                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
-                  }`,
-                  color: `${
-                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-                  }`,
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
                 },
                 ...(active === "home"
                   ? {
-                      backgroundColor: `${
-                        themeColor === "light"
-                          ? "#e2e3f3"
-                          : "rgba(45,50,59,255)"
-                      }`,
-                      color: `${
-                        themeColor === "light"
-                          ? "#1A2027"
-                          : "rgba(249,242,222,255)"
-                      }`,
+                      backgroundColor: "#e2e3f3",
+                      color: "#1A2027",
                     }
                   : ""),
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                  color: "#1A2027",
                   minWidth: "35px",
                 }}
               >
@@ -124,7 +120,7 @@ const Sidebar = () => {
             to="/bookmarks"
             style={{
               display: "flex",
-              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+              color: "#1A2027",
               textDecoration: "none",
               width: "100%",
             }}
@@ -133,32 +129,20 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: `${
-                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
-                  }`,
-                  color: `${
-                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-                  }`,
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
                 },
                 ...(active === "bookmarks"
                   ? {
-                      backgroundColor: `${
-                        themeColor === "light"
-                          ? "#e2e3f3"
-                          : "rgba(45,50,59,255)"
-                      }`,
-                      color: `${
-                        themeColor === "light"
-                          ? "#1A2027"
-                          : "rgba(249,242,222,255)"
-                      }`,
+                      backgroundColor: "#e2e3f3",
+                      color: "#1A2027",
                     }
                   : ""),
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                  color: "#1A2027",
                   minWidth: "35px",
                 }}
               >
@@ -172,12 +156,94 @@ const Sidebar = () => {
             </ListItemButton>
           </Link>
         </ListItem>
+        <ListItem key="5" disablePadding>
+          <Link
+            to="/tintuc"
+            style={{
+              display: "flex",
+              color: "#1A2027",
+              textDecoration: "none",
+              width: "100%",
+            }}
+            onClick={handleClickTinTuc}
+          >
+            <ListItemButton
+              sx={{
+                ":hover": {
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
+                },
+                ...(active === "tintuc"
+                  ? {
+                      backgroundColor: "#e2e3f3",
+                      color: "#1A2027",
+                    }
+                  : ""),
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#1A2027",
+                  minWidth: "35px",
+                }}
+              >
+                <NewspaperIcon />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
+                Tin Tức
+              </ListItemText>
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem key="4" disablePadding>
+          <Link
+            to="/tuyen-dung"
+            style={{
+              display: "flex",
+              color: "#1A2027",
+              textDecoration: "none",
+              width: "100%",
+            }}
+            onClick={handleClickTuyenDung}
+          >
+            <ListItemButton
+              sx={{
+                ":hover": {
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
+                },
+                ...(active === "tuyen-dung"
+                  ? {
+                      backgroundColor: "#e2e3f3",
+                      color: "#1A2027",
+                    }
+                  : ""),
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#1A2027",
+                  minWidth: "35px",
+                }}
+              >
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
+                Tuyển dụng
+              </ListItemText>
+            </ListItemButton>
+          </Link>
+        </ListItem>
         <ListItem key="3" disablePadding>
           <Link
             to="/search"
             style={{
               display: "flex",
-              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+              color: "#1A2027",
               textDecoration: "none",
               width: "100%",
             }}
@@ -186,33 +252,21 @@ const Sidebar = () => {
             <ListItemButton
               sx={{
                 ":hover": {
-                  backgroundColor: `${
-                    themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
-                  }`,
-                  color: `${
-                    themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-                  }`,
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
                 },
 
                 ...(active === "search"
                   ? {
-                      backgroundColor: `${
-                        themeColor === "light"
-                          ? "#e2e3f3"
-                          : "rgba(45,50,59,255)"
-                      }`,
-                      color: `${
-                        themeColor === "light"
-                          ? "#1A2027"
-                          : "rgba(249,242,222,255)"
-                      }`,
+                      backgroundColor: "#e2e3f3",
+                      color: "#1A2027",
                     }
                   : ""),
               }}
             >
               <ListItemIcon
                 sx={{
-                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                  color: "#1A2027",
                   alignItems: "center",
                   minWidth: "35px",
                 }}

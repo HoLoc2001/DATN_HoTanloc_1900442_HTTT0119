@@ -41,6 +41,7 @@ const index = ({ articleId }) => {
   const [comment, setComment] = useState("");
   const [openDeleteComment, setOpenDeleteComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [openMenu, setOpenMenu] = useState({
     commentId: null,
     content: "",
@@ -111,13 +112,20 @@ const index = ({ articleId }) => {
     setOpenDeleteComment(false);
   };
 
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
     <>
       <Box
         height={"75%"}
-        borderTop={`1px solid ${
-          themeColor === "light" ? "#a6aeb8" : "#2d3748"
-        }`}
+        borderTop={`1px solid ${themeColor === "light" ? "#a6aeb8" : "#2d3748"
+          }`}
         sx={{
           overflowY: "scroll",
 
@@ -144,6 +152,8 @@ const index = ({ articleId }) => {
                 margin: "10px",
                 maxWidth: "80%",
               }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <Link
                 to={
@@ -245,26 +255,26 @@ const index = ({ articleId }) => {
                     {comment.content}
                   </Typography>
                 )}
-
-                <Box
-                  position={"absolute"}
-                  right={"-50px"}
-                  top={"0"}
-                  sx={{
-                    display: `${comment.userId === userId ? "block" : "none"}`,
-                  }}
-                >
-                  <IconButton
-                    onClick={(event) =>
-                      handleClick(event, {
-                        index,
-                        comment,
-                      })
-                    }
+            
+                  <Box
+                    position={"absolute"}
+                    right={"-50px"}
+                    top={"0"}
+                    sx={{
+                      display: `${comment.userId === userId ? "block" : "none"}`,
+                    }}
                   >
-                    <MoreHorizIcon />
-                  </IconButton>
-                </Box>
+                    <IconButton
+                      onClick={(event) =>
+                        handleClick(event, {
+                          index,
+                          comment,
+                        })
+                      }
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </Box>
               </div>
             </div>
           );

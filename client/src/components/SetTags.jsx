@@ -59,7 +59,7 @@ function SimpleDialog(props) {
       <Box
         sx={{
           ...(themeColor === "light"
-            ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+            ? { backgroundColor: "#fff", color: "#171717" }
             : { backgroundColor: "#0E1217", color: "rgb(255 242 242)" }),
         }}
       >
@@ -80,7 +80,7 @@ function SimpleDialog(props) {
                   marginRight: "2%",
                   border: "0.2px solid white",
                   ...(themeColor === "light"
-                    ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+                    ? { backgroundColor: "#fff", color: "#171717" }
                     : {
                         backgroundColor: "#0E1217",
                         color: "rgb(255 242 242)",
@@ -102,7 +102,7 @@ function SimpleDialog(props) {
                       }
                     : {
                         backgroundColor: "#0E1217",
-                        color: "rgb(255 242 242)",
+                        color: "#fff",
                         ":hover": {
                           backgroundColor: `${
                             themeColor === "light"

@@ -71,7 +71,7 @@ const index = () => {
           sx={{
             width: "1",
             ...(themeColor === "light"
-              ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+              ? { backgroundColor: "#fff", color: "#171717" }
               : { backgroundColor: "#0E1217", color: "#fff2f2" }),
           }}
         >

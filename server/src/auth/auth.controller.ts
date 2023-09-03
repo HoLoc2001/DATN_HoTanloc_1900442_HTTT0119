@@ -30,7 +30,12 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   @Get('google-redirect')
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+
     const tokens = await this.authService.googleLogin(req, res);
+
+    if (tokens === null) {
+      return res.redirect('http://localhost:5173/signin?error=403')
+    }
     res.cookie('auth-cookie', JSON.stringify(tokens), {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });

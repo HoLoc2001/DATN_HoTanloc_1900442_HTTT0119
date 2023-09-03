@@ -43,14 +43,18 @@ export class AuthService {
       return tail === 'student.ctuet.edu.vn';
     }
 
-    let isStuentEmail = checkEmailStudent(req.user.email) ? "student" : checkEmailTeacher(req.user.email) ? "teacher" : "null"
-    console.log(isStuentEmail);
-    if (isUser && isStuentEmail !== "null") {
+    let isStuentEmail = checkEmailStudent(req.user.email) ? "student" : checkEmailTeacher(req.user.email) ? "teacher" : null
+
+    if(!isStuentEmail){
+      return null
+    }
+
+    if (isUser && isStuentEmail !== null) {
       const tokens = await this.signToken(isUser.id);
 
       await this.updateRefreshToken(isUser.id, tokens.refreshToken);
 
-      return tokens;
+      return tokens; 
     }
 
     const user = await this.prisma.user.create({

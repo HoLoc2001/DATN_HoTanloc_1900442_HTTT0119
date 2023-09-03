@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import BookmarkIcon from "@mui/icons-material/Bookmark";import NewspaperIcon from '@mui/icons-material/Newspaper';import WorkIcon from '@mui/icons-material/Work';
+import BookmarkIcon from "@mui/icons-material/Bookmark"; import NewspaperIcon from '@mui/icons-material/Newspaper'; import WorkIcon from '@mui/icons-material/Work';
 import SearchIcon from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -32,9 +32,11 @@ const Sidebar = () => {
     if (pathname === "/") {
       setActive("home");
     } else if (pathname === "/bookmarks") {
-      setActive("bookmarks");} else if (pathname === "/tintuc") {
-        setActive("tintuc");} else if (pathname === "/tuyen-dung") {
-          setActive("tuyen-dung");
+      setActive("bookmarks");
+    } else if (pathname === "/tintuc") {
+      setActive("tintuc");
+    } else if (pathname === "/tuyen-dung") {
+      setActive("tuyen-dung");
     } else if (pathname === "/search") {
       setActive("search");
     } else {
@@ -93,9 +95,9 @@ const Sidebar = () => {
                 },
                 ...(active === "home"
                   ? {
-                      backgroundColor: "#e2e3f3",
-                      color: "#1A2027",
-                    }
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
                   : ""),
               }}
             >
@@ -110,7 +112,7 @@ const Sidebar = () => {
               <ListItemText
                 sx={{ display: { xs: "none", md: "none", lg: "block" } }}
               >
-                Home
+                Trang chủ
               </ListItemText>
             </ListItemButton>
           </Link>
@@ -134,9 +136,9 @@ const Sidebar = () => {
                 },
                 ...(active === "bookmarks"
                   ? {
-                      backgroundColor: "#e2e3f3",
-                      color: "#1A2027",
-                    }
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
                   : ""),
               }}
             >
@@ -151,7 +153,7 @@ const Sidebar = () => {
               <ListItemText
                 sx={{ display: { xs: "none", md: "none", lg: "block" } }}
               >
-                Bookmarks
+                Lưu trữ
               </ListItemText>
             </ListItemButton>
           </Link>
@@ -175,9 +177,9 @@ const Sidebar = () => {
                 },
                 ...(active === "tintuc"
                   ? {
-                      backgroundColor: "#e2e3f3",
-                      color: "#1A2027",
-                    }
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
                   : ""),
               }}
             >
@@ -216,9 +218,9 @@ const Sidebar = () => {
                 },
                 ...(active === "tuyen-dung"
                   ? {
-                      backgroundColor: "#e2e3f3",
-                      color: "#1A2027",
-                    }
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
                   : ""),
               }}
             >
@@ -258,9 +260,9 @@ const Sidebar = () => {
 
                 ...(active === "search"
                   ? {
-                      backgroundColor: "#e2e3f3",
-                      color: "#1A2027",
-                    }
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
                   : ""),
               }}
             >
@@ -276,7 +278,7 @@ const Sidebar = () => {
               <ListItemText
                 sx={{ display: { xs: "none", md: "none", lg: "block" } }}
               >
-                Search
+                Tìm kiếm
               </ListItemText>
             </ListItemButton>
           </Link>

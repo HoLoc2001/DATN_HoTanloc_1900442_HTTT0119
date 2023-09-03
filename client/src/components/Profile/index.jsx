@@ -107,7 +107,7 @@ const index = () => {
                 color: `${themeColor === "light" ? "#171717" : "#fff2f2"}`,
               }}
             >
-              Edit Profile
+              Thay đổi
             </Button>
           </Link>
         </Box>
@@ -129,7 +129,7 @@ const index = () => {
               onClick={
                 user?._count?.followers
                   ? () => handleOpenFollowers(user.id)
-                  : () => {}
+                  : () => { }
               }
             >
               {user?._count?.followers}
@@ -144,7 +144,7 @@ const index = () => {
               onClick={
                 user?._count?.followings
                   ? () => handleOpenFollowing(user.id)
-                  : () => {}
+                  : () => { }
               }
             >
               {user?._count?.followings}

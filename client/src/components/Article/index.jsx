@@ -144,27 +144,23 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                 sx={{
                   height: "410px",
                   width: "350px",
-                  color: `${
-                    themeColor === "light" ? "rgb(8 9 10)" : "rgb(245 245 245)"
-                  }`,
-                  border: `1px solid ${
-                    themeColor === "light"
-                      ? "rgb(245 245 245)"
-                      : "rgba(45,50,59,255)"
-                  } `,
-                  backgroundColor: `${
-                    themeColor === "light"
-                      ? "rgb(245 245 245)"
-                      : "rgba(45,50,59,255)"
-                  }`,
+                  color: `${themeColor === "light" ? "rgb(8 9 10)" : "rgb(245 245 245)"
+                    }`,
+                  border: `1px solid ${themeColor === "light"
+                    ? "rgb(245 245 245)"
+                    : "rgba(45,50,59,255)"
+                    } `,
+                  backgroundColor: `${themeColor === "light"
+                    ? "rgb(245 245 245)"
+                    : "rgba(45,50,59,255)"
+                    }`,
 
                   borderRadius: "10px",
                   ":hover": {
-                    border: `1px solid ${
-                      themeColor === "light"
-                        ? "rgba(45,50,59,255)"
-                        : "rgb(245 245 245)"
-                    }`,
+                    border: `1px solid ${themeColor === "light"
+                      ? "rgba(45,50,59,255)"
+                      : "rgb(245 245 245)"
+                      }`,
                     cursor: "pointer",
                   },
                 }}
@@ -202,29 +198,25 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                   sx={{
                     height: "410px",
                     width: "350px",
-                    color: `${
-                      themeColor === "light"
-                        ? "rgb(8 9 10)"
-                        : "rgb(245 245 245)"
-                    }`,
-                    border: `1px solid ${
-                      themeColor === "light"
-                        ? "rgb(245 245 245)"
-                        : "rgba(45,50,59,255)"
-                    } `,
-                    backgroundColor: `${
-                      themeColor === "light"
-                        ? "rgb(245 245 245)"
-                        : "rgba(45,50,59,255)"
-                    }`,
+                    color: `${themeColor === "light"
+                      ? "rgb(8, 9, 10)"
+                      : "rgb(245, 245, 245)"
+                      }`,
+                    border: `1px solid ${themeColor === "light"
+                      ? "rgb(245, 245, 245)"
+                      : "rgba(45,50,59,255)"
+                      } `,
+                    backgroundColor: `${themeColor === "light"
+                      ? "white"
+                      : "rgba(45,50,59,255)"
+                      }`,
 
                     borderRadius: "10px",
                     ":hover": {
-                      border: `1px solid ${
-                        themeColor === "light"
-                          ? "rgba(45,50,59,255)"
-                          : "rgb(245 245 245)"
-                      }`,
+                      border: `1px solid ${themeColor === "light"
+                        ? "rgba(45,50,59,255)"
+                        : "rgb(245 245 245)"
+                        }`,
                       cursor: "pointer",
                     },
                   }}
@@ -250,9 +242,8 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       </Typography>
                       <Box
                         marginLeft={"3vw"}
-                        display={`${
-                          article.userId === userId ? "block" : "none"
-                        }`}
+                        display={`${article.userId === userId ? "block" : "none"
+                          }`}
                         sx={{}}
                       >
                         <IconButton
@@ -293,24 +284,21 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       container
                       justifyContent="center"
                       spacing={12}
-                      // color={"rgb(245 245 245)"}
+                    // color={"rgb(245 245 245)"}
                     >
                       <Grid key={1} item display={"flex"} alignItems={"center"}>
                         <Tooltip title="Like">
                           <IconButton
                             sx={{
-                              color: `${
-                                themeColor === "light" ? "" : "rgb(245 245 245)"
-                              }`,
+                              color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                                }`,
                               ":hover": {
-                                backgroundColor: `${
-                                  themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                                }`,
-                                color: `${
-                                  themeColor === "light"
-                                    ? ""
-                                    : "rgba(249,242,222,255)"
-                                }`,
+                                backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                                  }`,
+                                color: `${themeColor === "light"
+                                  ? ""
+                                  : "rgba(249,242,222,255)"
+                                  }`,
                               },
                             }}
                             onClick={(event) =>
@@ -332,18 +320,15 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         <Tooltip title="Comment">
                           <IconButton
                             sx={{
-                              color: `${
-                                themeColor === "light" ? "" : "rgb(245 245 245)"
-                              }`,
+                              color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                                }`,
                               ":hover": {
-                                backgroundColor: `${
-                                  themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                                }`,
-                                color: `${
-                                  themeColor === "light"
-                                    ? ""
-                                    : "rgba(249,242,222,255)"
-                                }`,
+                                backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                                  }`,
+                                color: `${themeColor === "light"
+                                  ? ""
+                                  : "rgba(249,242,222,255)"
+                                  }`,
                               },
                             }}
                             onClick={handleClickComment}
@@ -358,22 +343,19 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                           <Tooltip title="Remove bookmark">
                             <IconButton
                               sx={{
-                                color: `${
-                                  themeColor === "light"
-                                    ? ""
-                                    : "rgb(245 245 245)"
-                                }`,
+                                color: `${themeColor === "light"
+                                  ? ""
+                                  : "rgb(245 245 245)"
+                                  }`,
                                 ":hover": {
-                                  backgroundColor: `${
-                                    themeColor === "light"
-                                      ? "#e2e3f3"
-                                      : "#5c5d5f"
-                                  }`,
-                                  color: `${
-                                    themeColor === "light"
-                                      ? ""
-                                      : "rgba(249,242,222,255)"
-                                  }`,
+                                  backgroundColor: `${themeColor === "light"
+                                    ? "#e2e3f3"
+                                    : "#5c5d5f"
+                                    }`,
+                                  color: `${themeColor === "light"
+                                    ? ""
+                                    : "rgba(249,242,222,255)"
+                                    }`,
                                 },
                               }}
                               onClick={(event) =>
@@ -389,22 +371,19 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                           <Tooltip title="Add bookmark">
                             <IconButton
                               sx={{
-                                color: `${
-                                  themeColor === "light"
-                                    ? ""
-                                    : "rgb(245 245 245)"
-                                }`,
+                                color: `${themeColor === "light"
+                                  ? ""
+                                  : "rgb(245 245 245)"
+                                  }`,
                                 ":hover": {
-                                  backgroundColor: `${
-                                    themeColor === "light"
-                                      ? "#e2e3f3"
-                                      : "#5c5d5f"
-                                  }`,
-                                  color: `${
-                                    themeColor === "light"
-                                      ? ""
-                                      : "rgba(249,242,222,255)"
-                                  }`,
+                                  backgroundColor: `${themeColor === "light"
+                                    ? "#e2e3f3"
+                                    : "#5c5d5f"
+                                    }`,
+                                  color: `${themeColor === "light"
+                                    ? ""
+                                    : "rgba(249,242,222,255)"
+                                    }`,
                                 },
                               }}
                               onClick={(event) =>

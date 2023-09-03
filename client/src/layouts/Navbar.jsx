@@ -122,9 +122,8 @@ const Navbar = ({ notShowCreate }) => {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: `${
-            themeColor === "light" ? "rgb(255 248 248)" : "#000000"
-          }`,
+          backgroundColor: `${themeColor === "light" ? "rgb(255 248 248)" : "#000000"
+            }`,
           height: "56px",
           borderBottom: "1px solid rgb(255 248 248)",
         }}
@@ -147,9 +146,8 @@ const Navbar = ({ notShowCreate }) => {
                   sx={{
                     ml: 2,
                     fontFamily: "monospace",
-                    color: `${
-                      themeColor === "light" ? "black" : "rgb(255 248 248)"
-                    }`,
+                    color: `${themeColor === "light" ? "black" : "rgb(255 248 248)"
+                      }`,
                     fontWeight: 700,
                     letterSpacing: ".3rem",
                     textDecoration: "none",
@@ -159,7 +157,7 @@ const Navbar = ({ notShowCreate }) => {
                     window.scroll({ top: 0, left: 0, behavior: "smooth" })
                   }
                 >
-                  Article
+                  HTL
                 </Typography>
               </Link>
             </Box>
@@ -175,9 +173,8 @@ const Navbar = ({ notShowCreate }) => {
                         sx={{
                           textTransform: "none",
                           border: "1px solid #a3a3a3",
-                          color: `${
-                            themeColor === "light" ? "#171717" : "#fff2f2"
-                          }`,
+                          color: `${themeColor === "light" ? "#171717" : "#fff2f2"
+                            }`,
                         }}
                       >
                         Create article
@@ -213,7 +210,7 @@ const Navbar = ({ notShowCreate }) => {
                         color: "rgb(74 74 74)",
                       }}
                     >
-                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>Thông tin tài khoản</MenuItem>
                     </Link>
 
                     <MenuItem
@@ -222,7 +219,7 @@ const Navbar = ({ notShowCreate }) => {
                         setAnchorEl(null);
                       }}
                     >
-                      SignOut
+                      Đăng Xuất
                     </MenuItem>
                   </Menu>
                 </>
@@ -230,23 +227,19 @@ const Navbar = ({ notShowCreate }) => {
                 <Link to={"./signin"} style={{ textDecoration: "none" }}>
                   <Button
                     sx={{
-                      color: `${
-                        themeColor === "light" ? "black" : "rgb(255 248 248)"
-                      }`,
-                      border: `1px solid ${
-                        themeColor === "light" ? "black" : "rgb(255 248 248)"
-                      }`,
+                      color: `${themeColor === "light" ? "black" : "rgb(255 248 248)"
+                        }`,
+                      border: `1px solid ${themeColor === "light" ? "black" : "rgb(255 248 248)"
+                        }`,
                       ":hover": {
-                        backgroundColor: `${
-                          themeColor === "light"
-                            ? "rgb(226 227 243)"
-                            : "rgba(45,50,59,255)"
-                        }`,
-                        color: `${
-                          themeColor === "light"
-                            ? "black"
-                            : "rgba(249,242,222,255)"
-                        }`,
+                        backgroundColor: `${themeColor === "light"
+                          ? "rgb(226 227 243)"
+                          : "rgba(45,50,59,255)"
+                          }`,
+                        color: `${themeColor === "light"
+                          ? "black"
+                          : "rgba(249,242,222,255)"
+                          }`,
                       },
                     }}
                   >

@@ -14,13 +14,15 @@ import {
   Typography,
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { signInLocal } from "../redux/authSlice";
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
+  const data = window.location.href
+  console.log("---------------------------", data);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   // const isForgetPass = useAppSelector((state) => state.user.isForgetPass);
@@ -172,7 +174,7 @@ const SignIn = () => {
           <Button
             variant="contained"
             href="http://localhost:5000/api/auth/google-redirect"
-            // onClick={handleClickGoogle}
+          // onClick={handleClickGoogle}
           >
             <GoogleIcon />
             &ensp; Đăng nhập Google

@@ -126,7 +126,7 @@ const SignIn = () => {
     <>
       <Box
         sx={{
-          width: "50%",
+          width: "70%",
           height: "100%",
           backgroundColor: "#E7E9EB",
           margin: "60px auto",
@@ -135,6 +135,10 @@ const SignIn = () => {
         }}
       >
         <Typography component="h1" fontSize={"50px"}>
+          Trường Đại học kỹ thuật công nghệ Cần Thơ
+        </Typography>
+        <br />
+        <Typography component="h4" fontSize={"30px"}>
           Đăng nhập
         </Typography>
         <Stack
@@ -147,7 +151,7 @@ const SignIn = () => {
           noValidate
           autoComplete="on"
         >
-          <TextField
+          {/* <TextField
             id="email"
             name="email"
             label="Email"
@@ -169,28 +173,32 @@ const SignIn = () => {
           />
           <Button variant="contained" onClick={handleClickSignin}>
             Đăng nhập
-          </Button>
+          </Button> */}
 
           <Button
             variant="contained"
             href="http://localhost:5000/api/auth/google-redirect"
+            sx={{
+              mt: "10vw",
+              mb: "10vw",
+            }}
           // onClick={handleClickGoogle}
           >
             <GoogleIcon />
-            &ensp; Đăng nhập Google
+            &ensp; Đăng nhập bằng tài khoản CTUT
           </Button>
 
-          <Button variant="contained" onClick={() => setOpenForgetPass(true)}>
+          {/* <Button variant="contained" onClick={() => setOpenForgetPass(true)}>
             Quên mật khẩu
-          </Button>
+          </Button> */}
         </Stack>
 
-        <Typography>
+        {/* <Typography>
           Bạn chưa có tài khoản?
           <Link to="/signup">
             <Button>Đăng ký</Button>
           </Link>
-        </Typography>
+        </Typography> */}
       </Box>
       <Stack sx={{ width: "60%" }} spacing={2}>
         <Snackbar

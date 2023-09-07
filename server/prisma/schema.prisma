@@ -56,6 +56,7 @@ model Article {
   comments  Comment[]
   bookmarks Bookmark[]
   userId    Int
+  chude     Chude
   user      User       @relation(fields: [userId], references: [id])
   tags      Tag[]
 
@@ -118,4 +119,10 @@ enum Provider {
   STUDENT
   TEACHER
   GOOGLE
+}
+
+enum Chude {
+  TINTUC
+  TUYENDUNG
+  CAUHOI
 }

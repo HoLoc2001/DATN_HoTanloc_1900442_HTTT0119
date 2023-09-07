@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import BookmarkIcon from "@mui/icons-material/Bookmark"; import NewspaperIcon from '@mui/icons-material/Newspaper'; import WorkIcon from '@mui/icons-material/Work';
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from "@mui/icons-material/Search"; import HelpIcon from '@mui/icons-material/Help';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -39,6 +39,8 @@ const Sidebar = () => {
       setActive("tuyen-dung");
     } else if (pathname === "/search") {
       setActive("search");
+    } else if (pathname === "/hoi-dap") {
+      setActive("hoi-dap");
     } else {
       setActive("");
     }
@@ -58,6 +60,10 @@ const Sidebar = () => {
 
   const handleClickTuyenDung = () => {
     setActive("tuyen-dung");
+  };
+
+  const handleClickHoiDap = () => {
+    setActive("hoi-dap");
   };
 
   const handleClickSearch = () => {
@@ -236,6 +242,47 @@ const Sidebar = () => {
                 sx={{ display: { xs: "none", md: "none", lg: "block" } }}
               >
                 Tuyển dụng
+              </ListItemText>
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem key="9" disablePadding>
+          <Link
+            to="/hoi-dap"
+            style={{
+              display: "flex",
+              color: "#1A2027",
+              textDecoration: "none",
+              width: "100%",
+            }}
+            onClick={handleClickHoiDap}
+          >
+            <ListItemButton
+              sx={{
+                ":hover": {
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
+                },
+                ...(active === "hoi-dap"
+                  ? {
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
+                  : ""),
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#1A2027",
+                  minWidth: "35px",
+                }}
+              >
+                <HelpIcon />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
+                Hỏi đáp
               </ListItemText>
             </ListItemButton>
           </Link>

@@ -177,7 +177,7 @@ const Navbar = ({ notShowCreate }) => {
                             }`,
                         }}
                       >
-                        Create article
+                        Tạo bài đăng
                       </Button>
                     </Link>
                   )}

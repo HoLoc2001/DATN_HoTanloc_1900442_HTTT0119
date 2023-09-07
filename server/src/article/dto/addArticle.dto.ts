@@ -13,6 +13,6 @@ export class AddArticle {
   @IsNotEmpty()
   thumbnail: string;
 
-  @IsArray()
-  tags: string[];
+  @IsNotEmpty()
+  chude: any;
 }

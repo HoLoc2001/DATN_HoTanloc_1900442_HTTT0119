@@ -10,6 +10,9 @@ import Tag from "./components/Tag";
 import Profile from "./components/Profile";
 import OtherUser from "./components/Profile/OtherUser";
 import Bookmark from "./components/Bookmark";
+import Tuyendung from "./components/Tuyendung";
+import Tintuc from "./components/Tintuc";
+import Hoidap from "./components/Hoidap";
 import ReadArticle from "./components/Article/ReadArticle";
 import EditProfile from "./components/Profile/EditProfile";
 import AddArticle from "./components/Article/AddArticle";
@@ -41,6 +44,9 @@ const App = () => {
               <Route path="/search" element={<Search />} />
               <Route path="/tag/:tag" element={<Tag />} />
               <Route path="/bookmarks" element={<Bookmark />} />
+              <Route path="/hoi-dap" element={<Hoidap />} />
+              <Route path="/tuyen-dung" element={<Tuyendung />} />
+              <Route path="/tintuc" element={<Tintuc />} />
               <Route path="/user/:userId" element={<OtherUser />} />
               <Route path="/:articleId" element={<ReadArticle />} />
             </Route>

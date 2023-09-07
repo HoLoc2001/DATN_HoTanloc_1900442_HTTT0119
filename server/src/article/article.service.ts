@@ -275,6 +275,171 @@ export class ArticleService {
     }
   }
 
+  async getTuyendung(userId: number, query: GetArticlesDto) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { chude: 'TUYENDUNG' },
+        skip: query.offset,
+        take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      const Articles = articles?.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHoidap(userId: number, query: GetArticlesDto) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { chude: 'CAUHOI' },
+        skip: query.offset,
+        take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+          chude: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      const Articles = articles?.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTintuc(userId: number, query: GetArticlesDto) {
+    try {
+      const articles = await this.prisma.article.findMany({
+        where: { chude: 'TINTUC' },
+        skip: query.offset,
+        take: query.limit,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        select: {
+          bookmarks: {
+            where: {
+              userId: userId,
+            },
+          },
+          likes: {
+            where: {
+              userId: userId,
+            },
+          },
+          userId: true,
+          id: true,
+          title: true,
+          thumbnail: true,
+          tags: true,
+          views: true,
+
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          _count: {
+            select: {
+              likes: true,
+              comments: true,
+            },
+          },
+        },
+      });
+      const Articles = articles?.map((article) => {
+        article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
+        article['isLiked'] = article.likes.length === 1 ? true : false;
+        return { ...article };
+      });
+      return Articles;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getArticlesByUserIdAuth(
     userId: number,
     myUserId: number,
@@ -362,9 +527,9 @@ export class ArticleService {
   async addArticle(userId: number, dto: AddArticle) {
     try {
       const tagsArr = [];
-      dto.tags.forEach((tag) => {
-        tagsArr.push({ name: tag });
-      });
+      // dto.tags.forEach((tag) => {
+      //   tagsArr.push({ name: tag });
+      // });
 
       const article = await this.prisma.article.create({
         data: {
@@ -372,9 +537,10 @@ export class ArticleService {
           content: dto.content,
           userId: userId,
           thumbnail: dto.thumbnail,
-          tags: {
-            connect: tagsArr,
-          },
+          chude: dto.chude,
+          // tags: {
+          //   connect: tagsArr,
+          // },
         },
         select: {
           bookmarks: {
@@ -391,9 +557,9 @@ export class ArticleService {
           id: true,
           title: true,
           thumbnail: true,
-          tags: true,
+          // tags: true,
           views: true,
-
+          chude: true,
           createdAt: true,
           user: {
             select: {

@@ -22,6 +22,10 @@ import {
   Autocomplete,
   Box,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   styled,
@@ -65,13 +69,14 @@ const AddArticle = () => {
   const article = useAppSelector((state) => state.article.article);
   const [content, setContent] = useState("");
   const [errMissInput, setErrMissInput] = useState(false);
+  const [chude, setChude] = useState('');
   const [articleForm, setArticleForm] = useState({
     title: "",
     thumbnailUrl: "",
     thumbnailBase64: "",
-    tags: [],
+
   });
-  const { title, thumbnailUrl, thumbnailBase64, tags } = articleForm;
+  const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
 
   useEffect(() => {
     (async () => {
@@ -80,6 +85,8 @@ const AddArticle = () => {
   }, []);
 
   function handleChange(content) {
+
+    console.log(content);
     setContent(content);
   }
 
@@ -102,24 +109,24 @@ const AddArticle = () => {
         data: { secure_url },
       },
     } = await dispatch(addImage(formData));
-
+    console.log("secure_url", secure_url);
     const response = {
       result: [
         {
-          url: secure_url,
+          url: "https://res.cloudinary.com/dxlsponnf/image/upload/v1693823112/du4hnogavkig1avmizxp.jpg",//secure_url,
           name: "hello world",
         },
       ],
     };
-    uploadHandler(response);
+    await uploadHandler(response);
   };
 
   const handleAddArticle = async (e) => {
     const { error } = articleValidate({
       title,
       thumbnail: thumbnailUrl,
-      tags,
       content,
+      chude
     });
 
     if (error) {
@@ -128,7 +135,7 @@ const AddArticle = () => {
       setErrMissInput(true);
     } else {
       await dispatch(
-        addArticle({ title, thumbnail: thumbnailUrl, tags, content })
+        addArticle({ title, thumbnail: thumbnailUrl, content, chude })
       );
     }
   };
@@ -155,7 +162,11 @@ const AddArticle = () => {
         thumbnailBase64: base64,
         thumbnailUrl: url,
       });
-    } catch (error) {}
+    } catch (error) { }
+  };
+
+  const handleChange2 = (event) => {
+    setChude(event.target.value);
   };
 
   return (
@@ -208,7 +219,22 @@ const AddArticle = () => {
           src={thumbnailBase64}
         />
 
-        <Autocomplete
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Chủ đề</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={chude}
+            label="Chủ đề"
+            onChange={handleChange2}
+          >
+            <MenuItem value={"CAUHOI"}>Câu hỏi</MenuItem>
+            <MenuItem value={"TINTUC"}>Tin tức</MenuItem>
+            <MenuItem value={"TUYENDUNG"}>Tuyển dụng</MenuItem>
+          </Select>
+        </FormControl>
+
+        {/* <Autocomplete
           multiple
           limitTags={5}
           id="multiple-limit-tags"
@@ -235,7 +261,8 @@ const AddArticle = () => {
             backgroundColor: "#fff",
             color: "rgb(255 242 242)",
           }}
-        />
+        /> */}
+
         <SunEditor
           name="my-editor"
           setAllPlugins={true}

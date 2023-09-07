@@ -29,8 +29,8 @@ export const articleValidate = (data) => {
   const articleSchema = Joi.object({
     title: Joi.string().min(1).required(),
     thumbnail: Joi.string().min(1).required(),
-    tags: Joi.array().required(),
     content: Joi.string().min(1).required(),
+    chude: Joi.string().min(1).required(),
   });
 
   return articleSchema.validate(data);

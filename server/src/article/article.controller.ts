@@ -93,6 +93,24 @@ export class ArticleController {
     return await this.articleService.getMyArticles(user['userId'], query);
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Get('/tuyendung')
+  async getTuyendung(@Query() query: GetArticlesDto, @GetUser() user: User) {
+    return await this.articleService.getTuyendung(user['userId'], query);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/hoidap')
+  async getHoidap(@Query() query: GetArticlesDto, @GetUser() user: User) {
+    return await this.articleService.getHoidap(user['userId'], query);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/tintuc')
+  async getTintuc(@Query() query: GetArticlesDto, @GetUser() user: User) {
+    return await this.articleService.getTintuc(user['userId'], query);
+  }
+
   @Get('user/:userId')
   async getArticlesByUserId(
     @Param() user: GetArticlesByUserIdDto,

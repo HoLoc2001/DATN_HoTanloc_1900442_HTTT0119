@@ -193,7 +193,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                 height: "410px",
               }}
             >
-              <Link to={`/${article.id}`} style={{ textDecoration: "none" }}>
+              <Link to={`/${article?.id}`} style={{ textDecoration: "none" }}>
                 <Paper
                   sx={{
                     height: "410px",
@@ -420,10 +420,10 @@ const index = ({ _articles, _setPage, _hasPost }) => {
             to={`../update/${articleId}`}
             style={{ textDecoration: "none", color: "black" }}
           >
-            Update
+            Cập nhật
           </Link>
         </MenuItem>
-        <MenuItem onClick={handleDeleteArticle}>Delete</MenuItem>
+        <MenuItem onClick={handleDeleteArticle}>Xóa</MenuItem>
       </Menu>
       <AlertInfo
         err={errMissInput}

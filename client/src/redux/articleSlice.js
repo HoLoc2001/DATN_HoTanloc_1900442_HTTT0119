@@ -54,6 +54,60 @@ export const getMyArticles = createAsyncThunk(
   }
 );
 
+export const getTuyendung = createAsyncThunk(
+  "article/getTuyendung",
+  async ({ page }, { getState }) => {
+    try {
+      const { tuyendung } = getState().article;
+      const res = await axiosPrivate.get(
+        `article/tuyendung?limit=6&offset=${page}`
+      );
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...tuyendung, ...res.data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getTintuc = createAsyncThunk(
+  "article/getTintuc",
+  async ({ page }, { getState }) => {
+    try {
+      const { tintuc } = getState().article;
+      const res = await axiosPrivate.get(
+        `article/tintuc?limit=6&offset=${page}`
+      );
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...tintuc, ...res.data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getHoidap = createAsyncThunk(
+  "article/getHoidap",
+  async ({ page }, { getState }) => {
+    try {
+      const { hoidap } = getState().article;
+      const res = await axiosPrivate.get(
+        `article/hoidap?limit=6&offset=${page}`
+      );
+      if (page === 0) {
+        return [...res.data];
+      }
+      return [...hoidap, ...res.data];
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const getArticleByUserId = createAsyncThunk(
   "article/getArticleByUserId",
   async ({ userId, page }, { getState }) => {
@@ -362,6 +416,9 @@ export const articleSlice = createSlice({
     myArticles: [],
     userArticles: [],
     bookmarks: [],
+    tuyendung: [],
+    hoidap: [],
+    tintuc: [],
     comments: [],
     article: null,
     articleSearch: [],
@@ -376,6 +433,15 @@ export const articleSlice = createSlice({
       })
       .addCase(getMyArticles.fulfilled, (state, action) => {
         state.myArticles = action.payload;
+      })
+      .addCase(getTuyendung.fulfilled, (state, action) => {
+        state.tuyendung = action.payload;
+      })
+      .addCase(getHoidap.fulfilled, (state, action) => {
+        state.hoidap = action.payload;
+      })
+      .addCase(getTintuc.fulfilled, (state, action) => {
+        state.tintuc = action.payload;
       })
       .addCase(getArticleByUserId.fulfilled, (state, action) => {
         state.userArticles = action.payload;

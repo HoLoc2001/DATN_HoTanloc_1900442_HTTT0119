@@ -23,6 +23,9 @@ const SignIn = () => {
   const dispatch = useAppDispatch();
   const data = window.location.href
   console.log("---------------------------", data);
+  let cutEmail = data.slice(-3)
+
+
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   // const isForgetPass = useAppSelector((state) => state.user.isForgetPass);
@@ -33,6 +36,7 @@ const SignIn = () => {
   });
 
   const [errMissInput, setErrMissInput] = useState(false);
+  const [errEmail, setErrEmail] = useState(false);
   const [openForgetPass, setOpenForgetPass] = useState(false);
   const [forgetPass, setForgetPass] = useState(false);
   const [validateEmail, setValidateEmail] = useState("");
@@ -43,6 +47,13 @@ const SignIn = () => {
   });
 
   const { email, password } = signinForm;
+  useEffect(() => {
+
+    if (cutEmail === "403") {
+      setErrEmail(true)
+    }
+
+  }, [])
 
   const onChangeSigninForm = (e) => {
     return setSigninForm({
@@ -207,6 +218,13 @@ const SignIn = () => {
           onClose={() => setErrMissInput(false)}
         >
           <Alert severity="warning">Vui lòng nhập email và mật khẩu</Alert>
+        </Snackbar>
+        <Snackbar
+          open={errEmail}
+          autoHideDuration={4000}
+          onClose={() => setErrMissInput(false)}
+        >
+          <Alert severity="warning">Vui lòng nhập sử dụng Email thuộc CTUET</Alert>
         </Snackbar>
         <Snackbar
           open={errSignIn}

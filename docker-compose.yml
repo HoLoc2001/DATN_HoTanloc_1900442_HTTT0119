@@ -1,17 +1,18 @@
 
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - backend
-  #   image: social-network-client
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - postgres
+  vite_docker:
+    image: node:alpine
+    container_name: vite_docker
+    entrypoint: /bin/sh
+    ports:
+      - 8000:8000
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: ./client
+        target: /srv/app
+    tty: true
   
   # backend:
   #   build:
@@ -24,6 +25,16 @@ services:
   #     - "5000:5000"
   #   networks:
   #     - postgres
+  server:
+    user: "node"
+    container_name: server
+    build: 
+      context: ./server
+    environment:
+      - NODE_ENV=production
+    restart: always  
+    ports:
+      - 3000:3000
 
   postgres:
     container_name: postgres_container

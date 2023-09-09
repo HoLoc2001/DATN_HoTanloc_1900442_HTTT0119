@@ -246,7 +246,6 @@ export class ArticleService {
           thumbnail: true,
           tags: true,
           views: true,
-
           createdAt: true,
           user: {
             select: {

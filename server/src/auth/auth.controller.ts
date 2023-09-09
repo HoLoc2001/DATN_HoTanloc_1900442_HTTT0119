@@ -33,12 +33,12 @@ export class AuthController {
     const tokens = await this.authService.googleLogin(req, res);
 
     if (tokens === null) {
-      return res.redirect('http://localhost:8000/signin?error=403');
+      return res.redirect('https://lv.hotanloc.xyz/signin?error=403');
     }
     res.cookie('auth-cookie', JSON.stringify(tokens), {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });
-    return res.redirect('http://localhost:8000');
+    return res.redirect('https://lv.hotanloc.xyz');
   }
 
   @Post('signupLocal')

@@ -4,20 +4,15 @@ services:
   reactapp:
     build: ./client
     container_name: react_vite_app
-    ports:
-      - '8000:8000'
-  
-  # backend:
-  #   build:
-  #     context: ./server
-  #     dockerfile: Dockerfile
-  #   image: social-network-server
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "5000:5000"
-  #   networks:
-  #     - postgres
+    networks:
+      - directus_traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`lv.hotanloc.xyz`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.client.service=client"
+      - "traefik.http.services.client.loadbalancer.server.port=8000"
 
   server:
     user: "node"
@@ -27,8 +22,15 @@ services:
     environment:
       - NODE_ENV=production
     restart: always  
-    ports:
-      - 5000:5000
+    networks:
+      - directus_traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`lv-server.hotanloc.xyz`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.client.service=client"
+      - "traefik.http.services.client.loadbalancer.server.port=5000"
 
   postgres:
     container_name: postgres_container
@@ -43,7 +45,7 @@ services:
     ports:
       - "5434:5432"
     networks:
-      - postgres
+      - directus_traefik
     restart: unless-stopped
   
   pgadmin:
@@ -59,7 +61,7 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      - postgres
+      - directus_traefik
     restart: unless-stopped
 
   directus:
@@ -88,11 +90,11 @@ services:
     ports:
       - 8057:8055
     networks:
-      - postgres
+      - directus_traefik
 
 networks:
-  postgres:
-    driver: bridge
+  directus_traefik:
+    external: true
 
 volumes:
     postgres:

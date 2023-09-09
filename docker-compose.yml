@@ -8,11 +8,11 @@ services:
       - directus_traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`lv.hotanloc.xyz`)"
-      - "traefik.http.routers.client.entrypoints=websecure"
-      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.client.service=client"
-      - "traefik.http.services.client.loadbalancer.server.port=8000"
+      - "traefik.http.routers.client1.rule=Host(`lv.hotanloc.xyz`)"
+      - "traefik.http.routers.client1.entrypoints=websecure"
+      - "traefik.http.routers.client1.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.client1.service=client1"
+      - "traefik.http.services.client1.loadbalancer.server.port=8000"
 
   server:
     user: "node"

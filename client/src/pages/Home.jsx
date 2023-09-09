@@ -14,6 +14,7 @@ const Home = () => {
   let tokens = searchParams.get("token")
   const themeColor = useAppSelector((state) => state.theme.color);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
+  console.log(tokens);
 
   useEffect(() => {
     function getCookie(name) {

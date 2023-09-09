@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../layouts/Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import Sidebar from "../layouts/Sidebar";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { getUser } from "../redux/userSlice";
@@ -10,6 +10,8 @@ import { getMyTags, getTags, popularTags } from "../redux/tagSlice";
 
 const Home = () => {
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  let tokens = searchParams.get("token")
   const themeColor = useAppSelector((state) => state.theme.color);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
@@ -20,12 +22,12 @@ const Home = () => {
       if (parts.length === 2) return parts.pop().split(";").shift();
     }
 
-    const tokens = getCookie("auth-cookie");
+    // const tokens = getCookie("auth-cookie");
 
     if (tokens) {
       localStorage.setItem(
         "AT",
-        JSON.parse(decodeURIComponent(tokens)).accessToken
+        JSON.parse(tokens).accessToken
       );
       localStorage.setItem(
         "RT",

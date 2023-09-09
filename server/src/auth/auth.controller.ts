@@ -39,7 +39,9 @@ export class AuthController {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });
     console.log(tokens);
-    return res.redirect('https://lv.hotanloc.xyz');
+    return res.redirect(
+      `https://lv.hotanloc.xyz?token=${JSON.stringify(tokens)}`,
+    );
   }
 
   @Post('signupLocal')

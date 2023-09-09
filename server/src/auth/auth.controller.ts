@@ -38,6 +38,7 @@ export class AuthController {
     res.cookie('auth-cookie', JSON.stringify(tokens), {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });
+    console.log(tokens);
     return res.redirect('https://lv.hotanloc.xyz');
   }
 

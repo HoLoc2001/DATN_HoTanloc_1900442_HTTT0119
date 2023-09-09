@@ -188,7 +188,7 @@ const SignIn = () => {
 
           <Button
             variant="contained"
-            href="http://localhost:5000/api/auth/google-redirect"
+            href="https://lv-server.hotanloc.xyz/api/auth/google-redirect"
             sx={{
               mt: "10vw",
               mb: "10vw",

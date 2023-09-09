@@ -31,6 +31,9 @@ services:
       - "traefik.http.routers.client.tls.certresolver=letsencrypt"
       - "traefik.http.routers.client.service=client"
       - "traefik.http.services.client.loadbalancer.server.port=5000"
+    depends_on:
+      - postgres
+      - reactapp
 
   postgres:
     container_name: postgres_container

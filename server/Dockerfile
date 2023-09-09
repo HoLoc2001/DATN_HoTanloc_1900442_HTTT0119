@@ -13,7 +13,7 @@ RUN npm install --force
 # Bundle app source
 #COPY ./prisma .
 COPY . .
-RUN npx prisma db pull
+# RUN npx prisma db pull
 RUN npx prisma generate
 # Creates a "dist" folder with the production build
 #COPY . .

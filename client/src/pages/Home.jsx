@@ -10,8 +10,8 @@ import { getMyTags, getTags, popularTags } from "../redux/tagSlice";
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
-  let tokens = searchParams.get("token")
+  const queryParameters = new URLSearchParams(window.location.search)
+  let tokens = queryParameters.get("token")
   const themeColor = useAppSelector((state) => state.theme.color);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   console.log(tokens);

@@ -1,18 +1,11 @@
 
 
 services:
-  vite_docker:
-    image: node:alpine
-    container_name: vite_docker
-    entrypoint: /bin/sh
+  reactapp:
+    build: ./client
+    container_name: react_vite_app
     ports:
-      - 8000:8000
-    working_dir: /srv/app
-    volumes:
-      - type: bind
-        source: ./client
-        target: /srv/app
-    tty: true
+      - '8000:8000'
   
   # backend:
   #   build:
@@ -25,6 +18,7 @@ services:
   #     - "5000:5000"
   #   networks:
   #     - postgres
+
   server:
     user: "node"
     container_name: server

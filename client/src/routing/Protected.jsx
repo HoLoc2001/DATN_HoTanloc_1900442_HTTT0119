@@ -5,6 +5,8 @@ import { signIn } from "../redux/authSlice";
 
 const ProtectedRoute = () => {
   const dispatch = useAppDispatch();
+  const queryParameters = new URLSearchParams(window.location.search)
+  let tokens = queryParameters.get("token")
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   useEffect(() => {
     function getCookie(name) {
@@ -13,16 +15,16 @@ const ProtectedRoute = () => {
       if (parts.length === 2) return parts.pop().split(";").shift();
     }
 
-    const tokens = getCookie("auth-cookie");
+    // const tokens = getCookie("auth-cookie");
 
     if (tokens) {
       localStorage.setItem(
         "AT",
-        JSON.parse(decodeURIComponent(tokens)).accessToken
+        JSON.parse(tokens).accessToken
       );
       localStorage.setItem(
         "RT",
-        JSON.parse(decodeURIComponent(tokens)).refreshToken
+        JSON.parse(tokens).refreshToken
       );
       (async () => {
         await dispatch(signIn());

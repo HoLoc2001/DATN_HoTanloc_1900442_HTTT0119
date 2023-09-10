@@ -537,6 +537,7 @@ export class ArticleService {
           userId: userId,
           thumbnail: dto.thumbnail,
           chude: dto.chude,
+          articles_files: dto?.files,
           // tags: {
           //   connect: tagsArr,
           // },
@@ -596,10 +597,6 @@ export class ArticleService {
     dto: UpdateArticleDto,
   ) {
     try {
-      const tagsArr = [];
-      dto.tags.forEach((tag) => {
-        tagsArr.push({ name: tag });
-      });
       const hasArticle = await this.prisma.article.findMany({
         where: {
           id: articleId,
@@ -614,9 +611,6 @@ export class ArticleService {
           title: dto.title,
           content: dto.content,
           thumbnail: dto.thumbnail,
-          tags: {
-            connect: tagsArr,
-          },
         },
         where: {
           id: articleId,
@@ -636,7 +630,6 @@ export class ArticleService {
           id: true,
           title: true,
           thumbnail: true,
-          tags: true,
           views: true,
 
           createdAt: true,

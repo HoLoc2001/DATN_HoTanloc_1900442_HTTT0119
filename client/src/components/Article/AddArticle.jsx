@@ -165,6 +165,19 @@ const AddArticle = () => {
     } catch (error) { }
   };
 
+  const handleFiles = async (e) => {
+    try {
+      const formData = new FormData();
+      const files = e.target.files;
+
+      for (const file of files) {
+        formData.append('files[]', file);
+      }
+      console.log(formData);
+
+    } catch (error) { }
+  };
+
   const handleChange2 = (event) => {
     setChude(event.target.value);
   };
@@ -263,6 +276,25 @@ const AddArticle = () => {
           }}
         /> */}
 
+        <Box marginBottom={"10px"}>
+          <Button
+            component="label"
+            sx={{
+              textTransform: "none",
+              border: "1px solid #a3a3a3",
+              color: "black",
+            }}
+          >
+            <input
+              type="file"
+              hidden
+              multiple
+              onChange={handleFiles}
+            />
+            Files
+          </Button>
+        </Box>
+
         <SunEditor
           name="my-editor"
           setAllPlugins={true}
@@ -328,8 +360,8 @@ const AddArticle = () => {
             ],
           }}
           onChange={handleChange}
-          // defaultValue={article.content}
-          onImageUploadBefore={handleImageUploadBefore}
+        // defaultValue={article.content}
+        // onImageUploadBefore={handleImageUploadBefore}
         />
       </Stack>
       <Link

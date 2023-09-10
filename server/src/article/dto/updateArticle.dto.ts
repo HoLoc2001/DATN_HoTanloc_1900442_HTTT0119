@@ -12,8 +12,4 @@ export class UpdateArticleDto {
   @IsString()
   @IsOptional()
   thumbnail: string;
-
-  @IsOptional()
-  @IsArray()
-  tags: string[];
 }

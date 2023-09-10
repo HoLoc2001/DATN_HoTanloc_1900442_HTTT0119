@@ -37,23 +37,23 @@ const App = () => {
               <Route path="/:id" element={<OtherUser />} />
             </Route>
           </Route>*/}
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />}>
-              <Route path="/" element={<Article />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/tag/:tag" element={<Tag />} />
-              <Route path="/bookmarks" element={<Bookmark />} />
-              <Route path="/hoi-dap" element={<Hoidap />} />
-              <Route path="/tuyen-dung" element={<Tuyendung />} />
-              <Route path="/tintuc" element={<Tintuc />} />
-              <Route path="/user/:userId" element={<OtherUser />} />
-              <Route path="/:articleId" element={<ReadArticle />} />
-            </Route>
-            <Route path="/editProfile" element={<EditProfile />} />
-            <Route path="/create" element={<AddArticle />} />
-            <Route path="/update/:articleId" element={<UpdateArticle />} />
+          {/* <Route path="/" element={<ProtectedRoute />}> */}
+          <Route path="/" element={<Home />}>
+            <Route path="/" element={<Article />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/tag/:tag" element={<Tag />} />
+            <Route path="/bookmarks" element={<Bookmark />} />
+            <Route path="/hoi-dap" element={<Hoidap />} />
+            <Route path="/tuyen-dung" element={<Tuyendung />} />
+            <Route path="/tintuc" element={<Tintuc />} />
+            <Route path="/user/:userId" element={<OtherUser />} />
+            <Route path="/:articleId" element={<ReadArticle />} />
           </Route>
+          <Route path="/editProfile" element={<EditProfile />} />
+          <Route path="/create" element={<AddArticle />} />
+          <Route path="/update/:articleId" element={<UpdateArticle />} />
+          {/* </Route> */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           {/* <Route path="/socket" element={<Socket />} /> */}

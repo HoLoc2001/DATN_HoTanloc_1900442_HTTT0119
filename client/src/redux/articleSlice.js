@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
+import axios from "axios";
 
 export const getArticles = createAsyncThunk(
   "article/getArticles",
@@ -334,6 +335,40 @@ export const addComment = createAsyncThunk(
   }
 );
 
+export const addFlieComment = createAsyncThunk(
+  "article/addFlieComment",
+  async ({ articleId, file }, { getState }) => {
+    try {
+      const { bookmarks, articles } = getState().article;
+      const res = await axios({
+        method: "POST",
+        url: `http://localhost:8057/files`,
+        data: file,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+          Authorization: "Bearer gxMtOafBAeY9SeByNghkKB5XysplUStn",
+        },
+      });
+
+      const comment = await axiosPrivate.post(`files`, {
+        data: res.data,
+        articleId,
+      });
+      const indexBookmark = bookmarks.findIndex(
+        (bookmark) => bookmark.id === articleId
+      );
+      const indexArticle = articles.findIndex(
+        (article) => article.id === articleId
+      );
+
+      return { data: comment.data, indexBookmark, indexArticle };
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const updatingComment = createAsyncThunk(
   "article/updatingComment",
   async (indexComment, { getState }) => {
@@ -542,6 +577,16 @@ export const articleSlice = createSlice({
         state.comments = action.payload;
       })
       .addCase(addComment.fulfilled, (state, action) => {
+        state.comments.push(action.payload.data);
+        state.article._count.comments += 1;
+        if (state.articles[action.payload.indexArticle]) {
+          state.articles[action.payload.indexArticle]._count.comments += 1;
+        }
+        if (state.articles[action.payload.indexBookmark]) {
+          state.articles[action.payload.indexBookmark]._count.comments += 1;
+        }
+      })
+      .addCase(addFlieComment.fulfilled, (state, action) => {
         state.comments.push(action.payload.data);
         state.article._count.comments += 1;
         if (state.articles[action.payload.indexArticle]) {

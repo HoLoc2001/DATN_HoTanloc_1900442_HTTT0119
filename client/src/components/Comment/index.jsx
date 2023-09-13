@@ -15,18 +15,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"; import AttachFileIcon from '@mui/icons-material/AttachFile';
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { Link } from "react-router-dom";
 import {
   addComment,
+  addFlieComment,
   cancelUpdatingComment,
   deleteComment,
   getComments,
   updateComment,
   updatingComment,
 } from "../../redux/articleSlice";
+import { getBase64 } from "../../utils";
+import { addFile } from "../../redux/cloudSlice";
 
 const index = ({ articleId }) => {
   const dispatch = useAppDispatch();
@@ -118,6 +121,34 @@ const index = ({ articleId }) => {
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+  };
+
+  const handleFileUpload = async (e) => {
+    try {
+      let file = new FormData();
+      file.append("files", e.target.files[0]);
+      const data = await dispatch(addFlieComment({ articleId, file }))
+      // return data
+      // const base64 = await getBase64(e.target.files[0]);
+      // setArticleForm({
+      //   ...articleForm,
+      //   thumbnailBase64: base64,
+      // });
+
+      // const {
+      //   payload: {
+      //     data: { url },
+      //   },
+      // } = await dispatch(addImage(thumbnail));
+
+      // setArticleForm({
+      //   ...articleForm,
+      //   thumbnailBase64: base64,
+      //   thumbnailUrl: url,
+      // });
+
+
+    } catch (error) { }
   };
 
   return (
@@ -248,33 +279,38 @@ const index = ({ articleId }) => {
                     </Box>
                   </>
                 ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{ fontSize: "15px", color: "black" }}
-                  >
-                    {comment.content}
-                  </Typography>
-                )}
-            
-                  <Box
-                    position={"absolute"}
-                    right={"-50px"}
-                    top={"0"}
-                    sx={{
-                      display: `${comment.userId === userId ? "block" : "none"}`,
-                    }}
-                  >
-                    <IconButton
-                      onClick={(event) =>
-                        handleClick(event, {
-                          index,
-                          comment,
-                        })
-                      }
+                  (comment?.file ? <Button sx={{
+                    display: "block",
+
+                    variant: "outlined"
+                  }}>Dalowdadsdasasds</Button> :
+                    <Typography
+                      variant="body2"
+                      sx={{ fontSize: "15px", color: "black" }}
                     >
-                      <MoreHorizIcon />
-                    </IconButton>
-                  </Box>
+                      {comment.content}
+                    </Typography>
+                  ))}
+
+                <Box
+                  position={"absolute"}
+                  right={"-50px"}
+                  top={"0"}
+                  sx={{
+                    display: `${comment.userId === userId ? "block" : "none"}`,
+                  }}
+                >
+                  <IconButton
+                    onClick={(event) =>
+                      handleClick(event, {
+                        index,
+                        comment,
+                      })
+                    }
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                </Box>
               </div>
             </div>
           );
@@ -308,6 +344,20 @@ const index = ({ articleId }) => {
           marginLeft: "5px",
         }}
       >
+        <IconButton
+          component="label"
+          sx={{
+            textTransform: "none",
+          }}
+        >
+          <input
+            type="file"
+            hidden
+            onChange={handleFileUpload}
+          />
+
+          <AttachFileIcon />
+        </IconButton>
         <TextField
           sx={{
             width: "100%",

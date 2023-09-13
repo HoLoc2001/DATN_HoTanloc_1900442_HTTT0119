@@ -162,7 +162,7 @@ const SignIn = () => {
           noValidate
           autoComplete="on"
         >
-          {/* <TextField
+          <TextField
             id="email"
             name="email"
             label="Email"
@@ -184,10 +184,11 @@ const SignIn = () => {
           />
           <Button variant="contained" onClick={handleClickSignin}>
             Đăng nhập
-          </Button> */}
+          </Button>
 
           <Button
             variant="contained"
+            // href="http://localhost:5000/api/auth/google-redirect"
             href="https://lv-server.hotanloc.xyz/api/auth/google-redirect"
             sx={{
               mt: "10vw",

@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { TagService } from './tag.service';
@@ -12,14 +13,21 @@ import { AddTagDto, GetTagById, GetTagDto } from './dto';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 import { AccessTokenGuard } from 'src/auth/guards';
+import { Request } from 'express';
 
-@Controller('api/tags')
+@Controller('api/files')
 export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Get()
   getTags() {
     return this.tagService.getTags();
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post()
+  addFile(@Req() req: Request) {
+    return this.tagService.addFile(req.body);
   }
 
   @UseGuards(AccessTokenGuard)

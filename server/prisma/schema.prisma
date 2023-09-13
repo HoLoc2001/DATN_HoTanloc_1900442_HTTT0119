@@ -75,14 +75,16 @@ model Tag {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  content   String
-  articleId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id])
+  id             Int             @id @default(autoincrement())
+  userId         Int
+  content        String
+  articleId      Int
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  file           String?         @db.Uuid
+  Article        Article         @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user           User            @relation(fields: [userId], references: [id])
+  directus_files directus_files? @relation(fields: [file], references: [id], onUpdate: NoAction, map: "comment_file_foreign")
 
   @@index([articleId])
 }
@@ -203,6 +205,7 @@ model directus_files {
   location                                                              String?
   tags                                                                  String?
   metadata                                                              Json?               @db.Json
+  Comment                                                               Comment[]
   articles_files                                                        articles_files[]
   directus_folders                                                      directus_folders?   @relation(fields: [folder], references: [id], onUpdate: NoAction, map: "directus_files_folder_foreign")
   directus_users_directus_files_modified_byTodirectus_users             directus_users?     @relation("directus_files_modified_byTodirectus_users", fields: [modified_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "directus_files_modified_by_foreign")

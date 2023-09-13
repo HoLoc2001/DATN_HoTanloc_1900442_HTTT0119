@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddTagDto, GetTagDto } from './dto';
 import { Prisma } from '@prisma/client';
+import axios from 'axios';
 
 @Injectable()
 export class TagService {
@@ -9,6 +10,37 @@ export class TagService {
   async getTags() {
     const tags = await this.prisma.tag.findMany();
     return tags;
+  }
+
+  async addFile(data: any) {
+    // console.log(data);
+    // const tags = await axios({
+    //   method: 'POST',
+    //   url: `${process.env.DIRECTUS_URL}/files`,
+    //   data: data,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // });
+    const ab = await this.prisma.comment.create({
+      data: {
+        file: data.data.data.id,
+        articleId: data.articleId,
+        userId: 1,
+        content: 'dasd',
+      },
+      include: {
+        user: {
+          select: {
+            avatar: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    });
+    console.log(data);
+    return ab;
   }
 
   async getMyTags(userId: number) {

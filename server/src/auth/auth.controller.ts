@@ -40,6 +40,9 @@ export class AuthController {
     });
     console.log(tokens);
     return res.redirect(
+      `http://localhost:8000?token=${JSON.stringify(tokens)}`,
+    );
+    return res.redirect(
       `https://lv.hotanloc.xyz?token=${JSON.stringify(tokens)}`,
     );
   }

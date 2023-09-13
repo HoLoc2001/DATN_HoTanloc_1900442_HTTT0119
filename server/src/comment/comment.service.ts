@@ -22,6 +22,7 @@ export class CommentService {
           },
         },
       });
+      console.log(listComment, articleId);
 
       return listComment;
     } catch (error) {

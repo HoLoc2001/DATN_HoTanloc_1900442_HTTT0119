@@ -20,6 +20,11 @@ export class CommentService {
               lastName: true,
             },
           },
+          directus_files: {
+            select: {
+              title: true,
+            },
+          },
         },
       });
       console.log(listComment, articleId);

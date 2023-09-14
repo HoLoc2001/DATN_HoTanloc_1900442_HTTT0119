@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"; import AttachFileIcon from '@mui/icons-material/AttachFile';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; import FilePresentIcon from '@mui/icons-material/FilePresent';
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { Link } from "react-router-dom";
 import {
@@ -174,7 +174,7 @@ const index = ({ articleId }) => {
           },
         }}
       >
-        {comments.map((comment, index) => {
+        {comments?.map((comment, index) => {
           return (
             <div
               key={comment.id}
@@ -279,11 +279,7 @@ const index = ({ articleId }) => {
                     </Box>
                   </>
                 ) : (
-                  (comment?.file ? <Button sx={{
-                    display: "block",
-
-                    variant: "outlined"
-                  }}>Dalowdadsdasasds</Button> :
+                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', }}><FilePresentIcon /> {comment?.directus_files.title}</Button> </div> :
                     <Typography
                       variant="body2"
                       sx={{ fontSize: "15px", color: "black" }}

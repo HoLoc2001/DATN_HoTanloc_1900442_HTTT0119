@@ -523,12 +523,17 @@ export class ArticleService {
     }
   }
 
-  async addArticle(userId: number, dto: AddArticle) {
+  async addArticle(userId: number, dto: any) {
     try {
       const tagsArr = [];
       // dto.tags.forEach((tag) => {
       //   tagsArr.push({ name: tag });
       // });
+      console.log(
+        '---------------------------------',
+        dto,
+        '---------------------------------',
+      );
 
       const article = await this.prisma.article.create({
         data: {

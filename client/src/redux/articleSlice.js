@@ -138,6 +138,7 @@ export const addArticle = createAsyncThunk(
   "article/addArticle",
   async (data) => {
     try {
+      console.log("data", data);
       const res = await axiosPrivate.post(`article`, data);
 
       return res.data;

@@ -121,7 +121,8 @@ export class ArticleController {
 
   @UseGuards(AccessTokenGuard)
   @Post()
-  async addArticle(@Body() dto: AddArticle, @GetUser() user: User) {
+  async addArticle(@Body() dto: any, @GetUser() user: User) {
+    console.log(dto);
     const article = await this.articleService.addArticle(user['userId'], dto);
     return article;
   }

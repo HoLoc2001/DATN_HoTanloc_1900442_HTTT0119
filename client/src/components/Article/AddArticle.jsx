@@ -70,11 +70,12 @@ const AddArticle = () => {
   const [content, setContent] = useState("");
   const [errMissInput, setErrMissInput] = useState(false);
   const [chude, setChude] = useState('');
+  const [files, setFiles] = useState();
   const [articleForm, setArticleForm] = useState({
     title: "",
     thumbnailUrl: "",
     thumbnailBase64: "",
-
+    files: null
   });
   const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
 
@@ -122,21 +123,28 @@ const AddArticle = () => {
   };
 
   const handleAddArticle = async (e) => {
-    const { error } = articleValidate({
-      title,
-      thumbnail: thumbnailUrl,
-      content,
-      chude
-    });
+    try {
 
-    if (error) {
+
+      const { error } = articleValidate({
+        title,
+        thumbnail: thumbnailUrl,
+        content,
+        chude
+      });
+
+      if (error) {
+        console.log(error);
+        e.preventDefault();
+        setErrMissInput(true);
+      } else {
+        console.log(files);
+        await dispatch(
+          addArticle({ title, thumbnail: thumbnailUrl, content, chude, files })
+        );
+      }
+    } catch (error) {
       console.log(error);
-      e.preventDefault();
-      setErrMissInput(true);
-    } else {
-      await dispatch(
-        addArticle({ title, thumbnail: thumbnailUrl, content, chude })
-      );
     }
   };
 
@@ -167,13 +175,17 @@ const AddArticle = () => {
 
   const handleFiles = async (e) => {
     try {
-      const formData = new FormData();
-      const files = e.target.files;
+      const files = new FormData();
+      const files2 = e.target.files;
 
-      for (const file of files) {
-        formData.append('files[]', file);
+      for (const file of files2) {
+        files.append('files[]', file);
       }
-      console.log(formData);
+
+      setFiles(
+        files
+      );
+      console.log(files);
 
     } catch (error) { }
   };

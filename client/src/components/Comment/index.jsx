@@ -279,7 +279,7 @@ const index = ({ articleId }) => {
                     </Box>
                   </>
                 ) : (
-                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', }}><FilePresentIcon /> {comment?.directus_files.title}</Button> </div> :
+                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> {comment?.directus_files.title}</Button> </div> :
                     <Typography
                       variant="body2"
                       sx={{ fontSize: "15px", color: "black" }}

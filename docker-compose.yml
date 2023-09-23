@@ -91,10 +91,18 @@ services:
       CORS_ORIGIN: "*"
       CORS_METHODS: "GET,POST,PATCH,DELETE"
 
-    ports:
-      - 8057:8055
+    # ports:
+    #   - 8057:8055
     networks:
       - directus_traefik
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lv-diretus.rule=Host(`lv-diretus.hotanloc.xyz`)"
+      - "traefik.http.routers.lv-diretus.entrypoints=websecure"
+      - "traefik.http.routers.lv-diretus.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.lv-diretus.service=lv-diretus"
+      - "traefik.http.services.lv-diretus.loadbalancer.server.port=8055"
 
 networks:
   directus_traefik:

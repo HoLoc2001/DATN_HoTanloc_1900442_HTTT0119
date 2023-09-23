@@ -26,6 +26,7 @@ import { follow, getHasFollow } from "../../redux/userSlice";
 import { removeBookmark } from "../../redux/articleSlice";
 import AlertInfo from "../AlertInfo";
 import Comment from "../Comment";
+import axios from "axios"; import TagFacesIcon from '@mui/icons-material/TagFaces'; import Chip from '@mui/material/Chip';
 
 const ReadArticle = () => {
   const dispatch = useAppDispatch();
@@ -36,6 +37,7 @@ const ReadArticle = () => {
   const article = useAppSelector((state) => state.article.article);
   const { isFollowed } = useAppSelector((state) => state.user.authorPost);
   const [errMissInput, setErrMissInput] = useState(false);
+  const [chipData, setChipData] = useState();
   useEffect(() => {
     (async () => {
       await dispatch(getArticleByArticleId(articleId));
@@ -46,6 +48,19 @@ const ReadArticle = () => {
     if (article) {
       (async () => {
         await dispatch(getHasFollow({ userId: article.user.id }));
+        if (article?.files) {
+
+          const arr = article.files.split(',')
+          const arr2 = []
+
+          console.log(arr);
+          for (let i = 0; i < arr.length; i++) {
+            let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
+            arr2.push({ key: i, label: data.data.title, id: data.data.id })
+          }
+
+          setChipData([...arr2])
+        }
       })();
     }
   }, [article]);
@@ -164,16 +179,14 @@ const ReadArticle = () => {
                     variant="h6"
                     sx={{
                       ":hover": {
-                        backgroundColor: `${
-                          themeColor === "light"
-                            ? "#e2e3f3"
-                            : "rgba(45,50,59,255)"
-                        }`,
-                        color: `${
-                          themeColor === "light"
-                            ? "#1A2027"
-                            : "rgba(249,242,222,255)"
-                        }`,
+                        backgroundColor: `${themeColor === "light"
+                          ? "#e2e3f3"
+                          : "rgba(45,50,59,255)"
+                          }`,
+                        color: `${themeColor === "light"
+                          ? "#1A2027"
+                          : "rgba(249,242,222,255)"
+                          }`,
                         borderRadius: "5px",
                       },
                     }}
@@ -189,6 +202,23 @@ const ReadArticle = () => {
             style={{ overflow: "hidden" }}
             dangerouslySetInnerHTML={{ __html: article?.content }}
           />
+          {chipData?.map((data) => {
+            let icon;
+
+            return (
+              <div key={data.key} style={{ marginTop: "5px", marginLeft: "5px" }}>
+                <Chip
+                  variant="outlined"
+                  icon={icon}
+                  label={data.label}
+                  onClick={() => {
+                    window.location.href = `https://lv-directus.hotanloc.xyz/assets/${data.id}?download`
+                  }}
+                />
+              </div>
+
+            );
+          })}
           <Typography color={"#ff000000"}>a</Typography>
         </Box>
         <Box
@@ -198,9 +228,8 @@ const ReadArticle = () => {
           sx={{
             width: "29vw",
             // marginLeft: "20px",
-            borderLeft: `0.1px solid ${
-              themeColor === "light" ? "#a6aeb8" : "#2d3748"
-            }`,
+            borderLeft: `0.1px solid ${themeColor === "light" ? "#a6aeb8" : "#2d3748"
+              }`,
           }}
         >
           <Box
@@ -261,15 +290,13 @@ const ReadArticle = () => {
                     border: `${isFollowed ? "1px solid #a3a3a3" : ""}`,
                     ...(isFollowed
                       ? {
-                          color: `${
-                            themeColor === "light" ? "#3d3d3d" : "#3d3d3d"
+                        color: `${themeColor === "light" ? "#3d3d3d" : "#3d3d3d"
                           }`,
-                        }
+                      }
                       : {
-                          color: `${
-                            themeColor === "light" ? "#f9f9f9" : "#090909"
+                        color: `${themeColor === "light" ? "#f9f9f9" : "#090909"
                           }`,
-                        }),
+                      }),
                     ":hover": {
                       backgroundColor: `${isFollowed ? "#a3a3a3" : "#2f3ab2"}`,
                     },
@@ -284,11 +311,10 @@ const ReadArticle = () => {
             sx={{
               m: "5% 5% ",
               borderRadius: "10px",
-              border: `${
-                themeColor === "light"
-                  ? "1px solid #e9e9e9"
-                  : "1px solid #2d3748"
-              }`,
+              border: `${themeColor === "light"
+                ? "1px solid #e9e9e9"
+                : "1px solid #2d3748"
+                }`,
               height: "55vh",
               backgroundColor: `${themeColor === "light" ? "#fff" : "#2d3748"}`,
             }}
@@ -299,24 +325,21 @@ const ReadArticle = () => {
                   container
                   justifyContent="center"
                   spacing={12}
-                  // color={"rgb(245 245 245)"}
+                // color={"rgb(245 245 245)"}
                 >
                   <Grid key={1} item display={"flex"} alignItems={"center"}>
                     <Tooltip title="Like">
                       <IconButton
                         sx={{
-                          color: `${
-                            themeColor === "light" ? "" : "rgb(245 245 245)"
-                          }`,
+                          color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                            }`,
                           ":hover": {
-                            backgroundColor: `${
-                              themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                            }`,
-                            color: `${
-                              themeColor === "light"
-                                ? ""
-                                : "rgba(249,242,222,255)"
-                            }`,
+                            backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                              }`,
+                            color: `${themeColor === "light"
+                              ? ""
+                              : "rgba(249,242,222,255)"
+                              }`,
                           },
                         }}
                         onClick={(event) =>
@@ -338,18 +361,15 @@ const ReadArticle = () => {
                     <Tooltip title="Comment">
                       <IconButton
                         sx={{
-                          color: `${
-                            themeColor === "light" ? "" : "rgb(245 245 245)"
-                          }`,
+                          color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                            }`,
                           ":hover": {
-                            backgroundColor: `${
-                              themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                            }`,
-                            color: `${
-                              themeColor === "light"
-                                ? ""
-                                : "rgba(249,242,222,255)"
-                            }`,
+                            backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                              }`,
+                            color: `${themeColor === "light"
+                              ? ""
+                              : "rgba(249,242,222,255)"
+                              }`,
                           },
                         }}
                         onClick={handleClickComment}
@@ -364,18 +384,15 @@ const ReadArticle = () => {
                       <Tooltip title="Remove bookmark">
                         <IconButton
                           sx={{
-                            color: `${
-                              themeColor === "light" ? "" : "rgb(245 245 245)"
-                            }`,
+                            color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                              }`,
                             ":hover": {
-                              backgroundColor: `${
-                                themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                              }`,
-                              color: `${
-                                themeColor === "light"
-                                  ? ""
-                                  : "rgba(249,242,222,255)"
-                              }`,
+                              backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                                }`,
+                              color: `${themeColor === "light"
+                                ? ""
+                                : "rgba(249,242,222,255)"
+                                }`,
                             },
                           }}
                           onClick={(event) =>
@@ -393,18 +410,15 @@ const ReadArticle = () => {
                       <Tooltip title="Add bookmark">
                         <IconButton
                           sx={{
-                            color: `${
-                              themeColor === "light" ? "" : "rgb(245 245 245)"
-                            }`,
+                            color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                              }`,
                             ":hover": {
-                              backgroundColor: `${
-                                themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
-                              }`,
-                              color: `${
-                                themeColor === "light"
-                                  ? ""
-                                  : "rgba(249,242,222,255)"
-                              }`,
+                              backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                                }`,
+                              color: `${themeColor === "light"
+                                ? ""
+                                : "rgba(249,242,222,255)"
+                                }`,
                             },
                           }}
                           onClick={(event) =>

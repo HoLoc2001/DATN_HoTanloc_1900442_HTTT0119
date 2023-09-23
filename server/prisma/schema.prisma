@@ -45,21 +45,24 @@ model Follows {
 }
 
 model Article {
-  id             Int              @id @default(autoincrement())
-  title          String
-  content        String
-  thumbnail      String
-  views          Int              @default(0)
-  userId         Int
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  chude          Chude
-  bookmarks      Bookmark[]
-  comments       Comment[]
-  likes          Like[]
-  user           User             @relation(fields: [userId], references: [id])
-  articles_files articles_files[]
-  tags           Tag[]            @relation("ArticleToTag")
+  id               Int                @id @default(autoincrement())
+  title            String
+  content          String
+  thumbnail        String
+  views            Int                @default(0)
+  userId           Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  chude            Chude
+  files            String?
+  bookmarks        Bookmark[]
+  comments         Comment[]
+  likes            Like[]
+  user             User               @relation(fields: [userId], references: [id])
+  articles_files   articles_files[]
+  articles_files_1 articles_files_1[]
+  directus_files   directus_files[]
+  tags             Tag[]              @relation("ArticleToTag")
 
   @@index([id])
   @@map("articles")
@@ -205,8 +208,11 @@ model directus_files {
   location                                                              String?
   tags                                                                  String?
   metadata                                                              Json?               @db.Json
+  article                                                               Int?
   Comment                                                               Comment[]
   articles_files                                                        articles_files[]
+  articles_files_1                                                      articles_files_1[]
+  articles                                                              Article?            @relation(fields: [article], references: [id], onUpdate: NoAction, map: "directus_files_article_foreign")
   directus_folders                                                      directus_folders?   @relation(fields: [folder], references: [id], onUpdate: NoAction, map: "directus_files_folder_foreign")
   directus_users_directus_files_modified_byTodirectus_users             directus_users?     @relation("directus_files_modified_byTodirectus_users", fields: [modified_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "directus_files_modified_by_foreign")
   directus_users_directus_files_uploaded_byTodirectus_users             directus_users?     @relation("directus_files_uploaded_byTodirectus_users", fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "directus_files_uploaded_by_foreign")
@@ -494,6 +500,14 @@ model articles_files {
   directus_files_id String?         @db.Uuid
   articles          Article?        @relation(fields: [articles_id], references: [id], onUpdate: NoAction, map: "articles_files_articles_id_foreign")
   directus_files    directus_files? @relation(fields: [directus_files_id], references: [id], onUpdate: NoAction, map: "articles_files_directus_files_id_foreign")
+}
+
+model articles_files_1 {
+  id                Int             @id @default(autoincrement())
+  articles_id       Int?
+  directus_files_id String?         @db.Uuid
+  articles          Article?        @relation(fields: [articles_id], references: [id], onUpdate: NoAction, map: "articles_files_1_articles_id_foreign")
+  directus_files    directus_files? @relation(fields: [directus_files_id], references: [id], onUpdate: NoAction, map: "articles_files_1_directus_files_id_foreign")
 }
 
 enum Role {

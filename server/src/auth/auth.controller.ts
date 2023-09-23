@@ -39,9 +39,9 @@ export class AuthController {
       expires: new Date(Date.now() + 1 * 60 * 1000),
     });
     console.log(tokens);
-    return res.redirect(
-      `http://localhost:8000?token=${JSON.stringify(tokens)}`,
-    );
+    // return res.redirect(
+    //   `http://localhost:8000?token=${JSON.stringify(tokens)}`,
+    // );
     return res.redirect(
       `https://lv.hotanloc.xyz?token=${JSON.stringify(tokens)}`,
     );

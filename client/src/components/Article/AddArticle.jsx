@@ -326,10 +326,6 @@ const AddArticle = () => {
           {chipData.map((data) => {
             let icon;
 
-            if (data.label === 'React') {
-              icon = <TagFacesIcon />;
-            }
-
             return (
               <div key={data.key} style={{ marginTop: "5px", marginLeft: "10px" }}>
                 <Chip

@@ -31,6 +31,8 @@ export class ArticleService {
           views: true,
           content: true,
           tags: true,
+
+          files: true,
           createdAt: true,
           bookmarks: {
             where: {
@@ -88,6 +90,8 @@ export class ArticleService {
           content: true,
           tags: true,
           createdAt: true,
+
+          files: true,
 
           user: {
             select: {
@@ -300,7 +304,7 @@ export class ArticleService {
           thumbnail: true,
           tags: true,
           views: true,
-
+          files: true,
           createdAt: true,
           user: {
             select: {
@@ -543,7 +547,7 @@ export class ArticleService {
           userId: userId,
           thumbnail: dto.thumbnail,
           chude: dto.chude,
-          articles_files: dto?.files,
+          files: (dto?.files).toString(),
 
           //   connect: tagsArr,
           // },dto?.files,

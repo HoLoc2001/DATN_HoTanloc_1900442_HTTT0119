@@ -98,11 +98,11 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lv-diretus.rule=Host(`lv-diretus.hotanloc.xyz`)"
-      - "traefik.http.routers.lv-diretus.entrypoints=websecure"
-      - "traefik.http.routers.lv-diretus.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.lv-diretus.service=lv-diretus"
-      - "traefik.http.services.lv-diretus.loadbalancer.server.port=8055"
+      - "traefik.http.routers.lv-directus.rule=Host(`lv-directus.hotanloc.xyz`)"
+      - "traefik.http.routers.lv-directus.entrypoints=websecure"
+      - "traefik.http.routers.lv-directus.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.lv-directus.service=lv-directus"
+      - "traefik.http.services.lv-directus.loadbalancer.server.port=8055"
 
 networks:
   directus_traefik:

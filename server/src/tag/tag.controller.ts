@@ -26,8 +26,8 @@ export class TagController {
 
   @UseGuards(AccessTokenGuard)
   @Post()
-  addFile(@Req() req: Request) {
-    return this.tagService.addFile(req.body);
+  addFile(@Req() req: Request, @GetUser() user: User) {
+    return this.tagService.addFile(req.body, user['userId']);
   }
 
   @UseGuards(AccessTokenGuard)

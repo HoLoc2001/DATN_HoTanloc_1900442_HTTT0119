@@ -9,6 +9,7 @@ import { User } from '@prisma/client';
 export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Get(':articleId')
   async getLikesByArticleId(@Param() params: GetLikesByArticleId) {
     return await this.likeService.getLikesByArticleId(params.articleId);

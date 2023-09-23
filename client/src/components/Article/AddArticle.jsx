@@ -17,7 +17,7 @@ import {
   image,
   link,
 } from "suneditor/src/plugins";
-import "suneditor/dist/css/suneditor.min.css";
+import "suneditor/dist/css/suneditor.min.css"; import TagFacesIcon from '@mui/icons-material/TagFaces'; import Chip from '@mui/material/Chip';
 import {
   Autocomplete,
   Box,
@@ -78,6 +78,12 @@ const AddArticle = () => {
     files: null
   });
   const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+  };
+  const [chipData, setChipData] = useState([
+
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -86,6 +92,7 @@ const AddArticle = () => {
   }, []);
 
   function handleChange(content) {
+
 
     console.log(content);
     setContent(content);
@@ -135,8 +142,8 @@ const AddArticle = () => {
 
       if (error) {
         console.log(error);
-        e.preventDefault();
-        setErrMissInput(true);
+        e.preventDefault(); data.label === 'React' ? undefined :
+          setErrMissInput(true);
       } else {
         console.log(files);
         await dispatch(
@@ -175,17 +182,27 @@ const AddArticle = () => {
 
   const handleFiles = async (e) => {
     try {
-      const files = new FormData();
       const files2 = e.target.files;
+      const fileArr = []
+      const fileFormArr = []
 
-      for (const file of files2) {
-        files.append('files[]', file);
+
+      for (let i = 0; i < files2.length; i++) {
+        let files = new FormData();
+        files.append('files[]', files2[i]);
+
+        fileFormArr.push(files)
+        fileArr.push({ key: i, label: files2[i].name })
       }
+      console.log(fileArr);
 
+
+      setChipData([...fileArr])
       setFiles(
-        files
+        fileFormArr
       );
-      console.log(files);
+
+
 
     } catch (error) { }
   };
@@ -305,6 +322,26 @@ const AddArticle = () => {
             />
             Files
           </Button>
+
+          {chipData.map((data) => {
+            let icon;
+
+            if (data.label === 'React') {
+              icon = <TagFacesIcon />;
+            }
+
+            return (
+              <div key={data.key} style={{ marginTop: "5px", marginLeft: "10px" }}>
+                <Chip
+                  variant="outlined"
+                  icon={icon}
+                  label={data.label}
+                  onDelete={handleDelete(data)}
+                />
+              </div>
+
+            );
+          })}
         </Box>
 
         <SunEditor

@@ -534,6 +534,7 @@ export class ArticleService {
         dto,
         '---------------------------------',
       );
+      console.log(dto?.files);
 
       const article = await this.prisma.article.create({
         data: {
@@ -543,6 +544,9 @@ export class ArticleService {
           thumbnail: dto.thumbnail,
           chude: dto.chude,
           articles_files: dto?.files,
+
+          //   connect: tagsArr,
+          // },dto?.files,
           // tags: {
           //   connect: tagsArr,
           // },

@@ -1,29 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { EventGateway } from 'src/event.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LikeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventGateway: EventGateway,
+  ) {}
 
   async getLikesByArticleId(articleId: number) {
     try {
-      const listLike = await this.prisma.like.findMany({
+      const {
+        Article: {
+          _count: { likes },
+        },
+      } = await this.prisma.like.findFirst({
         where: {
           articleId: articleId,
         },
-
-        include: {
-          user: {
+        select: {
+          Article: {
             select: {
-              avatar: true,
-              firstName: true,
-              lastName: true,
+              _count: {
+                select: {
+                  likes: true,
+                },
+              },
             },
           },
         },
       });
 
-      return listLike;
+      return { isLiked: true, likes };
     } catch (error) {
       throw error;
     }
@@ -65,6 +74,14 @@ export class LikeService {
           },
         });
 
+        this.eventGateway.handleEmitSocket(
+          {
+            articleId: articleId,
+          },
+          'like',
+          null,
+        );
+
         return { isLiked: false, likes: likes - 1 };
       } else {
         const {
@@ -88,6 +105,13 @@ export class LikeService {
             },
           },
         });
+        this.eventGateway.handleEmitSocket(
+          {
+            articleId: articleId,
+          },
+          'like',
+          null,
+        );
 
         return { isLiked: true, likes };
       }

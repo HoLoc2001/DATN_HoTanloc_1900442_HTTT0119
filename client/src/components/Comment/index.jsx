@@ -24,7 +24,7 @@ import {
   addFlieComment,
   cancelUpdatingComment,
   deleteComment,
-  getComments,
+  getCommentsArticle,
   updateComment,
   updatingComment,
 } from "../../redux/articleSlice";
@@ -38,7 +38,7 @@ const index = ({ articleId }) => {
   const themeColor = useAppSelector((state) => state.theme.color);
   useEffect(() => {
     (async () => {
-      await dispatch(getComments({ articleId }));
+      await dispatch(getCommentsArticle({ articleId }));
     })();
   }, [articleId]);
   const [comment, setComment] = useState("");
@@ -175,6 +175,7 @@ const index = ({ articleId }) => {
         }}
       >
         {comments?.map((comment, index) => {
+          console.log(comment);
           return (
             <div
               key={comment.id}
@@ -279,7 +280,7 @@ const index = ({ articleId }) => {
                     </Box>
                   </>
                 ) : (
-                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> {comment?.directus_files.title}</Button> </div> :
+                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> {comment?.directus_files?.title}</Button> </div> :
                     <Typography
                       variant="body2"
                       sx={{ fontSize: "15px", color: "black" }}

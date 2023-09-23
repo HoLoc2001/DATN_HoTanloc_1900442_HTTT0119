@@ -3,16 +3,20 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AddTagDto, GetTagDto } from './dto';
 import { Prisma } from '@prisma/client';
 import axios from 'axios';
+import { EventGateway } from 'src/event.gateway';
 
 @Injectable()
 export class TagService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventGateway: EventGateway,
+  ) {}
   async getTags() {
     const tags = await this.prisma.tag.findMany();
     return tags;
   }
 
-  async addFile(data: any) {
+  async addFile(data: any, userId: number) {
     // console.log(data);
     // const tags = await axios({
     //   method: 'POST',
@@ -26,7 +30,7 @@ export class TagService {
       data: {
         file: data.data.data.id,
         articleId: data.articleId,
-        userId: 1,
+        userId: userId,
         content: 'dasd',
       },
       include: {
@@ -37,8 +41,21 @@ export class TagService {
             lastName: true,
           },
         },
+        directus_files: {
+          select: {
+            title: true,
+          },
+        },
       },
     });
+
+    this.eventGateway.handleEmitSocket(
+      {
+        articleId: data.articleId,
+      },
+      'comment',
+      null,
+    );
     console.log(data);
     return ab;
   }

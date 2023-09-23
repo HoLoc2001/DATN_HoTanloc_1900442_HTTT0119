@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../layouts/Navbar";
 import { Outlet, useSearchParams } from "react-router-dom";
 import Sidebar from "../layouts/Sidebar";
@@ -7,7 +7,9 @@ import { getUser } from "../redux/userSlice";
 import { signIn } from "../redux/authSlice";
 import { getMyTags, getTags, popularTags } from "../redux/tagSlice";
 // import { Box } from "@mui/material";
-
+import socketIOClient from "socket.io-client";
+import { getCommentsArticle, updateLike } from "../redux/articleSlice";
+import { getComments } from "../redux/commentSlice";
 const Home = () => {
   const dispatch = useAppDispatch();
   const queryParameters = new URLSearchParams(window.location.search)
@@ -15,6 +17,75 @@ const Home = () => {
   const themeColor = useAppSelector((state) => state.theme.color);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   console.log(tokens);
+  const host = import.meta.env.VITE_API;
+
+  const socketRef = useRef();
+  const user = useAppSelector((state) => state.user.user);
+
+  useEffect(() => {
+    socketRef.current = socketIOClient.connect(host);
+    // socketRef.current?.on("notification", (data) => {
+    //   console.log(data);
+    // });
+
+    socketRef.current?.on(
+      "comment",
+      async ({ articleId }) => {
+
+        await dispatch(getComments({ articleId }));
+        await dispatch(getCommentsArticle({ articleId }));
+
+      }
+    );
+
+    socketRef.current?.on(
+      "notification-DeleteCommentPost",
+      async ({ postId, userId, commentId }) => {
+        if ("" + user.id !== userId) {
+          await dispatch(getTotalComment(postId));
+          await dispatch(getCommentPost(postId));
+        }
+      }
+    );
+
+    socketRef.current?.on(
+      "notification-UpdateCommentPost",
+      async ({ postId }) => {
+        await dispatch(getCommentPost(postId));
+      }
+    );
+
+    // socketRef.current?.on(
+    //   "like",
+    //   async ({ articleId }) => {
+
+    //     await dispatch(updateLike(articleId));
+
+    //   }
+    // );
+
+    socketRef.current?.on(
+      "notification-UpdatePost",
+      async ({ postId, userId }) => {
+        if ("" + user.id !== userId) {
+          await dispatch(getUpdatePost(postId));
+        }
+      }
+    );
+
+    socketRef.current?.on(
+      "notification-addPost",
+      async ({ postId, userId }) => {
+        if ("" + user.id !== userId) {
+          await dispatch(getPostSocket({ postId, userId }));
+        }
+      }
+    );
+
+    socketRef.current?.on("notification-updateUser", async (data) => {
+      await dispatch(updateUserSocket(data));
+    });
+  }, []);
 
   useEffect(() => {
     function getCookie(name) {

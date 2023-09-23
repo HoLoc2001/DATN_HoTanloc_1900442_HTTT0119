@@ -10,6 +10,7 @@ import { LikeModule } from './like/like.module';
 import { SearchModule } from './search/search.module';
 import { CommentModule } from './comment/comment.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
+import { EventGateway } from './event.gateway';
 
 @Module({
   imports: [
@@ -28,5 +29,6 @@ import { BookmarkModule } from './bookmark/bookmark.module';
     CommentModule,
     BookmarkModule,
   ],
+  providers: [EventGateway],
 })
 export class AppModule {}

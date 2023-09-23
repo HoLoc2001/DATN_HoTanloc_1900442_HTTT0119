@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { EventGateway } from 'src/event.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventGateway: EventGateway,
+  ) {}
 
   async getCommentsByArticleId(articleId: number) {
     try {
@@ -54,6 +58,16 @@ export class CommentService {
           },
         },
       });
+
+      this.eventGateway.handleEmitSocket(
+        {
+          articleId: articleId,
+        },
+        'comment',
+        null,
+      );
+
+      console.log('co nguypi');
 
       return comment;
     } catch (error) {

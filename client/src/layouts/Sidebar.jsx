@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import BookmarkIcon from "@mui/icons-material/Bookmark"; import NewspaperIcon from '@mui/icons-material/Newspaper'; import WorkIcon from '@mui/icons-material/Work';
-import SearchIcon from "@mui/icons-material/Search"; import HelpIcon from '@mui/icons-material/Help';
+import SearchIcon from "@mui/icons-material/Search"; import HelpIcon from '@mui/icons-material/Help'; import ChatIcon from '@mui/icons-material/Chat';
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/store";
@@ -41,6 +41,8 @@ const Sidebar = () => {
       setActive("search");
     } else if (pathname === "/hoi-dap") {
       setActive("hoi-dap");
+    } else if (pathname === "/nhan-tin") {
+      setActive("nhan-tin");
     } else {
       setActive("");
     }
@@ -64,6 +66,10 @@ const Sidebar = () => {
 
   const handleClickHoiDap = () => {
     setActive("hoi-dap");
+  };
+
+  const handleClickNhanTin = () => {
+    setActive("nhan-tin");
   };
 
   const handleClickSearch = () => {
@@ -287,6 +293,49 @@ const Sidebar = () => {
             </ListItemButton>
           </Link>
         </ListItem>
+
+        <ListItem key="11" disablePadding>
+          <Link
+            to="/nhan-tin"
+            style={{
+              display: "flex",
+              color: "#1A2027",
+              textDecoration: "none",
+              width: "100%",
+            }}
+            onClick={handleClickNhanTin}
+          >
+            <ListItemButton
+              sx={{
+                ":hover": {
+                  backgroundColor: "#e2e3f3",
+                  color: "#1A2027",
+                },
+                ...(active === "nhan-tin"
+                  ? {
+                    backgroundColor: "#e2e3f3",
+                    color: "#1A2027",
+                  }
+                  : ""),
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  color: "#1A2027",
+                  minWidth: "35px",
+                }}
+              >
+                <ChatIcon />
+              </ListItemIcon>
+              <ListItemText
+                sx={{ display: { xs: "none", md: "none", lg: "block" } }}
+              >
+                Nhắn tin
+              </ListItemText>
+            </ListItemButton>
+          </Link>
+        </ListItem>
+
         <ListItem key="3" disablePadding>
           <Link
             to="/search"

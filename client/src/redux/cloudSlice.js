@@ -18,7 +18,7 @@ export const addFile = createAsyncThunk("cloud/addFile", async (file) => {
     console.log(file);
     const res = await axios({
       method: "POST",
-      url: `https://lv-diretus.hotanloc.xyz/files`,
+      url: `http://localhost:8057/files`,
       data: file,
       headers: {
         Accept: "application/json",

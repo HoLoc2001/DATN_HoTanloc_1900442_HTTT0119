@@ -55,7 +55,8 @@ const ReadArticle = () => {
 
           console.log(arr);
           for (let i = 0; i < arr.length; i++) {
-            let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
+            // let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
+            let { data } = await axios.get(`http://localhost:8057/files/${arr[i]}`)
             arr2.push({ key: i, label: data.data.title, id: data.data.id })
           }
 
@@ -212,7 +213,8 @@ const ReadArticle = () => {
                   icon={icon}
                   label={data.label}
                   onClick={() => {
-                    window.location.href = `https://lv-directus.hotanloc.xyz/assets/${data.id}?download`
+                    window.location.href = `http://localhost:8057/assets/${data.id}?download`
+                    // window.location.href = `https://lv-directus.hotanloc.xyz/assets/${data.id}?download`
                   }}
                 />
               </div>

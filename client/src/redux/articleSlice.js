@@ -142,7 +142,7 @@ export const addArticle = createAsyncThunk(
       for (let i = 0; i < data.files.length; i++) {
         const data2 = await axios({
           method: "POST",
-          url: `https://lv-diretus.hotanloc.xyz/files`,
+          url: `http://localhost:8057/files`,
           data: data.files[i],
           headers: {
             Accept: "application/json",
@@ -393,7 +393,7 @@ export const addFlieComment = createAsyncThunk(
       const { bookmarks, articles } = getState().article;
       const res = await axios({
         method: "POST",
-        url: `https://lv-diretus.hotanloc.xyz/files`,
+        url: `http://localhost:8057/files`,
         data: file,
         headers: {
           Accept: "application/json",

@@ -11,6 +11,7 @@ import { SearchModule } from './search/search.module';
 import { CommentModule } from './comment/comment.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { EventGateway } from './event.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EventGateway } from './event.gateway';
     SearchModule,
     CommentModule,
     BookmarkModule,
+    ChatModule,
   ],
   providers: [EventGateway],
 })

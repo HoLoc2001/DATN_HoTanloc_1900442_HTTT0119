@@ -12,6 +12,7 @@ import { likeSlice } from "./likeSlice";
 import { commentSlice } from "./commentSlice";
 import { followSlice } from "./followSlice";
 import { cloudSlice } from "./cloudSlice";
+import { chatSlice } from "./chat";
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
     comment: commentSlice.reducer,
     follow: followSlice.reducer,
     cloud: cloudSlice.reducer,
+    chat: chatSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

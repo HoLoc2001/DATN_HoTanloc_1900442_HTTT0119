@@ -1,13 +1,39 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
+import axios from "axios";
+const directus = 'https://lv-directus.hotanloc.xyz/items/'
 
 export const getchats = createAsyncThunk(
     "chat/getchats",
-    async ({ articleId }, { getState }) => {
+    async (id) => {
         try {
-            const res = await axiosPublic.get(`chat/${articleId}`);
+            const res = await axios.get(`${directus}chat?filter[user][_eq]=${id}&fields=*.*`)
 
+            console.log(res.data);
             return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+export const createchat = createAsyncThunk(
+    "chat/createchat",
+    async ({ chatId, content }) => {
+        try {
+            const { data } = await axios.get(`${directus}chat/${chatId}`)
+            const res = await axios.patch(`${directus}chat/${chatId}`, {
+                content: [
+                    ...data.data.content,
+                    {
+                        from: "me",
+                        content: content,
+                        create_at: new Date()
+                    }
+                ]
+            });
+
+            return res.data
         } catch (error) {
             console.log(error);
         }
@@ -48,11 +74,14 @@ export const chatSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getchats.fulfilled, (state, action) => {
-                state.chats = action.payload;
+                state.chats = action.payload.data;
+            })
+            .addCase(createchat.fulfilled, (state, action) => {
+                state.chats = action.payload.data;
             })
             .addCase(updatechat.fulfilled, (state, action) => { })
             .addCase(deletechat.fulfilled, (state, action) => {
-                state.bookmarks.push(action.payload);
+                // state.bookmarks.push(action.payload);
             });
     },
 });

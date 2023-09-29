@@ -15,16 +15,43 @@ export class ChatService {
     } catch (error) {}
   }
 
-  findAll() {
-    return `This action returns all chat`;
+  async findAll(userId: any) {
+    const result = await this.prisma.chat.findMany({
+      where: {
+        users_chat_userTousers: userId,
+      },
+    });
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chat`;
+  async findUser(id: any, userId: any) {
+    const result = await this.prisma.chat.findMany({
+      where: {
+        AND: [
+          { users_chat_userTousers: userId },
+          { users_chat_to_userTousers: id },
+        ],
+      },
+    });
+    return result;
   }
 
-  update(id: number, updateChatDto: any) {
-    return `This action updates a #${id} chat`;
+  async findGroup(id: any, userId: any) {
+    const result = await this.prisma.chat.findMany({
+      where: {
+        AND: [{ users_chat_userTousers: userId }, { group_id: id }],
+      },
+    });
+    return result;
+  }
+
+  async updateChatUser(id: any, userId: any, updateChatDto: any) {
+    // const result = await this.prisma.chat.updateMany({
+    //   where: {
+    //     AND: [{ users_chat_userTousers: userId }, { group_id: id }],
+    //   },
+    // });
+    // return result;
   }
 
   remove(id: number) {

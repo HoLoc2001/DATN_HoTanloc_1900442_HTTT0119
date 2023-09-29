@@ -26,29 +26,29 @@ export class ChatController {
   @UseGuards(AccessTokenGuard)
   @Get()
   findAll(@GetUser() user: User) {
-    return this.chatService.findAll();
+    return this.chatService.findAll(user['userId']);
   }
 
   @UseGuards(AccessTokenGuard)
   @Get(':userId')
   findOne(@Param('userId') id: string, @GetUser() user: User) {
-    return this.chatService.findOne(+id);
+    return this.chatService.findUser(id, user['userId']);
   }
 
   @UseGuards(AccessTokenGuard)
   @Get(':groupId')
   finddGroup(@Param('groupId') id: string, @GetUser() user: User) {
-    return this.chatService.findOne(+id);
+    return this.chatService.findGroup(id, user['userId']);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: any,
     @Body() updateChatDto: any,
     @GetUser() user: User,
   ) {
-    return this.chatService.update(+id, updateChatDto);
+    // return this.chatService.updateChat(id, user['userId'], updateChatDto);
   }
 
   @UseGuards(AccessTokenGuard)

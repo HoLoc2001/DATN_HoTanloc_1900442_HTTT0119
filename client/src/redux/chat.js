@@ -7,7 +7,7 @@ export const getchats = createAsyncThunk(
     "chat/getchats",
     async (id) => {
         try {
-            const res = await axios.get(`${directus}chat?filter[user][_eq]=${id}&fields=*.*`)
+            const res = await axios.get(`${directus}chat?filter[user][_in]=${id}&fields=*.*`)
 
             console.log(res.data);
             return res.data;
@@ -17,27 +17,64 @@ export const getchats = createAsyncThunk(
     }
 );
 
+export const getchat = createAsyncThunk(
+    "chat/getchat",
+    async (id, { getState }) => {
+        try {
+            const { chats } = getState().chat;
+            const { data } = await axios.get(`${directus}chat/${id}?fields=*.*`)
+            const indexChat = chats.findIndex(
+                (chat) => chat.id === data.data.id
+            );
+
+            return { data: data.data, indexChat };
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
 export const createchat = createAsyncThunk(
     "chat/createchat",
-    async ({ chatId, content }, { getState }) => {
+    async ({ chatId, content, userId }, { getState }) => {
         try {
             const { chats } = getState().chat;
 
             const { data } = await axios.get(`${directus}chat/${chatId}`)
-            const res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
-                content: [
-                    ...data.data.content,
-                    {
-                        from: "me",
-                        content: content,
-                        create_at: new Date()
-                    }
-                ]
-            });
-            await axiosPrivate.get('/chat')
-            const indexChat = chats.findIndex(
+            let indexChat = null
+            let res
+
+            if (data?.data?.content) {
+
+                res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    content: [
+                        ...data?.data?.content,
+                        {
+                            user: userId,
+                            content: content,
+                            create_at: new Date()
+                        }
+                    ]
+                });
+            } else {
+                res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    content: [
+
+                        {
+                            user: userId,
+                            content: content,
+                            create_at: new Date()
+                        }
+                    ]
+                });
+            }
+
+
+            await axiosPrivate.get(`/chat/${chatId}`)
+            indexChat = chats.findIndex(
                 (chat) => chat.id === res.data.data.id
             );
+
 
 
             return { data: res.data.data, indexChat }
@@ -103,8 +140,15 @@ export const chatSlice = createSlice({
             .addCase(getchats.fulfilled, (state, action) => {
                 state.chats = action.payload.data;
             })
+            .addCase(getchat.fulfilled, (state, action) => {
+                state.chats[action.payload?.indexChat] = action.payload?.data;
+
+            })
             .addCase(createchat.fulfilled, (state, action) => {
-                state.chats[action.payload.indexChat] = action.payload.data;
+                if (action.payload.indexChat != null) {
+
+                    state.chats[action.payload?.indexChat] = action.payload?.data;
+                }
             })
             .addCase(updatechat.fulfilled, (state, action) => { state.chats[action.payload.indexChat] = action.payload.data; })
             .addCase(deletechat.fulfilled, (state, action) => {

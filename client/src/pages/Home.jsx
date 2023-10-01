@@ -14,6 +14,7 @@ import chat from "../assets/chat.png";
 import { IconButton } from "@mui/material";
 import Chat from "../components/Chat";
 import Slide from '@mui/material/Slide';
+import { getchat } from "../redux/chat";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -102,10 +103,11 @@ const Home = () => {
     });
 
     socketRef.current?.on("chat", async (data) => {
-      // await dispatch(updateUserSocket(data));
+      console.log("socker rtai day");
+      await dispatch(getchat(data.chatId))
     });
 
-    socketRef.current?.emit("addUser", user.id);
+    // socketRef.current?.emit("addUser", user.id);
   }, []);
 
   useEffect(() => {

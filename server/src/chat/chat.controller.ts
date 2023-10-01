@@ -13,7 +13,7 @@ import { AccessTokenGuard } from 'src/auth/guards';
 import { GetUser } from 'src/auth/decorator';
 import { User } from '@prisma/client';
 
-@Controller('chat')
+@Controller('api/chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 

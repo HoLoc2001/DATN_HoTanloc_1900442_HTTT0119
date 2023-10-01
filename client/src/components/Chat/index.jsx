@@ -84,14 +84,14 @@ const index = () => {
     }
 
     const handelClickSend = async () => {
-        await dispatch(createchat({ chatId: chats[active].id, content }))
+        await dispatch(createchat({ chatId: chats[active].id, content, userId }))
         setContent("");
 
     }
 
     const keyPress = async (e) => {
         if (e.key === "Enter" && content) {
-            await dispatch(createchat({ chatId: chats[active].id, content }))
+            await dispatch(createchat({ chatId: chats[active].id, content, userId }))
 
             setContent("");
         }
@@ -165,10 +165,10 @@ const index = () => {
                                         userSelect: "none",
                                     }}
                                 >
-                                    <Avatar alt="Remy Sharp" src={chat.to_user.avatar} />
+                                    <Avatar alt="Remy Sharp" src={`${chat.user[0].id == userId ? chat.user[1].avatar : chat.user[0].avatar}`} />
                                     <div
                                         style={{ margin: "auto", marginLeft: "5px" }}
-                                    >{`${chat.to_user.firstName} ${chat.to_user.lastName}`}</div>
+                                    >{`${chat.user[0].id == userId ? chat.user[1].fullname : chat.user[0].fullname}`}</div>
                                 </Box>
                             </Box>
                         );
@@ -194,10 +194,10 @@ const index = () => {
                             {" "}
                             <Box>
                                 <Box sx={{ display: "flex", userSelect: "none", mb: "10px" }}>
-                                    <Avatar alt="Remy Sharp" src={chats[active].to_user.avatar} />
+                                    <Avatar alt="Remy Sharp" src={`${chats[active].user[0].id == userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`} />
                                     <div
                                         style={{ margin: "auto", marginLeft: "5px" }}
-                                    >{`${chats[active].to_user.firstName} ${chats[active].to_user.lastName}`}</div>
+                                    >{`${chats[active].user[0].id == userId ? chats[active].user[1].fullname : chats[active].user[0].fullname}`}</div>
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box
@@ -231,11 +231,11 @@ const index = () => {
                                                     display="block"
                                                     margin="10px"
                                                     sx={{
-                                                        textAlign: `${content.from == "me" ? "right" : "left"
+                                                        textAlign: `${content.user == userId ? "right" : "left"
                                                             }`,
                                                     }}
                                                 >
-                                                    {content.from == "me" ? (
+                                                    {content.user == userId ? (
                                                         <Box display="flex" justifyContent="flex-end">
                                                             <Chip
                                                                 sx={{
@@ -260,7 +260,7 @@ const index = () => {
                                                                 sx={{ ml: "5px" }}
                                                                 alt="Remy Sharp"
                                                                 sizes="10px"
-                                                                src={chats[active].user.avatar}
+                                                                src={`${chats[active].user[0].id != userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`}
                                                             />
                                                         </Box>
                                                     ) : (
@@ -269,7 +269,7 @@ const index = () => {
                                                                 sx={{ mr: "5px" }}
                                                                 alt="Remy Sharp"
                                                                 sizes="10px"
-                                                                src={chats[active].to_user.avatar}
+                                                                src={`${chats[active].user[0].id == userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`}
                                                             />
                                                             <Chip
                                                                 sx={{

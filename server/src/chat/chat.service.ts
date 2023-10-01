@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 import { EventGateway } from 'src/event.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -10,6 +11,10 @@ export class ChatService {
   ) {}
   async getAll(userId: any, id: any) {
     try {
+      const { data } = await axios.get(
+        `https://lv-directus.hotanloc.xyz/items/users/${userId}`,
+      );
+      console.log(data.data.socket_id);
       this.eventGateway.handleEmitSocket(
         {
           userId: userId,

@@ -1,4 +1,47 @@
 services:
+  dashboard-traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    logging:
+      # Configure the logs retention according to your needs
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command:
+      - "--api.debug=true"
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+      # Get Docker as the provider
+      - "--providers.docker=true"
+      # Avoid that all containers are exposed
+      - "--providers.docker.exposedbydefault=false"
+      # Settle the ports for the entry points
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.websecure.http.tls.certResolver=letsencrypt"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--entrypoints.websecure.http.tls.domains[0].main=hotanloc.xyz"
+      - "--entrypoints.websecure.http.tls.domains[0].sans=*.hotanloc.xyz"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.email=hotanloc2001@gmail.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - directus_traefik
+    volumes:
+      # Store certificates in ./letsencrypt/acme.json
+      - "./letsencrypt:/letsencrypt"
+      # Connect to Docker socket
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
   reactapp:
     build: ./client
     container_name: react_vite_app
@@ -90,8 +133,7 @@ services:
       CORS_ENABLED: true
       CORS_ORIGIN: "*"
       CORS_METHODS: "GET,POST,PATCH,DELETE"
-      WEBSOCKETS_ENABLED: true
-      WEBSOCKETS_HEARTBEAT_ENABLED: false
+
     # ports:
     #   - 8057:8055
     networks:
@@ -107,7 +149,6 @@ services:
 
 networks:
   directus_traefik:
-    external: true
 
 volumes:
   postgres:

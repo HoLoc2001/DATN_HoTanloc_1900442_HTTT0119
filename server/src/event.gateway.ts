@@ -11,6 +11,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 // import { AuthService } from './user/services/auth.service';
 // import { AuthenticatorJwtService } from './authenticator-jwt/authenticator-jwt.service';
 let users = [];
@@ -48,13 +49,14 @@ export class EventGateway
   afterInit(socket: Socket): any {}
 
   async handleConnection(socket: Socket) {
-    console.log('connect', socket.id);
+    // console.log('connect', socket.id);
 
     socket.on('addUser', async (userId) => {
       console.log('user_id' + userId);
       if (userId) {
-        // this.addUser(userId, socket.id);
+        this.addUser(userId, socket.id);
       }
+      console.log(123123);
       this.server.emit('getUsers', users);
     });
 
@@ -69,32 +71,18 @@ export class EventGateway
     });
   }
 
-  // async addUser(user_id, socket_id) {
-  //   try {
-  //     const user_socket = await this.prisma.user_socket_ids.findFirst({
-  //       where: {
-  //         user_id: user_id,
-  //       },
-  //     });
-
-  //     if (user_socket) {
-  //       return await this.prisma.user_socket_ids.updateMany({
-  //         where: { user_id: user_id },
-  //         data: {
-  //           socket_id: socket_id,
-  //         },
-  //       });
-  //     }
-  //     return await this.prisma.user_socket_ids.create({
-  //       data: {
-  //         user_id: user_id,
-  //         socket_id: socket_id,
-  //       },
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  async addUser(user_id, socket_id) {
+    try {
+      return await axios.patch(
+        `https://lv-directus.hotanloc.xyz/items/users/${user_id}`,
+        {
+          socket_id: socket_id,
+        },
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   removeUser(socketId) {
     users = users.filter((user) => user.socketId !== socketId);

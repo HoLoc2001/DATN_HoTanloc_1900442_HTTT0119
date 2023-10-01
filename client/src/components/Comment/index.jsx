@@ -154,7 +154,7 @@ const index = ({ articleId }) => {
   return (
     <>
       <Box
-        height={"75%"}
+        height={"85%"}
         borderTop={`1px solid ${themeColor === "light" ? "#a6aeb8" : "#2d3748"
           }`}
         sx={{
@@ -175,7 +175,6 @@ const index = ({ articleId }) => {
         }}
       >
         {comments?.map((comment, index) => {
-          console.log(comment);
           return (
             <div
               key={comment.id}
@@ -280,7 +279,7 @@ const index = ({ articleId }) => {
                     </Box>
                   </>
                 ) : (
-                  (comment?.file ? <div><Button href={`http://localhost:8057/assets/${comment.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> {comment?.directus_files?.title}</Button> </div> :
+                  (comment?.file ? <div><Button href={`https://lv-directus.hotanloc.xyz/assets/${comment.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> {comment?.directus_files?.title}</Button> </div> :
                     <Typography
                       variant="body2"
                       sx={{ fontSize: "15px", color: "black" }}

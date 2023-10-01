@@ -1,9 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosPublic, axiosPrivate } from "../utils";
+import axios from "axios";
 
 export const getUser = createAsyncThunk("user/getUser", async () => {
   try {
     const res = await axiosPrivate.get("user/profile");
+    return res.data;
+  } catch (error) {
+    return error;
+  }
+});
+
+export const getAllUser = createAsyncThunk("user/getAllUser", async () => {
+  try {
+    const res = await axios.get("https://lv-directus.hotanloc.xyz/items/users");
     return res.data;
   } catch (error) {
     return error;
@@ -74,6 +84,7 @@ export const userSlice = createSlice({
   initialState: {
     user: {},
     otherUser: {},
+    allUser: [],
     authorPost: {},
     userSearch: [],
   },
@@ -81,6 +92,9 @@ export const userSlice = createSlice({
     builder
       .addCase(getUser.fulfilled, (state, action) => {
         state.user = action.payload;
+      })
+      .addCase(getAllUser.fulfilled, (state, action) => {
+        state.allUser = action.payload.data;
       })
       .addCase(getUserByUserId.fulfilled, (state, action) => {
         state.otherUser = action.payload;

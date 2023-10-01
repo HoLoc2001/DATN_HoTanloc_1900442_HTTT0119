@@ -1,17 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { EventGateway } from 'src/event.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ChatService {
-  constructor(private readonly prisma: PrismaService) {}
-  async getAll(userId: any) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventGateway: EventGateway,
+  ) {}
+  async getAll(userId: any, id: any) {
     try {
-      let chats = await this.prisma.chat.findMany({
-        where: {
-          user: userId,
+      this.eventGateway.handleEmitSocket(
+        {
+          userId: userId,
+          chatId: id,
         },
-      });
-      return chats;
+        'chat',
+        null,
+      );
+      // let chats = await this.prisma.chat.findMany({
+      //   where: {
+      //     user: userId,
+      //   },
+      // });
+      // return chats;
+      return 12;
     } catch (error) {}
   }
 

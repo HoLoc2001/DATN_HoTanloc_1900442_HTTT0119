@@ -23,6 +23,7 @@ model User {
   github                   String?
   linkedin                 String?
   title                    String?    @db.VarChar(255)
+  fullname                 String?    @db.VarChar(255)
   bookmarks                Bookmark[]
   comments                 Comment[]
   followings               Follows[]  @relation("follower")
@@ -57,6 +58,7 @@ model Article {
   updatedAt        DateTime           @updatedAt
   chude            Chude
   files            String?
+  report           Int?               @default(0)
   bookmarks        Bookmark[]
   comments         Comment[]
   likes            Like[]
@@ -518,10 +520,11 @@ model chat {
   date_created              DateTime?       @db.Timestamptz(6)
   date_updated              DateTime?       @db.Timestamptz(6)
   user                      Int?
-  content                   String?
   to_user                   Int?
   file                      String?         @db.Uuid
   group_id                  String?         @db.VarChar(255)
+  content                   Json?           @db.Json
+  content_group             Json?           @db.Json
   directus_files            directus_files? @relation(fields: [file], references: [id], onUpdate: NoAction, map: "chat_file_foreign")
   users_chat_to_userTousers User?           @relation("chat_to_userTousers", fields: [to_user], references: [id], onUpdate: NoAction, map: "chat_to_user_foreign")
   users_chat_userTousers    User?           @relation("chat_userTousers", fields: [user], references: [id], onUpdate: NoAction, map: "chat_user_foreign")

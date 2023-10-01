@@ -10,16 +10,22 @@ import {
   Avatar,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   IconButton,
   Skeleton,
   Stack,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import CommentIcon from "@mui/icons-material/Comment";
+import CommentIcon from "@mui/icons-material/Comment"; import ReportIcon from '@mui/icons-material/Report';
 import BookmarkRemoveIcon from "@mui/icons-material/BookmarkRemove";
 import BookmarkAddIcon from "@mui/icons-material/BookmarkAdd";
 import { follow, getHasFollow } from "../../redux/userSlice";
@@ -37,7 +43,9 @@ const ReadArticle = () => {
   const article = useAppSelector((state) => state.article.article);
   const { isFollowed } = useAppSelector((state) => state.user.authorPost);
   const [errMissInput, setErrMissInput] = useState(false);
+  const [openReport, setOpenReport] = useState(false)
   const [chipData, setChipData] = useState();
+  const [content, setContent] = useState();
   useEffect(() => {
     (async () => {
       await dispatch(getArticleByArticleId(articleId));
@@ -55,8 +63,7 @@ const ReadArticle = () => {
 
           console.log(arr);
           for (let i = 0; i < arr.length; i++) {
-            // let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
-            let { data } = await axios.get(`http://localhost:8057/files/${arr[i]}`)
+            let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
             arr2.push({ key: i, label: data.data.title, id: data.data.id })
           }
 
@@ -154,6 +161,18 @@ const ReadArticle = () => {
   const handleClick = (e) => {
     e.preventDefault();
   };
+
+  const handleReport = async () => {
+    if (content != "") {
+      await axios.post("https://lv-directus.hotanloc.xyz/items/report", {
+        content,
+        user: userId,
+        article: articleId
+      })
+      setContent("")
+      setOpenReport(!openReport)
+    }
+  }
   return (
     <>
       <Box display={"flex"}>
@@ -213,8 +232,7 @@ const ReadArticle = () => {
                   icon={icon}
                   label={data.label}
                   onClick={() => {
-                    window.location.href = `http://localhost:8057/assets/${data.id}?download`
-                    // window.location.href = `https://lv-directus.hotanloc.xyz/assets/${data.id}?download`
+                    window.location.href = `https://lv-directus.hotanloc.xyz/assets/${data.id}?download`
                   }}
                 />
               </div>
@@ -239,7 +257,7 @@ const ReadArticle = () => {
               m: "5% 5% ",
               borderRadius: "10px",
               border: `${themeColor === "light" ? "1px solid #e9e9e9" : ""}`,
-              height: "25vh",
+              height: "15vh",
               backgroundColor: `${themeColor === "light" ? "#fff" : "#2d3748"}`,
             }}
           >
@@ -277,7 +295,7 @@ const ReadArticle = () => {
                   {`${article.user?.firstName} ${article.user?.lastName}`}
                 </Typography>
               </Link>
-              {userId === article.userId ? (
+              {/* {userId === article.userId ? (
                 ""
               ) : (
                 <Button
@@ -306,7 +324,7 @@ const ReadArticle = () => {
                 >
                   {isFollowed ? "Following" : "Follow"}
                 </Button>
-              )}
+              )} */}
             </Box>
           </Box>
           <Box
@@ -317,7 +335,7 @@ const ReadArticle = () => {
                 ? "1px solid #e9e9e9"
                 : "1px solid #2d3748"
                 }`,
-              height: "55vh",
+              height: "65vh",
               backgroundColor: `${themeColor === "light" ? "#fff" : "#2d3748"}`,
             }}
           >
@@ -434,6 +452,30 @@ const ReadArticle = () => {
                       </Tooltip>
                     )}
                   </Grid>
+                  <Grid key={4} item display={"flex"} alignItems={"center"}>
+                    <Tooltip title="Báo cáo">
+                      <IconButton
+                        sx={{
+                          color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
+                            }`,
+                          ":hover": {
+                            backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "#5c5d5f"
+                              }`,
+                            color: `${themeColor === "light"
+                              ? ""
+                              : "rgba(249,242,222,255)"
+                              }`,
+                          },
+                        }}
+                        onClick={() => {
+                          setOpenReport(!openReport)
+                        }}
+                      >
+                        <ReportIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
+
                 </Grid>
               </Grid>
             </Box>
@@ -447,6 +489,33 @@ const ReadArticle = () => {
         severity="info"
         content="Please login"
       />
+
+      <Dialog
+        open={openReport}
+        onClose={() => !openReport}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Bạn muốn báo cáo bài viết này?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">Lý do muốn báo cáo</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+
+            <TextField fullWidth onChange={(e) => { setContent(e.target.value) }} value={content} />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenReport(false)}
+            sx={{ textTransform: "none" }}
+          >
+            Hủy bỏ
+          </Button>
+          <Button onClick={handleReport} sx={{ textTransform: "none" }}>
+            Gửi báo cáo
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

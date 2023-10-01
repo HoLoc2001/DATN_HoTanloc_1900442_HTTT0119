@@ -43,10 +43,14 @@ export class AuthService {
       return tail === 'student.ctuet.edu.vn';
     }
 
-    let isStuentEmail = checkEmailStudent(req.user.email) ? "student" : checkEmailTeacher(req.user.email) ? "teacher" : null
+    let isStuentEmail = checkEmailStudent(req.user.email)
+      ? 'student'
+      : checkEmailTeacher(req.user.email)
+      ? 'teacher'
+      : null;
 
-    if(!isStuentEmail){
-      return null
+    if (!isStuentEmail) {
+      return null;
     }
 
     if (isUser && isStuentEmail !== null) {
@@ -54,7 +58,7 @@ export class AuthService {
 
       await this.updateRefreshToken(isUser.id, tokens.refreshToken);
 
-      return tokens; 
+      return tokens;
     }
 
     const user = await this.prisma.user.create({
@@ -63,7 +67,13 @@ export class AuthService {
         avatar: req.user.picture,
         firstName: req.user.firstName,
         lastName: req.user.lastName,
-        provider: isStuentEmail === "student" ? "STUDENT" : isStuentEmail === "teacher" ? "TEACHER" : "GOOGLE",
+        fullname: `${req.user.firstName} ${req.user.lastName}`,
+        provider:
+          isStuentEmail === 'student'
+            ? 'STUDENT'
+            : isStuentEmail === 'teacher'
+            ? 'TEACHER'
+            : 'GOOGLE',
       },
     });
 
@@ -94,7 +104,7 @@ export class AuthService {
           firstName: dto.firstName,
           lastName: dto.lastName,
           password: hashPass,
-          provider: "GOOGLE"
+          provider: 'GOOGLE',
         },
         select: {
           id: true,

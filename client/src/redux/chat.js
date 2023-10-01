@@ -19,10 +19,12 @@ export const getchats = createAsyncThunk(
 
 export const createchat = createAsyncThunk(
     "chat/createchat",
-    async ({ chatId, content }) => {
+    async ({ chatId, content }, { getState }) => {
         try {
+            const { chats } = getState().chat;
+
             const { data } = await axios.get(`${directus}chat/${chatId}`)
-            const res = await axios.patch(`${directus}chat/${chatId}`, {
+            const res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
                 content: [
                     ...data.data.content,
                     {
@@ -32,8 +34,13 @@ export const createchat = createAsyncThunk(
                     }
                 ]
             });
+            await axiosPrivate.get('/chat')
+            const indexChat = chats.findIndex(
+                (chat) => chat.id === res.data.data.id
+            );
 
-            return res.data
+
+            return { data: res.data.data, indexChat }
         } catch (error) {
             console.log(error);
         }
@@ -42,11 +49,31 @@ export const createchat = createAsyncThunk(
 
 export const updatechat = createAsyncThunk(
     "chat/updatechat",
-    async (articleId) => {
+    async ({ chatId, createAt }, { getState }) => {
         try {
-            const res = await axiosPrivate.post(`chat/${articleId}`);
+            const { chats } = getState().chat;
 
-            return res.data;
+            const { data } = await axios.get(`${directus}chat/${chatId}`)
+
+            for (let i = 0; i < data.data.content.length; i++) {
+
+                if (data.data.content[i].create_at == createAt) {
+                    data.data.content[i] = { ...data.data.content[i], content: "Tin nhắn đã xóa" };
+
+                }
+            }
+            console.log(data.data.content);
+            const res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                content: [
+                    ...data.data.content,
+                ]
+            });
+            const indexChat = chats.findIndex(
+                (chat) => chat.id === res.data.data.id
+            );
+
+
+            return { data: res.data.data, indexChat }
         } catch (error) {
             console.log(error);
         }
@@ -77,9 +104,9 @@ export const chatSlice = createSlice({
                 state.chats = action.payload.data;
             })
             .addCase(createchat.fulfilled, (state, action) => {
-                state.chats = action.payload.data;
+                state.chats[action.payload.indexChat] = action.payload.data;
             })
-            .addCase(updatechat.fulfilled, (state, action) => { })
+            .addCase(updatechat.fulfilled, (state, action) => { state.chats[action.payload.indexChat] = action.payload.data; })
             .addCase(deletechat.fulfilled, (state, action) => {
                 // state.bookmarks.push(action.payload);
             });

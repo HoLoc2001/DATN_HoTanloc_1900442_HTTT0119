@@ -6,28 +6,63 @@ import {
     Grid,
     IconButton,
     Skeleton,
-    TextField,
+    TextField, MenuList, MenuItem, Paper, Popper,
     Typography,
+    Menu,
+    Autocomplete,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import SendIcon from "@mui/icons-material/Send";
-import { createchat, getchats } from "../../redux/chat";
+import { createchat, getchats, updatechat } from "../../redux/chat";
+import { getAllUser } from "../../redux/userSlice";
+
+const url = 'wss://lv-directus.hotanloc.xyz/websocket';
 
 const index = () => {
     const dispatch = useAppDispatch();
     const [content, setContent] = useState("");
     const [active, setActive] = useState(0);
     const { id: userId } = useAppSelector((state) => state.user.user);
+    const { allUser } = useAppSelector((state) => state.user);
     const { chats } = useAppSelector((state) => state.chat);
+    const [anchorEl, setAnchorEl] = useState(null)
+    const bottomRef = useRef(null);
+    const [createAt, setCreateAt] = useState()
+    // const [connection, setConnection] = useState(new WebSocket(url))
+    console.log(allUser);
+    const open = Boolean(anchorEl);
 
-    const data = [
-        "Loremghdiwqg",
-        "qjdhiuqwhdiuqwdhiuqwd",
-        "dqhwuiqwhduiqwdhiquwdhiuqwdhiquwdh",
-    ];
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    useEffect(() => {
+        dispatch(getAllUser());
+    }, [])
+
+    // useEffect(() => {
+    //     connection.addEventListener('open', function () {
+    //         connection.send(
+    //             JSON.stringify({
+    //                 type: 'auth',
+    //                 email,
+    //                 password,
+    //             })
+    //         );
+    //     });
+
+    //     connection.addEventListener('message', function (message) {
+    //         receiveMessage(message);
+    //     });
+    // })
 
     console.log(chats, userId, "--------------------------");
+
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [chats[active]?.content]);
 
     useEffect(() => {
         (async () => {
@@ -50,14 +85,44 @@ const index = () => {
 
     const handelClickSend = async () => {
         await dispatch(createchat({ chatId: chats[active].id, content }))
+        setContent("");
 
     }
+
+    const keyPress = async (e) => {
+        if (e.key === "Enter" && content) {
+            await dispatch(createchat({ chatId: chats[active].id, content }))
+
+            setContent("");
+        }
+    };
+
+    const handleClick = (e) => {
+
+        e.preventDefault()
+        handleClose()
+        if (e.type === 'click') {
+            console.log('Left click');
+        } else if (e.type === 'contextmenu') {
+            console.log('Right click');
+            setAnchorEl(e.currentTarget);
+        }
+    };
+
+    const handleDelete = async () => {
+        await dispatch(updatechat({ chatId: chats[active].id, createAt }))
+        handleClose()
+
+    }
+
+    let id = open ? "faked-reference-popper" : undefined;
+
 
     return (
         <>
             <Grid container spacing={2}>
                 <Grid item xs={2} sx={{ backgroundColor: "#f6f6f6", height: "94vh" }}>
-                    <TextField
+                    {/* <TextField
                         InputProps={{
                             style: {
                                 borderRadius: "15px",
@@ -67,6 +132,13 @@ const index = () => {
                         fullWidth
                         label="Tìm kiếm"
                         id="fullWidth"
+                    /> */}
+
+                    <Autocomplete
+                        id="free-solo-demo"
+                        freeSolo
+                        options={allUser.map((option) => option.fullname)}
+                        renderInput={(params) => <TextField {...params} label="Tìm kiếm" />}
                     />
                     {chats?.map((chat, index) => {
                         return (
@@ -117,7 +189,7 @@ const index = () => {
                     </Box> */}
                 </Grid>
                 <Grid item xs={10}>
-                    {chats.length >= 1 ? (
+                    {chats?.length >= 1 ? (
                         <>
                             {" "}
                             <Box>
@@ -132,7 +204,23 @@ const index = () => {
                                     sx={{
                                         height: "79vh",
                                         width: "70vw",
-                                        backgroundColor: "GrayText",
+                                        // backgroundColor: "GrayText",
+
+                                        overflowY: "scroll",
+
+                                        "&::-webkit-scrollbar": {
+                                            width: "0.4em",
+                                        },
+                                        "&::-webkit-scrollbar-track": {
+                                            boxShadow: "inset 0 0 6px rgba(0,0,0,0.00)",
+                                            webkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.00)",
+                                        },
+                                        "&::-webkit-scrollbar-thumb": {
+                                            backgroundColor: "#fff",
+                                            borderRadius: "5px",
+                                            outline: "1px solid slategrey",
+                                        },
+
                                     }}
                                 >
                                     {chats[active].content?.map((content, index) => {
@@ -159,6 +247,14 @@ const index = () => {
                                                                     fontSize: "20px",
                                                                 }}
                                                                 label={content.content}
+                                                                onClick={(e) => {
+                                                                    setCreateAt(content.create_at)
+                                                                    handleClick(e)
+                                                                }}
+                                                                onContextMenu={(e) => {
+                                                                    setCreateAt(content.create_at)
+                                                                    handleClick(e)
+                                                                }}
                                                             />
                                                             <Avatar
                                                                 sx={{ ml: "5px" }}
@@ -185,10 +281,20 @@ const index = () => {
                                                                     fontSize: "20px",
                                                                 }}
                                                                 label={content.content}
+                                                                aria-describedby={id}
+                                                            // onClick={(e) => {
+                                                            //     setCreateAt(content.create_at)
+                                                            //     handleClick(e)
+                                                            // }}
+                                                            // onContextMenu={(e) => {
+                                                            //     setCreateAt(content.create_at)
+                                                            //     handleClick(e)
+                                                            // }}
                                                             />
                                                         </Box>
                                                     )}
                                                 </Box>
+                                                <div ref={bottomRef} />
                                             </>
                                         );
                                     })}
@@ -204,7 +310,9 @@ const index = () => {
                                         fullWidth
                                         placeholder="Tin nhắn"
                                         id="fullWidth"
+                                        value={content}
                                         onChange={handelOnChange}
+                                        onKeyDown={keyPress}
                                     />{" "}
                                     <IconButton onClick={handelClickSend} sx={{ mt: "-5px", ml: "10px", mr: "10px" }}>
                                         <SendIcon></SendIcon>
@@ -217,6 +325,18 @@ const index = () => {
                     )}
                 </Grid>
             </Grid>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+            >
+                <MenuItem onClick={handleDelete}>Xóa tin nhắn</MenuItem>
+            </Menu>
+
         </>
     );
 };

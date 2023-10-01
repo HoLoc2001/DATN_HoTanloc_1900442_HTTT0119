@@ -31,6 +31,13 @@ const Home = () => {
   const user = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
+    if (user?.id) {
+
+      socketRef.current?.emit("addUser", user.id);
+    }
+  }, [user])
+
+  useEffect(() => {
     socketRef.current = socketIOClient.connect(host);
     // socketRef.current?.on("notification", (data) => {
     //   console.log(data);
@@ -93,6 +100,12 @@ const Home = () => {
     socketRef.current?.on("notification-updateUser", async (data) => {
       await dispatch(updateUserSocket(data));
     });
+
+    socketRef.current?.on("chat", async (data) => {
+      // await dispatch(updateUserSocket(data));
+    });
+
+    socketRef.current?.emit("addUser", user.id);
   }, []);
 
   useEffect(() => {

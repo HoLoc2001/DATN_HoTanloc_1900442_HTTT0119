@@ -27,7 +27,7 @@ import {
   styled,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getTags } from "../../redux/tagSlice";
+
 import { addImage } from "../../redux/cloudSlice";
 import Navbar from "../../layouts/Navbar";
 import { getBase64 } from "../../utils";
@@ -68,11 +68,10 @@ const UpdateArticle = () => {
   useEffect(() => {
     (async () => {
       await dispatch(getArticleByArticleId(articleId));
-      await dispatch(getTags());
+
     })();
   }, []);
 
-  const tagsList = useAppSelector((state) => state.tag.tags);
   const article = useAppSelector((state) => state.article.article);
   const [errMissInput, setErrMissInput] = useState(false);
   const [content, setContent] = useState("");
@@ -80,19 +79,19 @@ const UpdateArticle = () => {
     title: "",
     thumbnailUrl: "",
     thumbnailBase64: "",
-    tags: [],
+
   });
   useEffect(() => {
     setArticleForm({
       title: article?.title || "",
       thumbnailUrl: article?.thumbnail || "",
       thumbnailBase64: article?.thumbnail || "",
-      tags: article?.tags || [],
+
     });
     setContent(article?.content || "");
   }, [article]);
 
-  const { title, thumbnailUrl, thumbnailBase64, tags } = articleForm;
+  const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
 
   function handleChange(content) {
     setContent(content);
@@ -102,11 +101,6 @@ const UpdateArticle = () => {
     setArticleForm({ ...articleForm, title: e.target.value });
   }
 
-  function handleChangeTags(e, tags) {
-    // let result = tags.map(({ name }) => name);
-
-    return setArticleForm({ ...articleForm, tags });
-  }
 
   const handleImageUploadBefore = async (files, info, core, uploadHandler) => {
     const formData = new FormData();
@@ -133,7 +127,7 @@ const UpdateArticle = () => {
     const { error } = articleValidate({
       title,
       thumbnail: thumbnailUrl,
-      tags,
+
       content,
     });
     if (error) {
@@ -141,13 +135,13 @@ const UpdateArticle = () => {
       console.log(error);
       setErrMissInput(true);
     } else {
-      let result = tags.map(({ name }) => name);
+
       await dispatch(
         updateArticle({
           articleId,
           title,
           thumbnail: thumbnailUrl,
-          tags: result,
+
           content,
         })
       );
@@ -176,7 +170,7 @@ const UpdateArticle = () => {
         thumbnailBase64: base64,
         thumbnailUrl: url,
       });
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -229,30 +223,7 @@ const UpdateArticle = () => {
           src={thumbnailBase64}
         />
 
-        <Autocomplete
-          multiple
-          limitTags={5}
-          id="multiple-limit-tags"
-          options={tagsList}
-          onChange={handleChangeTags}
-          value={articleForm.tags}
-          isOptionEqualToValue={(option, value) => option.name === value.name}
-          // defaultValue={articleForm?.tags}
-          getOptionLabel={(option) => {
-            return option.name;
-          }}
-          renderInput={(params) => {
-            return <TextField {...params} placeholder="Add Tag" />;
-          }}
-          // onChange={(event, value) => console.log(value)}
-          sx={{
-            maxWidth: "100%",
-            minHeight: "60px",
-            marginBottom: "10px",
-            backgroundColor: "#fff",
-            color: "rgb(255 242 242)",
-          }}
-        />
+
         <SunEditor
           name="my-editor"
           setAllPlugins={true}

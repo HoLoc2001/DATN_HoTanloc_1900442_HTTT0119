@@ -81,9 +81,7 @@ const AddArticle = () => {
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
   };
-  const [chipData, setChipData] = useState([
-
-  ]);
+  const [chipData, setChipData] = useState([]);
 
   useEffect(() => {
     (async () => {

@@ -22,6 +22,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
   Stack,
   TextField,
   styled,
@@ -74,19 +77,22 @@ const UpdateArticle = () => {
 
   const article = useAppSelector((state) => state.article.article);
   const [errMissInput, setErrMissInput] = useState(false);
+  const [chude, setChude] = useState('');
   const [content, setContent] = useState("");
+  // const [files, setFiles] = useState(); 
+  const [chipData, setChipData] = useState([]);
   const [articleForm, setArticleForm] = useState({
     title: "",
     thumbnailUrl: "",
     thumbnailBase64: "",
-
+    files: ''
   });
   useEffect(() => {
     setArticleForm({
       title: article?.title || "",
       thumbnailUrl: article?.thumbnail || "",
       thumbnailBase64: article?.thumbnail || "",
-
+      files: article?.files || ""
     });
     setContent(article?.content || "");
   }, [article]);
@@ -100,7 +106,9 @@ const UpdateArticle = () => {
   function handleChangeTitle(e) {
     setArticleForm({ ...articleForm, title: e.target.value });
   }
-
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+  };
 
   const handleImageUploadBefore = async (files, info, core, uploadHandler) => {
     const formData = new FormData();
@@ -173,6 +181,10 @@ const UpdateArticle = () => {
     } catch (error) { }
   };
 
+  const handleChange2 = (event) => {
+    setChude(event.target.value);
+  };
+
   return (
     <>
       <Navbar notShowCreate={true} />
@@ -222,6 +234,56 @@ const UpdateArticle = () => {
           }}
           src={thumbnailBase64}
         />
+
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Chủ đề</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={chude}
+            label="Chủ đề"
+            onChange={handleChange2}
+          >
+            <MenuItem value={"CAUHOI"}>Câu hỏi</MenuItem>
+            <MenuItem value={"TINTUC"}>Tin tức</MenuItem>
+            <MenuItem value={"TUYENDUNG"}>Tuyển dụng</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Box marginBottom={"10px"}>
+          <Button
+            component="label"
+            sx={{
+              textTransform: "none",
+              border: "1px solid #a3a3a3",
+              color: "black",
+            }}
+          >
+            <input
+              type="file"
+              hidden
+              multiple
+              onChange={handleFiles}
+            />
+            Files
+          </Button>
+
+          {chipData.map((data) => {
+            let icon;
+
+            return (
+              <div key={data.key} style={{ marginTop: "5px", marginLeft: "10px" }}>
+                <Chip
+                  variant="outlined"
+                  icon={icon}
+                  label={data.label}
+                  onDelete={handleDelete(data)}
+                />
+              </div>
+
+            );
+          })}
+        </Box>
 
 
         <SunEditor

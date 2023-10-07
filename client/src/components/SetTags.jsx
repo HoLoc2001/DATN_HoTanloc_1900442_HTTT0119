@@ -16,18 +16,13 @@ import Typography from "@mui/material/Typography";
 import TuneIcon from "@mui/icons-material/Tune";
 import { blue } from "@mui/material/colors";
 import { useAppDispatch, useAppSelector } from "../redux/store";
-import { addMyTag, getTags, removeMyTag } from "../redux/tagSlice";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
 function SimpleDialog(props) {
   const dispatch = useAppDispatch();
 
-  React.useEffect(() => {
-    (async () => {
-      // await dispatch(getTags());
-    })();
-  }, []);
+
 
   const { onClose, selectedValue, open } = props;
   const tags = useAppSelector((state) => state.tag.tags);
@@ -82,40 +77,36 @@ function SimpleDialog(props) {
                   ...(themeColor === "light"
                     ? { backgroundColor: "#fff", color: "#171717" }
                     : {
-                        backgroundColor: "#0E1217",
-                        color: "rgb(255 242 242)",
-                      }),
+                      backgroundColor: "#0E1217",
+                      color: "rgb(255 242 242)",
+                    }),
                   ...(tag.isFollowed
                     ? {
-                        backgroundColor: "red",
-                        color: "#171717",
-                        ":hover": {
-                          backgroundColor: `${
-                            themeColor === "light" ? "#e2e3f3" : "red"
+                      backgroundColor: "red",
+                      color: "#171717",
+                      ":hover": {
+                        backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "red"
                           }`,
-                          color: `${
-                            themeColor === "light"
-                              ? "#1A2027"
-                              : "rgba(249,242,222,0.5)"
+                        color: `${themeColor === "light"
+                            ? "#1A2027"
+                            : "rgba(249,242,222,0.5)"
                           }`,
-                        },
-                      }
+                      },
+                    }
                     : {
-                        backgroundColor: "#0E1217",
-                        color: "#fff",
-                        ":hover": {
-                          backgroundColor: `${
-                            themeColor === "light"
-                              ? "#e2e3f3"
-                              : "rgba(45,50,59,255)"
+                      backgroundColor: "#0E1217",
+                      color: "#fff",
+                      ":hover": {
+                        backgroundColor: `${themeColor === "light"
+                            ? "#e2e3f3"
+                            : "rgba(45,50,59,255)"
                           }`,
-                          color: `${
-                            themeColor === "light"
-                              ? "#1A2027"
-                              : "rgba(249,242,222,0.5)"
+                        color: `${themeColor === "light"
+                            ? "#1A2027"
+                            : "rgba(249,242,222,0.5)"
                           }`,
-                        },
-                      }),
+                      },
+                    }),
                 }}
                 onClick={
                   tag.isFollowed
@@ -167,12 +158,10 @@ export default function SetTags() {
           ":hover": {
             border: "none",
 
-            backgroundColor: `${
-              themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
-            }`,
-            color: `${
-              themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-            }`,
+            backgroundColor: `${themeColor === "light" ? "#e2e3f3" : "rgba(45,50,59,255)"
+              }`,
+            color: `${themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+              }`,
           },
           textAlign: "center",
         }}

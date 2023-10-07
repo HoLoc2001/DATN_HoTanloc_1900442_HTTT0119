@@ -139,18 +139,21 @@ export const addArticle = createAsyncThunk(
   async (data) => {
     try {
       const arr = []
-      for (let i = 0; i < data.files.length; i++) {
-        const data2 = await axios({
-          method: "POST",
-          url: `https://lv-directus.hotanloc.xyz/files`,
-          data: data.files[i],
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer gxMtOafBAeY9SeByNghkKB5XysplUStn",
-          },
-        });
-        arr.push(data2.data.data.id)
+      if (data?.files?.length) {
+
+        for (let i = 0; i < data.files.length; i++) {
+          const data2 = await axios({
+            method: "POST",
+            url: `https://lv-directus.hotanloc.xyz/files`,
+            data: data.files[i],
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer gxMtOafBAeY9SeByNghkKB5XysplUStn",
+            },
+          });
+          arr.push(data2.data.data.id)
+        }
       }
       // console.log("res1", arr);
       // console.log("data", data);

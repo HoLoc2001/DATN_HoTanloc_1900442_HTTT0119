@@ -229,20 +229,20 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                     >
                       <Tooltip
                         title={
-                          article.user?.firstName + " " + article.user?.lastName
+                          article?.user?.fullname
                         }
                       >
                         <Avatar
                           sx={{ marginRight: "5px" }}
-                          src={article.user?.avatar}
+                          src={article?.user?.avatar}
                         />
                       </Tooltip>
                       <Typography minWidth={"200px"}>
-                        {article.user?.firstName + " " + article.user?.lastName}
+                        {article?.user?.fullname}
                       </Typography>
                       <Box
                         marginLeft={"3vw"}
-                        display={`${article.userId === userId ? "block" : "none"
+                        display={`${article?.userId === userId ? "block" : "none"
                           }`}
                         sx={{}}
                       >
@@ -255,15 +255,15 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         </IconButton>
                       </Box>
                     </Box>
-                    <Tooltip title={article.title}>
+                    <Tooltip title={article?.title}>
                       <Typography
                         p={"10px 0 0 10px"}
                         variant="h5"
                         height={"80px"}
                       >
-                        {article.title?.length <= 40
-                          ? article.title
-                          : article.title?.substr(0, 40) + "..."}
+                        {article?.title?.length <= 40
+                          ? article?.title
+                          : article?.title?.substr(0, 40) + "..."}
                       </Typography>
                     </Tooltip>
                     <Typography paddingLeft={"10px"}>

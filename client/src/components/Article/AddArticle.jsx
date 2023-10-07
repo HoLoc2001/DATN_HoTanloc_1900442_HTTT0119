@@ -31,7 +31,7 @@ import {
   styled,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { getTags } from "../../redux/tagSlice";
+
 import { addImage } from "../../redux/cloudSlice";
 import Navbar from "../../layouts/Navbar";
 import { getBase64 } from "../../utils";
@@ -83,11 +83,6 @@ const AddArticle = () => {
   };
   const [chipData, setChipData] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      await dispatch(getTags());
-    })();
-  }, []);
 
   function handleChange(content) {
 

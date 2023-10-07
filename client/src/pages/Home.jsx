@@ -5,7 +5,6 @@ import Sidebar from "../layouts/Sidebar";
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { getUser } from "../redux/userSlice";
 import { signIn } from "../redux/authSlice";
-import { getMyTags, getTags, popularTags } from "../redux/tagSlice";
 // import { Box } from "@mui/material";
 import socketIOClient from "socket.io-client";
 import { getCommentsArticle, updateLike } from "../redux/articleSlice";
@@ -137,11 +136,8 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       if (isAuthenticated) {
-        // await dispatch(getTags());
         await dispatch(getUser());
-        // await dispatch(getMyTags());
       } else {
-        // await dispatch(popularTags());
       }
     })();
   }, [isAuthenticated]);

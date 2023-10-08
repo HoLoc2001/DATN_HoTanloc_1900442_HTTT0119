@@ -31,7 +31,7 @@ import {
 import { getBase64 } from "../../utils";
 import { addFile } from "../../redux/cloudSlice";
 
-const index = ({ articleId }) => {
+const index = ({ articleId, uid }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.article.comments);
   const { id: userId } = useAppSelector((state) => state.user.user);
@@ -293,7 +293,7 @@ const index = ({ articleId }) => {
                   right={"-50px"}
                   top={"0"}
                   sx={{
-                    display: `${comment.userId === userId ? "block" : "none"}`,
+                    display: `${comment.userId === userId ? "block" : uid == userId ? "block" : "none"}`,
                   }}
                 >
                   <IconButton

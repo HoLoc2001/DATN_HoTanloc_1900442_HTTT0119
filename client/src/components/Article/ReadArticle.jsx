@@ -479,7 +479,7 @@ const ReadArticle = () => {
                 </Grid>
               </Grid>
             </Box>
-            <Comment articleId={article.id} />
+            <Comment articleId={article.id} uid={article.userId} />
           </Box>
         </Box>
       </Box>

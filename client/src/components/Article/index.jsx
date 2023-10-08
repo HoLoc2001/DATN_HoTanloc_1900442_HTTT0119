@@ -261,9 +261,9 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         variant="h5"
                         height={"80px"}
                       >
-                        {article?.title?.length <= 40
+                        {article?.title?.length <= 35
                           ? article?.title
-                          : article?.title?.substr(0, 40) + "..."}
+                          : article?.title?.substr(0, 35) + "..."}
                       </Typography>
                     </Tooltip>
                     <Typography paddingLeft={"10px"}>

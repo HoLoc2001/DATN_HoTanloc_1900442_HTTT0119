@@ -262,7 +262,7 @@ const index = ({ articleId }) => {
                           handleCloseUpdating(openMenu.indexComment)
                         }
                       >
-                        Cancel
+                        Hủy bỏ
                       </Button>
                       <Button
                         sx={{}}
@@ -274,7 +274,7 @@ const index = ({ articleId }) => {
                           )
                         }
                       >
-                        OK
+                        Cập nhật
                       </Button>
                     </Box>
                   </>
@@ -321,7 +321,7 @@ const index = ({ articleId }) => {
           }}
         >
           <MenuItem onClick={() => handleUpdateComment(openMenu.indexComment)}>
-            Update
+            Cập nhật
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -329,7 +329,7 @@ const index = ({ articleId }) => {
               handleClose();
             }}
           >
-            Delete
+            Xóa
           </MenuItem>
         </Menu>
       </Box>
@@ -384,7 +384,7 @@ const index = ({ articleId }) => {
         <DialogTitle id="alert-dialog-title">Article</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete the comment?
+            Bạn muốn xóa bình luận này?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -392,10 +392,10 @@ const index = ({ articleId }) => {
             onClick={() => setOpenDeleteComment(false)}
             sx={{ textTransform: "none" }}
           >
-            Cancel
+            Hủy bỏ
           </Button>
           <Button onClick={handleDeleteComment} sx={{ textTransform: "none" }}>
-            Yes, delete
+            Xóa
           </Button>
         </DialogActions>
       </Dialog>

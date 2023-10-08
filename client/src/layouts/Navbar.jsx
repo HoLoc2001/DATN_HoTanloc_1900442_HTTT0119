@@ -278,7 +278,7 @@ const Navbar = ({ notShowCreate }) => {
         <DialogTitle id="alert-dialog-title">Article</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to sign out?
+            Bạn thực sự muốn đăng xuất
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -286,10 +286,10 @@ const Navbar = ({ notShowCreate }) => {
             onClick={() => setOpenSignOut(false)}
             sx={{ textTransform: "none" }}
           >
-            Cancel
+            Hủy bỏ
           </Button>
           <Button onClick={handleSignOut} sx={{ textTransform: "none" }}>
-            Yes, sign out
+            Đăng xuất
           </Button>
         </DialogActions>
       </Dialog>

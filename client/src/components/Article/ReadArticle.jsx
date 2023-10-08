@@ -348,7 +348,7 @@ const ReadArticle = () => {
                 // color={"rgb(245 245 245)"}
                 >
                   <Grid key={1} item display={"flex"} alignItems={"center"}>
-                    <Tooltip title="Like">
+                    <Tooltip title="Thích">
                       <IconButton
                         sx={{
                           color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
@@ -378,7 +378,7 @@ const ReadArticle = () => {
                     <Typography>{article._count?.likes}</Typography>
                   </Grid>
                   <Grid key={2} item display={"flex"} alignItems={"center"}>
-                    <Tooltip title="Comment">
+                    <Tooltip title="Bình luận">
                       <IconButton
                         sx={{
                           color: `${themeColor === "light" ? "" : "rgb(245 245 245)"

@@ -287,7 +287,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                     // color={"rgb(245 245 245)"}
                     >
                       <Grid key={1} item display={"flex"} alignItems={"center"}>
-                        <Tooltip title="Like">
+                        <Tooltip title="Thích">
                           <IconButton
                             sx={{
                               color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
@@ -317,7 +317,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                         <Typography>{article._count?.likes}</Typography>
                       </Grid>
                       <Grid key={2} item display={"flex"} alignItems={"center"}>
-                        <Tooltip title="Comment">
+                        <Tooltip title="Bình luận">
                           <IconButton
                             sx={{
                               color: `${themeColor === "light" ? "" : "rgb(245 245 245)"
@@ -340,7 +340,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       </Grid>
                       <Grid key={3} item>
                         {article.isBookmarked ? (
-                          <Tooltip title="Remove bookmark">
+                          <Tooltip title="Xóa lưu trữ">
                             <IconButton
                               sx={{
                                 color: `${themeColor === "light"
@@ -368,7 +368,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                             </IconButton>
                           </Tooltip>
                         ) : (
-                          <Tooltip title="Add bookmark">
+                          <Tooltip title="Lưu trữ">
                             <IconButton
                               sx={{
                                 color: `${themeColor === "light"

@@ -427,7 +427,7 @@ const ReadArticle = () => {
                         </IconButton>
                       </Tooltip>
                     ) : (
-                      <Tooltip title="Add bookmark">
+                      <Tooltip title="Lưu trữ">
                         <IconButton
                           sx={{
                             color: `${themeColor === "light" ? "" : "rgb(245 245 245)"

@@ -134,12 +134,12 @@ const index = () => {
                         id="fullWidth"
                     /> */}
 
-                    <Autocomplete
+                    {/* <Autocomplete
                         id="free-solo-demo"
                         freeSolo
                         options={allUser.map((option) => option.fullname)}
                         renderInput={(params) => <TextField {...params} label="Tìm kiếm" />}
-                    />
+                    /> */}
                     {chats?.map((chat, index) => {
                         return (
                             <Box

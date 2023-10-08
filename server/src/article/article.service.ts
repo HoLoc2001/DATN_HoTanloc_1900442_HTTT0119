@@ -660,6 +660,8 @@ export class ArticleService {
         },
       });
 
+      console.log(article);
+
       article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
       article['isLiked'] = article.likes.length === 1 ? true : false;
 

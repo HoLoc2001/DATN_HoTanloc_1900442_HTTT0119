@@ -132,7 +132,7 @@ export class ArticleController {
   @Put(':articleId')
   async updateArticle(
     @Param() params: GetArticleByIdDto,
-    @Body() dto: UpdateArticleDto,
+    @Body() dto: any,
     @GetUser() user: User,
     @Res() res: Response,
   ) {

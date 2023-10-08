@@ -375,7 +375,7 @@ const AddArticle = () => {
                 "subscript",
                 "superscript",
               ],
-              ["fontColor", "hiliteColor"],
+              ["fontColor", "hiliteColor", 'textStyle'],
               ["removeFormat"],
               "/", // Line break
               ["outdent", "indent"],

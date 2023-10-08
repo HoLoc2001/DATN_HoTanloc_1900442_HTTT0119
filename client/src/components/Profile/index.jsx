@@ -99,7 +99,7 @@ const index = () => {
           </Typography>
         </Box>
         <Box marginTop={"2%"} marginLeft={"-15%"}>
-          <Link to={"../../editProfile"} style={{ textDecoration: "none" }}>
+          {/* <Link to={"../../editProfile"} style={{ textDecoration: "none" }}>
             <Button
               sx={{
                 textTransform: "none",
@@ -109,7 +109,7 @@ const index = () => {
             >
               Thay đổi
             </Button>
-          </Link>
+          </Link> */}
         </Box>
       </Box>
       <Box

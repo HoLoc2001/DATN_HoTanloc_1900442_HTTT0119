@@ -79,7 +79,12 @@ const AddArticle = () => {
   });
   const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
   const handleDelete = (chipToDelete) => () => {
+    console.log(chipToDelete.key);
+    console.log(files);
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    // setFiles(files.splice(chipToDelete.key, 1))
+    // console.log(files);
+
   };
   const [chipData, setChipData] = useState([]);
 
@@ -194,9 +199,6 @@ const AddArticle = () => {
       setFiles(
         fileFormArr
       );
-
-
-
     } catch (error) { }
   };
 

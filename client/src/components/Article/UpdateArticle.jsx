@@ -22,6 +22,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Chip,
   FormControl,
   InputLabel,
   MenuItem,
@@ -43,6 +44,7 @@ import {
 } from "../../redux/articleSlice";
 import { Link, useParams } from "react-router-dom";
 import AlertInfo from "../AlertInfo";
+import axios from "axios";
 
 const CssTextField = styled(TextField)({
   root: {
@@ -80,7 +82,7 @@ const UpdateArticle = () => {
   const [errMissInput, setErrMissInput] = useState(false);
   const [chude, setChude] = useState('');
   const [content, setContent] = useState("");
-  // const [files, setFiles] = useState(); 
+  const [files, setFiles] = useState();
   const [chipData, setChipData] = useState([]);
   const [articleForm, setArticleForm] = useState({
     title: "",
@@ -95,7 +97,27 @@ const UpdateArticle = () => {
       thumbnailBase64: article?.thumbnail || "",
       files: article?.files || ""
     });
+
+    setFiles(article?.files || "")
+    setChude(article?.chude)
     setContent(article?.content || "");
+
+    (async () => {
+      if (article?.files) {
+
+        const arr = article.files.split(',')
+        const arr2 = []
+
+        console.log(arr);
+        for (let i = 0; i < arr.length; i++) {
+          let { data } = await axios.get(`https://lv-directus.hotanloc.xyz/files/${arr[i]}`)
+          arr2.push({ key: i, label: data.data.title, id: data.data.id })
+        }
+
+        setChipData([...arr2])
+      }
+    })();
+
   }, [article]);
 
   const { title, thumbnailUrl, thumbnailBase64 } = articleForm;
@@ -109,6 +131,7 @@ const UpdateArticle = () => {
   }
   const handleDelete = (chipToDelete) => () => {
     setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    setFiles(files.splice(chipToDelete.key, 1))
   };
 
   const handleImageUploadBefore = async (files, info, core, uploadHandler) => {
@@ -136,7 +159,7 @@ const UpdateArticle = () => {
     const { error } = articleValidate({
       title,
       thumbnail: thumbnailUrl,
-
+      chude,
       content,
     });
     if (error) {
@@ -144,13 +167,14 @@ const UpdateArticle = () => {
       console.log(error);
       setErrMissInput(true);
     } else {
-
+      console.log(files);
       await dispatch(
         updateArticle({
           articleId,
           title,
           thumbnail: thumbnailUrl,
-
+          chude,
+          files,
           content,
         })
       );
@@ -184,6 +208,29 @@ const UpdateArticle = () => {
 
   const handleChange2 = (event) => {
     setChude(event.target.value);
+  };
+  const handleFiles = async (e) => {
+    try {
+      const files2 = e.target.files;
+      const fileArr = []
+      const fileFormArr = []
+
+
+      for (let i = 0; i < files2.length; i++) {
+        let files = new FormData();
+        files.append('files[]', files2[i]);
+
+        fileFormArr.push(files)
+        fileArr.push({ key: i, label: files2[i].name })
+      }
+      console.log(fileArr);
+
+
+      setChipData([...fileArr])
+      setFiles(
+        fileFormArr
+      );
+    } catch (error) { }
   };
 
   return (

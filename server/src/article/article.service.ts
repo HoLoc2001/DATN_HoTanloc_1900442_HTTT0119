@@ -31,7 +31,7 @@ export class ArticleService {
           views: true,
           content: true,
           tags: true,
-
+          chude: true,
           files: true,
           createdAt: true,
           bookmarks: {
@@ -138,7 +138,7 @@ export class ArticleService {
           thumbnail: true,
           tags: true,
           views: true,
-
+          chude: true,
           createdAt: true,
           user: {
             select: {
@@ -182,7 +182,7 @@ export class ArticleService {
           id: true,
           title: true,
           views: true,
-
+          chude: true,
           thumbnail: true,
           tags: true,
           createdAt: true,
@@ -604,11 +604,7 @@ export class ArticleService {
     }
   }
 
-  async updateArticle(
-    userId: number,
-    articleId: number,
-    dto: UpdateArticleDto,
-  ) {
+  async updateArticle(userId: number, articleId: number, dto: any) {
     try {
       const hasArticle = await this.prisma.article.findMany({
         where: {
@@ -624,6 +620,7 @@ export class ArticleService {
           title: dto.title,
           content: dto.content,
           thumbnail: dto.thumbnail,
+          chude: dto.chude,
         },
         where: {
           id: articleId,

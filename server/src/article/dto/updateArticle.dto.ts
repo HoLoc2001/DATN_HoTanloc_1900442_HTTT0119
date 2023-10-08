@@ -12,4 +12,6 @@ export class UpdateArticleDto {
   @IsString()
   @IsOptional()
   thumbnail: string;
+
+  chude: string;
 }

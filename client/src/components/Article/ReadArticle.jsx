@@ -63,7 +63,7 @@ const ReadArticle = () => {
 
           console.log(arr);
           for (let i = 0; i < arr.length; i++) {
-            let { data } = await axios.get(`https://lv-diretus.hotanloc.xyz/files/${arr[i]}`)
+            let { data } = await axios.get(`https://lv-directus.hotanloc.xyz/files/${arr[i]}`)
             arr2.push({ key: i, label: data.data.title, id: data.data.id })
           }
 

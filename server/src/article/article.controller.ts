@@ -48,6 +48,7 @@ export class ArticleController {
       query,
       user['userId'],
     );
+    console.log(articles);
     if (articles) {
       return res.json(articles);
     }

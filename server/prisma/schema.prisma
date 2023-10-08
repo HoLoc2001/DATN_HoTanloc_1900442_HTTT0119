@@ -9,30 +9,32 @@ datasource db {
 }
 
 model User {
-  id                       Int        @id @default(autoincrement())
-  email                    String     @unique
-  avatar                   String?
-  password                 String?
-  firstName                String?
-  lastName                 String?
-  role                     Role       @default(USER)
-  provider                 Provider
-  refreshToken             String?
-  createdAt                DateTime   @default(now())
-  updatedAt                DateTime   @updatedAt
-  github                   String?
-  linkedin                 String?
-  title                    String?    @db.VarChar(255)
-  fullname                 String?    @db.VarChar(255)
-  bookmarks                Bookmark[]
-  comments                 Comment[]
-  followings               Follows[]  @relation("follower")
-  followers                Follows[]  @relation("following")
-  likes                    Like[]
-  articles                 Article[]
-  chat_chat_to_userTousers chat[]     @relation("chat_to_userTousers")
-  chat_chat_userTousers    chat[]     @relation("chat_userTousers")
-  tags                     Tag[]      @relation("TagToUser")
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  avatar       String?
+  password     String?
+  firstName    String?
+  lastName     String?
+  role         Role       @default(USER)
+  provider     Provider
+  refreshToken String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  github       String?
+  linkedin     String?
+  title        String?    @db.VarChar(255)
+  fullname     String?    @db.VarChar(255)
+  ban          Boolean?   @default(false)
+  socket_id    String?    @db.VarChar(255)
+  chatId       Int?
+  bookmarks    Bookmark[]
+  comments     Comment[]
+  followings   Follows[]  @relation("follower")
+  followers    Follows[]  @relation("following")
+  likes        Like[]
+  articles     Article[]
+  chat         chat?      @relation(fields: [chatId], references: [id], onUpdate: NoAction, map: "users_chatid_foreign")
+  tags         Tag[]      @relation("TagToUser")
 
   @@index([id])
   @@map("users")
@@ -58,7 +60,6 @@ model Article {
   updatedAt        DateTime           @updatedAt
   chude            Chude
   files            String?
-  report           Int?               @default(0)
   bookmarks        Bookmark[]
   comments         Comment[]
   likes            Like[]
@@ -516,18 +517,15 @@ model articles_files_1 {
 }
 
 model chat {
-  id                        Int             @id @default(autoincrement())
-  date_created              DateTime?       @db.Timestamptz(6)
-  date_updated              DateTime?       @db.Timestamptz(6)
-  user                      Int?
-  to_user                   Int?
-  file                      String?         @db.Uuid
-  group_id                  String?         @db.VarChar(255)
-  content                   Json?           @db.Json
-  content_group             Json?           @db.Json
-  directus_files            directus_files? @relation(fields: [file], references: [id], onUpdate: NoAction, map: "chat_file_foreign")
-  users_chat_to_userTousers User?           @relation("chat_to_userTousers", fields: [to_user], references: [id], onUpdate: NoAction, map: "chat_to_user_foreign")
-  users_chat_userTousers    User?           @relation("chat_userTousers", fields: [user], references: [id], onUpdate: NoAction, map: "chat_user_foreign")
+  id             Int             @id @default(autoincrement())
+  date_created   DateTime?       @db.Timestamptz(6)
+  date_updated   DateTime?       @db.Timestamptz(6)
+  file           String?         @db.Uuid
+  group_id       String?         @db.VarChar(255)
+  content        Json?           @db.Json
+  content_group  Json?           @db.Json
+  directus_files directus_files? @relation(fields: [file], references: [id], onUpdate: NoAction, map: "chat_file_foreign")
+  users          User[]
 }
 
 enum Role {

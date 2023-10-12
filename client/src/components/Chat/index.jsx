@@ -10,12 +10,15 @@ import {
     Typography,
     Menu,
     Autocomplete,
+    Button,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import SendIcon from "@mui/icons-material/Send";
+import SendIcon from "@mui/icons-material/Send"; import AttachFileIcon from '@mui/icons-material/AttachFile'; import FilePresentIcon from '@mui/icons-material/FilePresent';
 import { createchat, getchats, updatechat } from "../../redux/chat";
 import { getAllUser } from "../../redux/userSlice";
+import { addFlieComment } from "../../redux/articleSlice";
+import axios from "axios";
 
 const url = 'wss://lv-directus.hotanloc.xyz/websocket';
 
@@ -91,18 +94,18 @@ const index = () => {
 
     const keyPress = async (e) => {
         if (e.key === "Enter" && content) {
-            await dispatch(createchat({ chatId: chats[active].id, content, userId }))
+            await dispatch(createchat({ chatId: chats[active].id, content, userId, isChat: true }))
 
             setContent("");
         }
     };
 
-    const handleClick = (e) => {
+    const handleClick = (e, file = null) => {
 
         e.preventDefault()
         handleClose()
         if (e.type === 'click') {
-            console.log('Left click');
+            window.location.href = `https://lv-directus.hotanloc.xyz/assets/${file}?download`
         } else if (e.type === 'contextmenu') {
             console.log('Right click');
             setAnchorEl(e.currentTarget);
@@ -116,6 +119,30 @@ const index = () => {
     }
 
     let id = open ? "faked-reference-popper" : undefined;
+
+    const handleFileUpload = async (e) => {
+        try {
+            console.log(123123);
+            let file = new FormData();
+            file.append("files", e.target.files[0]);
+            const res = await axios({
+                method: "POST",
+                url: `https://lv-directus.hotanloc.xyz/files`,
+                data: file,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "multipart/form-data",
+                    Authorization: "Bearer gxMtOafBAeY9SeByNghkKB5XysplUStn",
+                },
+
+            });
+            console.log(res.data);
+
+            await dispatch(createchat({ chatId: chats[active].id, content, userId, isChat: false, file: res.data.data.id }))
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (
@@ -237,25 +264,44 @@ const index = () => {
                                                 >
                                                     {content.user == userId ? (
                                                         <Box display="flex" justifyContent="flex-end">
-                                                            <Chip
-                                                                sx={{
-                                                                    height: "auto",
+                                                            {
+                                                                content?.file ? <div><Button href={`https://lv-directus.hotanloc.xyz/assets/${content?.file}?download`} sx={{
+                                                                    width: 'fullwith', textTransform: 'none', height: "auto",
                                                                     "& .MuiChip-label": {
                                                                         display: "block",
                                                                         whiteSpace: "normal",
                                                                     },
                                                                     fontSize: "20px",
                                                                 }}
-                                                                label={content.content}
-                                                                onClick={(e) => {
-                                                                    setCreateAt(content.create_at)
-                                                                    handleClick(e)
-                                                                }}
-                                                                onContextMenu={(e) => {
-                                                                    setCreateAt(content.create_at)
-                                                                    handleClick(e)
-                                                                }}
-                                                            />
+                                                                    onClick={(e) => {
+                                                                        setCreateAt(content.create_at)
+                                                                        handleClick(e, content?.file)
+                                                                    }}
+                                                                    onContextMenu={(e) => {
+                                                                        setCreateAt(content.create_at)
+                                                                        handleClick(e, content?.file)
+                                                                    }}
+                                                                ><FilePresentIcon /> file</Button> </div> :
+                                                                    <Chip
+                                                                        sx={{
+                                                                            height: "auto",
+                                                                            "& .MuiChip-label": {
+                                                                                display: "block",
+                                                                                whiteSpace: "normal",
+                                                                            },
+                                                                            fontSize: "20px",
+                                                                        }}
+                                                                        label={content.content}
+                                                                        onClick={(e) => {
+                                                                            setCreateAt(content.create_at)
+                                                                            handleClick(e)
+                                                                        }}
+                                                                        onContextMenu={(e) => {
+                                                                            setCreateAt(content.create_at)
+                                                                            handleClick(e)
+                                                                        }}
+                                                                    />
+                                                            }
                                                             <Avatar
                                                                 sx={{ ml: "5px" }}
                                                                 alt="Remy Sharp"
@@ -271,26 +317,21 @@ const index = () => {
                                                                 sizes="10px"
                                                                 src={`${chats[active].user[0].id == userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`}
                                                             />
-                                                            <Chip
-                                                                sx={{
-                                                                    height: "auto",
-                                                                    "& .MuiChip-label": {
-                                                                        display: "block",
-                                                                        whiteSpace: "normal",
-                                                                    },
-                                                                    fontSize: "20px",
-                                                                }}
-                                                                label={content.content}
-                                                                aria-describedby={id}
-                                                            // onClick={(e) => {
-                                                            //     setCreateAt(content.create_at)
-                                                            //     handleClick(e)
-                                                            // }}
-                                                            // onContextMenu={(e) => {
-                                                            //     setCreateAt(content.create_at)
-                                                            //     handleClick(e)
-                                                            // }}
-                                                            />
+                                                            {
+                                                                content?.file ? <div><Button href={`https://lv-directus.hotanloc.xyz/assets/${content?.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> file</Button> </div> :
+                                                                    <Chip
+                                                                        sx={{
+                                                                            height: "auto",
+                                                                            "& .MuiChip-label": {
+                                                                                display: "block",
+                                                                                whiteSpace: "normal",
+                                                                            },
+                                                                            fontSize: "20px",
+                                                                        }}
+                                                                        label={content.content}
+                                                                        aria-describedby={id}
+                                                                    />
+                                                            }
                                                         </Box>
                                                     )}
                                                 </Box>
@@ -300,6 +341,21 @@ const index = () => {
                                     })}
                                 </Box>
                                 <Box sx={{ display: "flex" }}>
+                                    <IconButton
+                                        component="label"
+                                        sx={{
+                                            textTransform: "none",
+                                            width: "50px"
+                                        }}
+                                    >
+                                        <input
+                                            type="file"
+                                            hidden
+                                            onChange={handleFileUpload}
+                                        />
+
+                                        <AttachFileIcon />
+                                    </IconButton>
                                     <TextField
                                         InputProps={{
                                             style: {

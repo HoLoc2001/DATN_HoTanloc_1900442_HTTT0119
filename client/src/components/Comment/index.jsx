@@ -30,6 +30,7 @@ import {
 } from "../../redux/articleSlice";
 import { getBase64 } from "../../utils";
 import { addFile } from "../../redux/cloudSlice";
+import axios from "axios";
 
 const index = ({ articleId, uid }) => {
   const dispatch = useAppDispatch();
@@ -44,7 +45,7 @@ const index = ({ articleId, uid }) => {
   const [comment, setComment] = useState("");
   const [openDeleteComment, setOpenDeleteComment] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); const [openReport, setOpenReport] = useState(false); const [content, setContent] = useState();
   const [openMenu, setOpenMenu] = useState({
     commentId: null,
     content: "",
@@ -65,6 +66,7 @@ const index = ({ articleId, uid }) => {
       commentId: comment.id,
       indexComment: index,
       content: comment.content,
+      userComment: comment.userId
     });
   };
   const keyPress = async (e) => {
@@ -150,6 +152,21 @@ const index = ({ articleId, uid }) => {
 
     } catch (error) { }
   };
+
+
+  const handleReport = async () => {
+    if (content != "") {
+      await axios.post("https://lv-directus.hotanloc.xyz/items/report", {
+        content,
+        type: "comment",
+        comment: openMenu.commentId,
+        reporter: userId,
+        user: openMenu.userComment
+      })
+      setContent("")
+      setOpenReport(!openReport)
+    }
+  }
 
   return (
     <>
@@ -320,9 +337,10 @@ const index = ({ articleId, uid }) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={() => handleUpdateComment(openMenu.indexComment)}>
-            Cập nhật
-          </MenuItem>
+          {openMenu.userComment == userId ?
+            <MenuItem onClick={() => handleUpdateComment(openMenu.indexComment)}>
+              Cập nhật
+            </MenuItem> : ""}
           <MenuItem
             onClick={() => {
               setOpenDeleteComment(true);
@@ -331,8 +349,21 @@ const index = ({ articleId, uid }) => {
           >
             Xóa
           </MenuItem>
+          {openMenu.userComment == userId ? "" :
+            <MenuItem onClick={async () => {
+              // await axios.post("https://lv-directus.hotanloc.xyz/items/report", {
+              //   type: "comment",
+              //   comment: openMenu.commentId,
+              //   reporter: userId,
+              //   user: openMenu.userComment
+              // })
+              handleReport()
+              handleClose();
+            }}>
+              Báo cáo bình luận
+            </MenuItem>}
         </Menu>
-      </Box>
+      </Box >
       <Box
         sx={{
           display: "flex",
@@ -396,6 +427,33 @@ const index = ({ articleId, uid }) => {
           </Button>
           <Button onClick={handleDeleteComment} sx={{ textTransform: "none" }}>
             Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openReport}
+        onClose={() => !openReport}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Bạn muốn báo cáo bài viết này?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">Lý do muốn báo cáo</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+
+            <TextField fullWidth onChange={(e) => { setContent(e.target.value) }} value={content} />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenReport(false)}
+            sx={{ textTransform: "none" }}
+          >
+            Hủy bỏ
+          </Button>
+          <Button onClick={handleReport} sx={{ textTransform: "none" }}>
+            Gửi báo cáo
           </Button>
         </DialogActions>
       </Dialog>

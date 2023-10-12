@@ -166,8 +166,10 @@ const ReadArticle = () => {
     if (content != "") {
       await axios.post("https://lv-directus.hotanloc.xyz/items/report", {
         content,
-        user: userId,
-        article: articleId
+        type: "article",
+        article: articleId,
+        reporter: userId,
+        user: article.userId
       })
       setContent("")
       setOpenReport(!openReport)

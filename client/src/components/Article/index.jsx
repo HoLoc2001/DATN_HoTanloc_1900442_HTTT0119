@@ -31,7 +31,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
 import { addBookmark, removeBookmark } from "../../redux/articleSlice";
-import SetTags from "../SetTags";
+
 
 const index = ({ _articles, _setPage, _hasPost }) => {
   moment().format();

@@ -91,7 +91,7 @@ const Navbar = ({ notShowCreate }) => {
   useEffect(() => {
     (async () => {
       if (isSuccessAuth) {
-        await dispatch(getUser());
+        // await dispatch(getUser());
       }
     })();
   }, [isSuccessAuth]);

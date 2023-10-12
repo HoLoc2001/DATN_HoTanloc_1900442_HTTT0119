@@ -115,7 +115,6 @@ export class CommentService {
       const comment = await this.prisma.comment.deleteMany({
         where: {
           id: commentId,
-          userId: userId,
         },
       });
 

@@ -36,7 +36,7 @@ export const getchat = createAsyncThunk(
 
 export const createchat = createAsyncThunk(
     "chat/createchat",
-    async ({ chatId, content, userId }, { getState }) => {
+    async ({ chatId, content, userId, isChat, file = null }, { getState }) => {
         try {
             const { chats } = getState().chat;
 
@@ -46,27 +46,55 @@ export const createchat = createAsyncThunk(
 
             if (data?.data?.content) {
 
-                res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
-                    content: [
-                        ...data?.data?.content,
-                        {
-                            user: userId,
-                            content: content,
-                            create_at: new Date()
-                        }
-                    ]
-                });
-            } else {
-                res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
-                    content: [
+                if (isChat) {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                        content: [
+                            ...data?.data?.content,
+                            {
+                                user: userId,
+                                content: content,
+                                create_at: new Date()
+                            }
+                        ]
+                    });
 
-                        {
-                            user: userId,
-                            content: content,
-                            create_at: new Date()
-                        }
-                    ]
-                });
+                } else {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                        content: [
+                            ...data?.data?.content,
+                            {
+                                user: userId,
+                                file: file,
+                                create_at: new Date()
+                            }
+                        ]
+                    });
+                }
+            } else {
+                if (isChat) {
+
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                        content: [
+
+                            {
+                                user: userId,
+                                content: content,
+                                create_at: new Date()
+                            }
+                        ]
+                    });
+                } else {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                        content: [
+
+                            {
+                                user: userId,
+                                file: file,
+                                create_at: new Date()
+                            }
+                        ]
+                    });
+                }
             }
 
 

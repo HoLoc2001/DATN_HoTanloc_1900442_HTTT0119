@@ -271,7 +271,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       </Typography>
                     </Tooltip>
                     <Typography paddingLeft={"10px"}>
-                      {moment(article.createdAt, "YYYYMMDD").fromNow()}
+                      {/* {moment(article.createdAt, "YYYYMMDD").fromNow()} */ moment(article.createdAt).startOf("hour").fromNow()}
                     </Typography>
                     <img
                       style={{

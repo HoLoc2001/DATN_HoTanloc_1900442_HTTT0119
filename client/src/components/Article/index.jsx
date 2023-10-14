@@ -31,6 +31,7 @@ import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
 import { addBookmark, removeBookmark } from "../../redux/articleSlice";
+import { getUser } from "../../redux/userSlice";
 
 
 const index = ({ _articles, _setPage, _hasPost }) => {
@@ -62,6 +63,8 @@ const index = ({ _articles, _setPage, _hasPost }) => {
 
   useEffect(() => {
     setPage(0);
+    dispatch(getUser());
+
   }, [isSuccessAuth]);
 
   if (!_articles) {

@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
+import "moment/locale/vi";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -32,7 +33,7 @@ import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
 import { addBookmark, removeBookmark } from "../../redux/articleSlice";
 import { getUser } from "../../redux/userSlice";
-
+moment.locale("vi");
 
 const index = ({ _articles, _setPage, _hasPost }) => {
   moment().format();

@@ -548,7 +548,9 @@ export class ArticleService {
           thumbnail: dto.thumbnail,
           chude: dto.chude,
           files: (dto?.files).toString(),
-
+          createdAt: new Date()
+            .setHours(Number(new Date().getHours) + 7)
+            .toString(),
           //   connect: tagsArr,
           // },dto?.files,
           // tags: {

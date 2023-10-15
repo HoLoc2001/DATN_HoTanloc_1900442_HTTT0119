@@ -7,7 +7,7 @@ export const getchats = createAsyncThunk(
     "chat/getchats",
     async (id) => {
         try {
-            const res = await axios.get(`${directus}chat?filter[user][_in]=${id}&fields=*.users_id.*`)
+            const res = await axios.get(`${directus}chat?filter[user][users_id][_in]=${id}&fields=*.users_id.*`)
 
             console.log(res.data);
             return res.data;

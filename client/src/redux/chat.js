@@ -7,7 +7,7 @@ export const getchats = createAsyncThunk(
     "chat/getchats",
     async (id) => {
         try {
-            const res = await axios.get(`${directus}chat?filter[user][_in]=${id}&fields=*.*`)
+            const res = await axios.get(`${directus}chat?filter[user][_in]=${id}&fields=*.users_id.*`)
 
             console.log(res.data);
             return res.data;
@@ -22,7 +22,7 @@ export const getchat = createAsyncThunk(
     async (id, { getState }) => {
         try {
             const { chats } = getState().chat;
-            const { data } = await axios.get(`${directus}chat/${id}?fields=*.*`)
+            const { data } = await axios.get(`${directus}chat/${id}?fields=*.users_id.*`)
             const indexChat = chats.findIndex(
                 (chat) => chat.id === data.data.id
             );
@@ -47,7 +47,7 @@ export const createchat = createAsyncThunk(
             if (data?.data?.content) {
 
                 if (isChat) {
-                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.users_id.*`, {
                         content: [
                             ...data?.data?.content,
                             {
@@ -59,7 +59,7 @@ export const createchat = createAsyncThunk(
                     });
 
                 } else {
-                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.users_id.*`, {
                         content: [
                             ...data?.data?.content,
                             {
@@ -73,7 +73,7 @@ export const createchat = createAsyncThunk(
             } else {
                 if (isChat) {
 
-                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.users_id.*`, {
                         content: [
 
                             {
@@ -84,7 +84,7 @@ export const createchat = createAsyncThunk(
                         ]
                     });
                 } else {
-                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+                    res = await axios.patch(`${directus}chat/${chatId}?fields=*.users_id.*`, {
                         content: [
 
                             {
@@ -128,7 +128,7 @@ export const updatechat = createAsyncThunk(
                 }
             }
             console.log(data.data.content);
-            const res = await axios.patch(`${directus}chat/${chatId}?fields=*.*`, {
+            const res = await axios.patch(`${directus}chat/${chatId}?fields=*.users_id.*`, {
                 content: [
                     ...data.data.content,
                 ]

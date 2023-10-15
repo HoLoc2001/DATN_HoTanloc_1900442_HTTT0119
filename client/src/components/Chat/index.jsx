@@ -192,10 +192,10 @@ const index = () => {
                                         userSelect: "none",
                                     }}
                                 >
-                                    <Avatar alt="Remy Sharp" src={`${chat.user[0].id == userId ? chat.user[1].avatar : chat.user[0].avatar}`} />
+                                    <Avatar alt="Remy Sharp" src={`${chat.user[0].users_id.id == userId ? chat.user[1].users_id.avatar : chat.user[0].users_id.avatar}`} />
                                     <div
                                         style={{ margin: "auto", marginLeft: "5px" }}
-                                    >{`${chat.user[0].id == userId ? chat.user[1].fullname : chat.user[0].fullname}`}</div>
+                                    >{`${chat.user[0].users_id.id == userId ? chat.user[1].users_id.fullname : chat.user[0].users_id.fullname}`}</div>
                                 </Box>
                             </Box>
                         );
@@ -221,10 +221,10 @@ const index = () => {
                             {" "}
                             <Box>
                                 <Box sx={{ display: "flex", userSelect: "none", mb: "10px" }}>
-                                    <Avatar alt="Remy Sharp" src={`${chats[active].user[0].id == userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`} />
+                                    <Avatar alt="Remy Sharp" src={`${chats[active].user[0].users_id.id == userId ? chats[active].user[1].users_id.avatar : chats[active].user[0].users_id.avatar}`} />
                                     <div
                                         style={{ margin: "auto", marginLeft: "5px" }}
-                                    >{`${chats[active].user[0].id == userId ? chats[active].user[1].fullname : chats[active].user[0].fullname}`}</div>
+                                    >{`${chats[active].user[0].users_id.id == userId ? chats[active].user[1].users_id.fullname : chats[active].user[0].users_id.fullname}`}</div>
                                 </Box>
                                 <Divider variant="middle" />
                                 <Box
@@ -306,7 +306,7 @@ const index = () => {
                                                                 sx={{ ml: "5px" }}
                                                                 alt="Remy Sharp"
                                                                 sizes="10px"
-                                                                src={`${chats[active].user[0].id != userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`}
+                                                                src={`${chats[active].user[0].users_id.id != userId ? chats[active].user[1].users_id.avatar : chats[active].user[0].users_id.avatar}`}
                                                             />
                                                         </Box>
                                                     ) : (
@@ -315,7 +315,7 @@ const index = () => {
                                                                 sx={{ mr: "5px" }}
                                                                 alt="Remy Sharp"
                                                                 sizes="10px"
-                                                                src={`${chats[active].user[0].id == userId ? chats[active].user[1].avatar : chats[active].user[0].avatar}`}
+                                                                src={`${chats[active].user[0].users_id.id == userId ? chats[active].user[1].users_id.avatar : chats[active].user[0].users_id.avatar}`}
                                                             />
                                                             {
                                                                 content?.file ? <div><Button href={`https://lv-directus.hotanloc.xyz/assets/${content?.file}?download`} sx={{ width: 'fullwith', textTransform: 'none' }}><FilePresentIcon /> file</Button> </div> :

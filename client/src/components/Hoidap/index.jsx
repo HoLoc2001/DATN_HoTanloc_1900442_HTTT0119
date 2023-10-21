@@ -11,7 +11,8 @@ const index = () => {
     const themeColor = useAppSelector((state) => state.theme.color);
     const hoidap = useAppSelector((state) => state.article.hoidap);
     const [page, setPage] = useState(hoidap?.length || 0);
-
+    const [chude, setChude] = useState();
+    const { type } = useAppSelector((state) => state.article);
     const [hasPost, setHasPost] = useState(() => {
         if (hoidap?.length % 6 === 0 && hoidap?.length !== 0) {
             return true;
@@ -21,11 +22,12 @@ const index = () => {
 
     useEffect(() => {
         setPage(0);
-    }, [isSuccessAuth]);
+        setChude(type)
+    }, [type]);
 
     useEffect(() => {
         (async () => {
-            await dispatch(getHoidap({ page }));
+            await dispatch(getHoidap({ page, type }));
             setHasPost(() => {
                 if (hoidap?.length % 6 === 0 && hoidap?.length >= page) {
                     return true;
@@ -92,7 +94,6 @@ const index = () => {
                 }}
                 justifyContent={"center"}
             >
-                <Typography height={"36.5px"}>Bookmark</Typography>
                 {hoidap?.length ? (
                     <Article _articles={hoidap} _setPage={setPage} hasPost={hasPost} />
                 ) : (

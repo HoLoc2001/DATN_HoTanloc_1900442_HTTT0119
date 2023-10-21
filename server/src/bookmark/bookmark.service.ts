@@ -9,46 +9,98 @@ export class BookmarkService {
 
   async getBookmarks(userId: number, query: GetBookmarksDto) {
     try {
-      let articles = await this.prisma.bookmark.findMany({
-        select: {
-          userId: true,
-          Article: {
-            select: {
-              id: true,
-              title: true,
-              views: true,
-              thumbnail: true,
-              tags: true,
-              likes: {
-                where: {
-                  userId: userId,
+      let articles;
+      if (query.type == 'new' || query.type == 'old') {
+        articles = await this.prisma.bookmark.findMany({
+          select: {
+            userId: true,
+            Article: {
+              select: {
+                id: true,
+                title: true,
+                views: true,
+                thumbnail: true,
+                tags: true,
+                likes: {
+                  where: {
+                    userId: userId,
+                  },
                 },
-              },
-              _count: {
-                select: {
-                  likes: true,
-                  comments: true,
+                _count: {
+                  select: {
+                    likes: true,
+                    comments: true,
+                  },
                 },
-              },
-              user: {
-                select: {
-                  id: true,
-                  avatar: true,
-                  firstName: true,
-                  lastName: true,
+                user: {
+                  select: {
+                    id: true,
+                    avatar: true,
+                    firstName: true,
+                    lastName: true,
+                  },
                 },
+                createdAt: true,
               },
-              createdAt: true,
             },
           },
-        },
-        skip: query.offset,
-        take: query.limit,
+          skip: query.offset,
+          take: query.limit,
 
-        where: {
-          userId: userId,
-        },
-      });
+          where: {
+            userId: userId,
+          },
+          orderBy: {
+            articleId:
+              query.type == 'new'
+                ? 'desc'
+                : query.type == 'old'
+                ? 'asc'
+                : 'asc',
+          },
+        });
+      } else {
+        articles = await this.prisma.bookmark.findMany({
+          select: {
+            userId: true,
+            Article: {
+              select: {
+                id: true,
+                title: true,
+                views: true,
+                thumbnail: true,
+                tags: true,
+                likes: {
+                  where: {
+                    userId: userId,
+                  },
+                },
+                _count: {
+                  select: {
+                    likes: true,
+                    comments: true,
+                  },
+                },
+                user: {
+                  select: {
+                    id: true,
+                    avatar: true,
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+                createdAt: true,
+              },
+            },
+          },
+          skip: query.offset,
+          take: query.limit,
+
+          where: {
+            userId: userId,
+          },
+        });
+      }
 
       const Articles = articles?.map((article) => {
         article.Article['isBookmarked'] =

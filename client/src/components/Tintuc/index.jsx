@@ -11,7 +11,8 @@ const index = () => {
     const themeColor = useAppSelector((state) => state.theme.color);
     const tintuc = useAppSelector((state) => state.article.tintuc);
     const [page, setPage] = useState(tintuc?.length || 0);
-
+    const [chude, setChude] = useState();
+    const { type } = useAppSelector((state) => state.article);
     const [hasPost, setHasPost] = useState(() => {
         if (tintuc?.length % 6 === 0 && tintuc?.length !== 0) {
             return true;
@@ -21,11 +22,12 @@ const index = () => {
 
     useEffect(() => {
         setPage(0);
-    }, [isSuccessAuth]);
+        setChude(type)
+    }, [type]);
 
     useEffect(() => {
         (async () => {
-            await dispatch(getTintuc({ page }));
+            await dispatch(getTintuc({ page, type }));
             setHasPost(() => {
                 if (tintuc?.length % 6 === 0 && tintuc?.length >= page) {
                     return true;
@@ -33,7 +35,7 @@ const index = () => {
                 return false;
             });
         })();
-    }, [page, isSuccessAuth]);
+    }, [page]);
 
     if (tintuc.length === 0) {
         return (
@@ -92,7 +94,6 @@ const index = () => {
                 }}
                 justifyContent={"center"}
             >
-                <Typography height={"36.5px"}>Bookmark</Typography>
                 {tintuc?.length ? (
                     <Article _articles={tintuc} _setPage={setPage} hasPost={hasPost} />
                 ) : (

@@ -1,5 +1,5 @@
 import { Transform, TransformFnParams, Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString, isString } from 'class-validator';
 
 export class GetArticlesDto {
   // @IsOptional()
@@ -12,5 +12,6 @@ export class GetArticlesDto {
   @IsInt()
   offset: number;
 
+  @IsString()
   type: any;
 }

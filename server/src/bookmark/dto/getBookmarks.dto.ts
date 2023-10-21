@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class GetBookmarksDto {
   // @IsOptional()
@@ -11,4 +11,7 @@ export class GetBookmarksDto {
   @Type(() => Number)
   @IsInt()
   offset: number;
+
+  @IsString()
+  type: any;
 }

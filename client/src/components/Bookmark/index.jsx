@@ -10,6 +10,7 @@ const index = () => {
   const isSuccessAuth = useAppSelector((state) => state.auth.isAuthenticated);
   const themeColor = useAppSelector((state) => state.theme.color);
   const bookmarks = useAppSelector((state) => state.article.bookmarks);
+  const { type } = useAppSelector((state) => state.article);
   const [page, setPage] = useState(bookmarks?.length || 0);
   const [chude, setChude] = useState('new');
   const [hasPost, setHasPost] = useState(() => {
@@ -20,9 +21,6 @@ const index = () => {
   });
 
 
-  const handleChange2 = (e) => {
-    setChude(e.target.value)
-  }
 
 
   useEffect(() => {
@@ -31,7 +29,7 @@ const index = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getBookmark({ page }));
+      await dispatch(getBookmark({ page, type }));
       setHasPost(() => {
         if (bookmarks?.length % 6 === 0 && bookmarks?.length >= page) {
           return true;
@@ -98,8 +96,8 @@ const index = () => {
         }}
         justifyContent={"center"}
       >
-        {/* <Typography height={"36.5px"}>Bookmark</Typography>
-        <FormControl sx={{ width: "150px", position: "absolute", right: 10, top: 85 }} >
+
+        {/* <FormControl sx={{ width: "150px", position: "absolute", right: 10, top: 85 }} >
           <InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
           <Select
             labelId="demo-simple-select-label"

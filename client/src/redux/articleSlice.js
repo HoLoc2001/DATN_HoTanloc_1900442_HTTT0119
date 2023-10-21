@@ -4,12 +4,12 @@ import axios from "axios";
 
 export const getArticles = createAsyncThunk(
   "article/getArticles",
-  async ({ page, chude }, { getState }) => {
+  async ({ page, type }, { getState }) => {
     try {
       const { articles } = getState().article;
       const { isAuthenticated } = getState().auth;
       const res = isAuthenticated
-        ? await axiosPrivate.get(`article/auth?limit=6&offset=${page}&type=${chude}`)
+        ? await axiosPrivate.get(`article/auth?limit=6&offset=${page}&type=${type}`)
         : await axiosPublic.get(`article?limit=6&offset=${page}`);
 
       if (page === 0) {
@@ -57,11 +57,11 @@ export const getMyArticles = createAsyncThunk(
 
 export const getTuyendung = createAsyncThunk(
   "article/getTuyendung",
-  async ({ page }, { getState }) => {
+  async ({ page, type }, { getState }) => {
     try {
       const { tuyendung } = getState().article;
       const res = await axiosPrivate.get(
-        `article/tuyendung?limit=6&offset=${page}`
+        `article/tuyendung?limit=6&offset=${page}&type=${type}`
       );
       if (page === 0) {
         return [...res.data];
@@ -75,11 +75,11 @@ export const getTuyendung = createAsyncThunk(
 
 export const getTintuc = createAsyncThunk(
   "article/getTintuc",
-  async ({ page }, { getState }) => {
+  async ({ page, type }, { getState }) => {
     try {
       const { tintuc } = getState().article;
       const res = await axiosPrivate.get(
-        `article/tintuc?limit=6&offset=${page}`
+        `article/tintuc?limit=6&offset=${page}&type=${type}`
       );
       if (page === 0) {
         return [...res.data];
@@ -93,11 +93,11 @@ export const getTintuc = createAsyncThunk(
 
 export const getHoidap = createAsyncThunk(
   "article/getHoidap",
-  async ({ page }, { getState }) => {
+  async ({ page, type }, { getState }) => {
     try {
       const { hoidap } = getState().article;
       const res = await axiosPrivate.get(
-        `article/hoidap?limit=6&offset=${page}`
+        `article/hoidap?limit=6&offset=${page}&type=${type}`
       );
       if (page === 0) {
         return [...res.data];
@@ -323,10 +323,10 @@ export const getLike = createAsyncThunk(
 
 export const getBookmark = createAsyncThunk(
   "article/getBookmark",
-  async ({ page }, { getState }) => {
+  async ({ page, type }, { getState }) => {
     try {
       const { bookmarks } = getState().article;
-      const res = await axiosPrivate.get(`bookmark?limit=6&offset=${page}`);
+      const res = await axiosPrivate.get(`bookmark?limit=6&offset=${page}&type=${type}`);
       if (page === 0) {
         return [...res.data];
       }
@@ -516,6 +516,16 @@ export const articleSearch = createAsyncThunk(
   }
 );
 
+export const updateType = createAsyncThunk(
+  "article/updateType",
+  async (type) => {
+
+
+    return type;
+
+  }
+);
+
 export const articleSlice = createSlice({
   name: "article",
   initialState: {
@@ -529,9 +539,13 @@ export const articleSlice = createSlice({
     comments: [],
     article: null,
     articleSearch: [],
+    type: "new"
   },
   extraReducers: (builder) => {
     builder
+      .addCase(updateType.fulfilled, (state, action) => {
+        state.type = action.payload;
+      })
       .addCase(getArticles.fulfilled, (state, action) => {
         state.articles = action.payload;
       })

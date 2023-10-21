@@ -118,6 +118,8 @@ export class ArticleService {
   async getArticlesAuth(query: GetArticlesDto, userId: number) {
     try {
       let articles;
+      console.log(1, query);
+      console.log(2, query.type == 'old');
       if (query.type == 'new' || query.type == 'old') {
         articles = await this.prisma.article.findMany({
           skip: query.offset,
@@ -332,48 +334,104 @@ export class ArticleService {
 
   async getTuyendung(userId: number, query: GetArticlesDto) {
     try {
-      const articles = await this.prisma.article.findMany({
-        where: { chude: 'TUYENDUNG' },
-        skip: query.offset,
-        take: query.limit,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        select: {
-          bookmarks: {
-            where: {
-              userId: userId,
+      let articles;
+      if (query.type == 'new' || query.type == 'old') {
+        articles = await this.prisma.article.findMany({
+          where: { chude: 'TUYENDUNG' },
+          skip: query.offset,
+          take: query.limit,
+
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          likes: {
-            where: {
-              userId: userId,
+          orderBy: {
+            createdAt:
+              query.type == 'new'
+                ? 'desc'
+                : query.type == 'old'
+                ? 'asc'
+                : 'asc',
+          },
+        });
+      } else {
+        articles = await this.prisma.article.findMany({
+          skip: query.offset,
+          take: query.limit,
+          orderBy: {
+            likes: {
+              _count: 'desc',
             },
           },
-          userId: true,
-          id: true,
-          title: true,
-          thumbnail: true,
-          tags: true,
-          views: true,
-          files: true,
-          createdAt: true,
-          user: {
-            select: {
-              id: true,
-              avatar: true,
-              firstName: true,
-              lastName: true,
+          where: { chude: 'TUYENDUNG' },
+
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          _count: {
-            select: {
-              likes: true,
-              comments: true,
-            },
-          },
-        },
-      });
+        });
+      }
+
       const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;
@@ -387,48 +445,104 @@ export class ArticleService {
 
   async getHoidap(userId: number, query: GetArticlesDto) {
     try {
-      const articles = await this.prisma.article.findMany({
-        where: { chude: 'CAUHOI' },
-        skip: query.offset,
-        take: query.limit,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        select: {
-          bookmarks: {
-            where: {
-              userId: userId,
+      let articles;
+      if (query.type == 'new' || query.type == 'old') {
+        articles = await this.prisma.article.findMany({
+          where: { chude: 'CAUHOI' },
+          skip: query.offset,
+          take: query.limit,
+
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          likes: {
-            where: {
-              userId: userId,
+          orderBy: {
+            createdAt:
+              query.type == 'new'
+                ? 'desc'
+                : query.type == 'old'
+                ? 'asc'
+                : 'asc',
+          },
+        });
+      } else {
+        articles = await this.prisma.article.findMany({
+          skip: query.offset,
+          take: query.limit,
+          orderBy: {
+            likes: {
+              _count: 'desc',
             },
           },
-          userId: true,
-          id: true,
-          title: true,
-          thumbnail: true,
-          tags: true,
-          views: true,
-          chude: true,
-          createdAt: true,
-          user: {
-            select: {
-              id: true,
-              avatar: true,
-              firstName: true,
-              lastName: true,
+          where: { chude: 'CAUHOI' },
+
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          _count: {
-            select: {
-              likes: true,
-              comments: true,
-            },
-          },
-        },
-      });
+        });
+      }
+
       const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;
@@ -442,48 +556,103 @@ export class ArticleService {
 
   async getTintuc(userId: number, query: GetArticlesDto) {
     try {
-      const articles = await this.prisma.article.findMany({
-        where: { chude: 'TINTUC' },
-        skip: query.offset,
-        take: query.limit,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        select: {
-          bookmarks: {
-            where: {
-              userId: userId,
-            },
-          },
-          likes: {
-            where: {
-              userId: userId,
-            },
-          },
-          userId: true,
-          id: true,
-          title: true,
-          thumbnail: true,
-          tags: true,
-          views: true,
+      let articles;
+      if (query.type == 'new' || query.type == 'old') {
+        articles = await this.prisma.article.findMany({
+          where: { chude: 'TINTUC' },
+          skip: query.offset,
+          take: query.limit,
 
-          createdAt: true,
-          user: {
-            select: {
-              id: true,
-              avatar: true,
-              firstName: true,
-              lastName: true,
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          _count: {
-            select: {
-              likes: true,
-              comments: true,
+          orderBy: {
+            createdAt:
+              query.type == 'new'
+                ? 'desc'
+                : query.type == 'old'
+                ? 'asc'
+                : 'asc',
+          },
+        });
+      } else {
+        articles = await this.prisma.article.findMany({
+          skip: query.offset,
+          take: query.limit,
+          orderBy: {
+            likes: {
+              _count: 'desc',
             },
           },
-        },
-      });
+          where: { chude: 'TINTUC' },
+
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            files: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
+            },
+          },
+        });
+      }
       const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;
         article['isLiked'] = article.likes.length === 1 ? true : false;

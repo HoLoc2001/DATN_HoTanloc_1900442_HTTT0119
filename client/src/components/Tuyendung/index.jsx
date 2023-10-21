@@ -11,7 +11,8 @@ const index = () => {
     const themeColor = useAppSelector((state) => state.theme.color);
     const tuyendung = useAppSelector((state) => state.article.tuyendung);
     const [page, setPage] = useState(tuyendung?.length || 0);
-
+    const [chude, setChude] = useState();
+    const { type } = useAppSelector((state) => state.article);
     const [hasPost, setHasPost] = useState(() => {
         if (tuyendung?.length % 6 === 0 && tuyendung?.length !== 0) {
             return true;
@@ -21,11 +22,12 @@ const index = () => {
 
     useEffect(() => {
         setPage(0);
-    }, [isSuccessAuth]);
+        setChude(type)
+    }, [type]);
 
     useEffect(() => {
         (async () => {
-            await dispatch(getTuyendung({ page }));
+            await dispatch(getTuyendung({ page, type }));
             setHasPost(() => {
                 if (tuyendung?.length % 6 === 0 && tuyendung?.length >= page) {
                     return true;
@@ -92,7 +94,6 @@ const index = () => {
                 }}
                 justifyContent={"center"}
             >
-                <Typography height={"36.5px"}>Bookmark</Typography>
                 {tuyendung?.length ? (
                     <Article _articles={tuyendung} _setPage={setPage} hasPost={hasPost} />
                 ) : (

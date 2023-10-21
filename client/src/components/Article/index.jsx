@@ -30,6 +30,7 @@ import {
   deleteArticle,
   getArticles,
   updateLike,
+  updateType,
 } from "../../redux/articleSlice";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "./InfiniteScroll";
@@ -52,12 +53,16 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const [page, setPage] = useState(articles?.length || 0);
   const [articleId, setArticleId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [chude, setChude] = useState('new');
+  const [chude, setChude] = useState()
+
   const open = Boolean(anchorEl);
 
+  const { type } = useAppSelector((state) => state.article);
 
   const handleChange2 = (e) => {
-    setChude(e.target.value)
+
+    dispatch(updateType(e.target.value));
+
   }
 
 
@@ -80,12 +85,14 @@ const index = ({ _articles, _setPage, _hasPost }) => {
 
   useEffect(() => {
     setPage(0);
+    setChude(type)
+  }, [type]);
 
-  }, [chude]);
+  console.log("type", type);
   if (!_articles) {
     useEffect(() => {
       (async () => {
-        await dispatch(getArticles({ page, chude }));
+        await dispatch(getArticles({ page, type }));
         setHasPost(() => {
           if (articles?.length % 6 === 0 && articles?.length >= page) {
             return true;
@@ -93,7 +100,8 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           return false;
         });
       })();
-    }, [page, isSuccessAuth, chude]);
+
+    }, [page, type]);
   }
 
   const handleLike = async (e, { articleId }) => {
@@ -202,7 +210,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={chude}
+            value={type}
             label="Sắp xếp"
             onChange={handleChange2}
           >

@@ -117,48 +117,100 @@ export class ArticleService {
 
   async getArticlesAuth(query: GetArticlesDto, userId: number) {
     try {
-      const articles = await this.prisma.article.findMany({
-        skip: query.offset,
-        take: query.limit,
+      let articles;
+      if (query.type == 'new' || query.type == 'old') {
+        articles = await this.prisma.article.findMany({
+          skip: query.offset,
+          take: query.limit,
 
-        select: {
-          bookmarks: {
-            where: {
-              userId: userId,
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            chude: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          likes: {
-            where: {
-              userId: userId,
+          orderBy: {
+            createdAt:
+              query.type == 'new'
+                ? 'desc'
+                : query.type == 'old'
+                ? 'asc'
+                : 'asc',
+          },
+        });
+      } else {
+        articles = await this.prisma.article.findMany({
+          skip: query.offset,
+          take: query.limit,
+          orderBy: {
+            likes: {
+              _count: 'desc',
             },
           },
-          userId: true,
-          id: true,
-          title: true,
-          thumbnail: true,
-          tags: true,
-          views: true,
-          chude: true,
-          createdAt: true,
-          user: {
-            select: {
-              id: true,
-              avatar: true,
-              firstName: true,
-              lastName: true,
+          select: {
+            bookmarks: {
+              where: {
+                userId: userId,
+              },
+            },
+            likes: {
+              where: {
+                userId: userId,
+              },
+            },
+            userId: true,
+            id: true,
+            title: true,
+            thumbnail: true,
+            tags: true,
+            views: true,
+            chude: true,
+            createdAt: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+            _count: {
+              select: {
+                likes: true,
+                comments: true,
+              },
             },
           },
-          _count: {
-            select: {
-              likes: true,
-              comments: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
+        });
+      }
 
       const Articles = articles?.map((article) => {
         article['isBookmarked'] = article.bookmarks.length === 1 ? true : false;

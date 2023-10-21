@@ -1,4 +1,4 @@
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select, Skeleton, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Article from "../Article";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
@@ -11,13 +11,19 @@ const index = () => {
   const themeColor = useAppSelector((state) => state.theme.color);
   const bookmarks = useAppSelector((state) => state.article.bookmarks);
   const [page, setPage] = useState(bookmarks?.length || 0);
-
+  const [chude, setChude] = useState('new');
   const [hasPost, setHasPost] = useState(() => {
     if (bookmarks?.length % 6 === 0 && bookmarks?.length !== 0) {
       return true;
     }
     return false;
   });
+
+
+  const handleChange2 = (e) => {
+    setChude(e.target.value)
+  }
+
 
   useEffect(() => {
     setPage(0);
@@ -55,27 +61,23 @@ const index = () => {
                 sx={{
                   height: "410px",
                   width: "350px",
-                  color: `${
-                    themeColor === "light" ? "rgb(8 9 10)" : "rgb(245 245 245)"
-                  }`,
-                  border: `1px solid ${
-                    themeColor === "light"
-                      ? "rgb(245 245 245)"
-                      : "rgba(45,50,59,255)"
-                  } `,
-                  backgroundColor: `${
-                    themeColor === "light"
-                      ? "rgb(245 245 245)"
-                      : "rgba(45,50,59,255)"
-                  }`,
+                  color: `${themeColor === "light" ? "rgb(8 9 10)" : "rgb(245 245 245)"
+                    }`,
+                  border: `1px solid ${themeColor === "light"
+                    ? "rgb(245 245 245)"
+                    : "rgba(45,50,59,255)"
+                    } `,
+                  backgroundColor: `${themeColor === "light"
+                    ? "rgb(245 245 245)"
+                    : "rgba(45,50,59,255)"
+                    }`,
 
                   borderRadius: "10px",
                   ":hover": {
-                    border: `1px solid ${
-                      themeColor === "light"
-                        ? "rgba(45,50,59,255)"
-                        : "rgb(245 245 245)"
-                    }`,
+                    border: `1px solid ${themeColor === "light"
+                      ? "rgba(45,50,59,255)"
+                      : "rgb(245 245 245)"
+                      }`,
                     cursor: "pointer",
                   },
                 }}
@@ -91,13 +93,26 @@ const index = () => {
     <>
       <Box
         sx={{
-          color: `${
-            themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
-          }`,
+          color: `${themeColor === "light" ? "#1A2027" : "rgba(249,242,222,255)"
+            }`,
         }}
         justifyContent={"center"}
       >
-        <Typography height={"36.5px"}>Bookmark</Typography>
+        {/* <Typography height={"36.5px"}>Bookmark</Typography>
+        <FormControl sx={{ width: "150px", position: "absolute", right: 10, top: 85 }} >
+          <InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={chude}
+            label="Sắp xếp"
+            onChange={handleChange2}
+          >
+            <MenuItem value={"new"}>Mới nhất</MenuItem>
+            <MenuItem value={"old"}>Cũ nhất</MenuItem>
+            <MenuItem value={"hot"}>Quan tâm nhất</MenuItem>
+          </Select>
+        </FormControl> */}
         {bookmarks?.length ? (
           <Article _articles={bookmarks} _setPage={setPage} hasPost={hasPost} />
         ) : (

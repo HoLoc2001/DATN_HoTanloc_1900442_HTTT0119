@@ -10,7 +10,7 @@ import socketIOClient from "socket.io-client";
 import { getCommentsArticle, updateLike } from "../redux/articleSlice";
 import { getComments } from "../redux/commentSlice";
 import chat from "../assets/chat.png";
-import { IconButton } from "@mui/material";
+import { FormControl, IconButton, InputLabel, MenuItem, Select } from "@mui/material";
 import Chat from "../components/Chat";
 import Slide from '@mui/material/Slide';
 import { getchat } from "../redux/chat";
@@ -29,6 +29,10 @@ const Home = () => {
   const [openChat, setOpenChat] = useState(false)
   const socketRef = useRef();
   const user = useAppSelector((state) => state.user.user);
+
+  let chude
+
+  const handleChange2 = () => { }
 
   useEffect(() => {
     if (user?.id) {
@@ -156,6 +160,8 @@ const Home = () => {
       <Navbar />
       <Sidebar />
       <div style={{ padding: "0 0 0 14%" }}>
+
+
         <Outlet />
       </div>
 

@@ -4,12 +4,12 @@ import axios from "axios";
 
 export const getArticles = createAsyncThunk(
   "article/getArticles",
-  async (page, { getState }) => {
+  async ({ page, chude }, { getState }) => {
     try {
       const { articles } = getState().article;
       const { isAuthenticated } = getState().auth;
       const res = isAuthenticated
-        ? await axiosPrivate.get(`article/auth?limit=6&offset=${page}`)
+        ? await axiosPrivate.get(`article/auth?limit=6&offset=${page}&type=${chude}`)
         : await axiosPublic.get(`article?limit=6&offset=${page}`);
 
       if (page === 0) {

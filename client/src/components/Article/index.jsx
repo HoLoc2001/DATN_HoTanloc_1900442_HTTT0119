@@ -2,11 +2,14 @@ import {
   Avatar,
   Box,
   Button,
+  FormControl,
   Grid,
   IconButton,
+  InputLabel,
   Menu,
   MenuItem,
   Paper,
+  Select,
   Skeleton,
   Stack,
   Tooltip,
@@ -49,7 +52,14 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const [page, setPage] = useState(articles?.length || 0);
   const [articleId, setArticleId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [chude, setChude] = useState('new');
   const open = Boolean(anchorEl);
+
+
+  const handleChange2 = (e) => {
+    setChude(e.target.value)
+  }
+
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -68,10 +78,14 @@ const index = ({ _articles, _setPage, _hasPost }) => {
 
   }, [isSuccessAuth]);
 
+  useEffect(() => {
+    setPage(0);
+
+  }, [chude]);
   if (!_articles) {
     useEffect(() => {
       (async () => {
-        await dispatch(getArticles(page));
+        await dispatch(getArticles({ page, chude }));
         setHasPost(() => {
           if (articles?.length % 6 === 0 && articles?.length >= page) {
             return true;
@@ -79,7 +93,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
           return false;
         });
       })();
-    }, [page, isSuccessAuth]);
+    }, [page, isSuccessAuth, chude]);
   }
 
   const handleLike = async (e, { articleId }) => {
@@ -131,6 +145,8 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   if (articles?.length === 0) {
     return (
       <>
+
+
         <Grid container spacing={0} marginTop={"34px"}>
           {[1, 2, 3, 4, 5, 6].map((index) => (
             <Grid
@@ -179,6 +195,24 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   return (
     <>
       {/* {!_articles && isSuccessAuth ? <SetTags /> : ""} */}
+      <div style={{ position: "relative" }}>
+
+        <FormControl sx={{ width: "150px", position: "absolute", right: 10, top: 10 }} >
+          <InputLabel id="demo-simple-select-label">Sắp xếp</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={chude}
+            label="Sắp xếp"
+            onChange={handleChange2}
+          >
+            <MenuItem value={"new"}>Mới nhất</MenuItem>
+            <MenuItem value={"old"}>Cũ nhất</MenuItem>
+            <MenuItem value={"hot"}>Quan tâm nhất</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      <div style={{ height: "50px" }}></div>
       <InfiniteScroll
         getMore={() => {
           _setPage ? _setPage((prev) => prev + 6) : setPage((prev) => prev + 6);

@@ -69,7 +69,7 @@ const OtherUser = () => {
           sx={{
             width: "1",
             ...(themeColor === "light"
-              ? { backgroundColor: "rgb(255 242 242)", color: "#171717" }
+              ? { backgroundColor: "#fff", color: "#171717" }
               : { backgroundColor: "#0E1217", color: "#fff2f2" }),
           }}
         >
@@ -97,7 +97,7 @@ const OtherUser = () => {
           </Typography>
         </Box>
       </Box>
-      <Button
+      {/* <Button
         onClick={() => handleFollow(userId)}
         sx={{
           marginTop: "30px",
@@ -110,18 +110,18 @@ const OtherUser = () => {
           border: `${isFollowed ? "1px solid #a3a3a3" : "1px solid #3b49df"}`,
           ...(isFollowed
             ? {
-                color: `${themeColor === "light" ? "#3d3d3d" : "#3d3d3d"}`,
-              }
+              color: `${themeColor === "light" ? "#3d3d3d" : "#3d3d3d"}`,
+            }
             : {
-                color: `${themeColor === "light" ? "#f9f9f9" : "#090909"}`,
-              }),
+              color: `${themeColor === "light" ? "#f9f9f9" : "#090909"}`,
+            }),
           ":hover": {
             backgroundColor: `${isFollowed ? "#a3a3a3" : "#2f3ab2"}`,
           },
         }}
       >
         {isFollowed ? "Following" : "Follow"}
-      </Button>
+      </Button> */}
       <Divider
         sx={{
           width: "98%",
@@ -136,7 +136,7 @@ const OtherUser = () => {
         />
       ) : (
         <Typography sx={{ margin: "25px 0 0 0" }}>
-          Your bookmark list is empty.
+          Người dùng này chưa đăng bài.
         </Typography>
       )}
     </>

@@ -64,9 +64,7 @@ const CssTextField = styled(TextField)({
 
 const AddArticle = () => {
   const dispatch = useAppDispatch();
-  const tagsList = useAppSelector((state) => state.tag.tags);
-  const themeColor = useAppSelector((state) => state.theme.color);
-  const article = useAppSelector((state) => state.article.article);
+  const user = useAppSelector((state) => state.user.user);
   const [content, setContent] = useState("");
   const [errMissInput, setErrMissInput] = useState(false);
   const [chude, setChude] = useState('');
@@ -86,6 +84,7 @@ const AddArticle = () => {
     // console.log(files);
 
   };
+  console.log(user);
   const [chipData, setChipData] = useState([]);
 
 
@@ -129,8 +128,6 @@ const AddArticle = () => {
 
   const handleAddArticle = async (e) => {
     try {
-
-
       const { error } = articleValidate({
         title,
         thumbnail: thumbnailUrl,

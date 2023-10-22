@@ -748,9 +748,13 @@ export class ArticleService {
     }
   }
 
-  async addArticle(userId: number, dto: any) {
+  async addArticle(userId: number, dto: any, ban: boolean) {
     try {
       const tagsArr = [];
+      console.log('ban ', ban);
+      if (ban == true) {
+        return;
+      }
       // dto.tags.forEach((tag) => {
       //   tagsArr.push({ name: tag });
       // });
@@ -769,9 +773,9 @@ export class ArticleService {
           thumbnail: dto.thumbnail,
           chude: dto.chude,
           files: (dto?.files).toString(),
-          createdAt: new Date()
-            .setHours(Number(new Date().getHours) + 7)
-            .toString(),
+          // createdAt: new Date(
+          //   new Date().setHours(Number(new Date().getHours) + 7),
+          // ),
           //   connect: tagsArr,
           // },dto?.files,
           // tags: {

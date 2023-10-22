@@ -35,7 +35,7 @@ import axios from "axios";
 const index = ({ articleId, uid }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((state) => state.article.comments);
-  const { id: userId } = useAppSelector((state) => state.user.user);
+  const { id: userId, ban } = useAppSelector((state) => state.user.user);
   const themeColor = useAppSelector((state) => state.theme.color);
   useEffect(() => {
     (async () => {
@@ -364,48 +364,52 @@ const index = ({ articleId, uid }) => {
             </MenuItem>}
         </Menu>
       </Box >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-end",
-          marginLeft: "5px",
-        }}
-      >
-        <IconButton
-          component="label"
-          sx={{
-            textTransform: "none",
-          }}
-        >
-          <input
-            type="file"
-            hidden
-            onChange={handleFileUpload}
-          />
+      {
+        !ban ?
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-end",
+              marginLeft: "5px",
+            }}
+          >
+            <IconButton
+              component="label"
+              sx={{
+                textTransform: "none",
+              }}
+            >
+              <input
+                type="file"
+                hidden
+                onChange={handleFileUpload}
+              />
 
-          <AttachFileIcon />
-        </IconButton>
-        <TextField
-          sx={{
-            width: "100%",
-            "& input": {
-              color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
-            },
+              <AttachFileIcon />
+            </IconButton>
+            <TextField
+              sx={{
+                width: "100%",
+                "& input": {
+                  color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+                },
 
-            // color: "white",
-          }}
-          //   color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
-          // id="input-with-sx"
-          variant="standard"
-          value={comment}
-          onChange={onChangeComment}
-          onKeyDown={keyPress}
-          placeholder="Viết bình luận"
-        />
-        <IconButton onClick={async () => await handleSendComment()}>
-          <SendIcon sx={{ color: "#1976d2" }} />
-        </IconButton>
-      </Box>
+                // color: "white",
+              }}
+              //   color={`${themeColor === "light" ? "#1A2027" : "#fff"}`}
+              // id="input-with-sx"
+              variant="standard"
+              value={comment}
+              onChange={onChangeComment}
+              onKeyDown={keyPress}
+              placeholder="Viết bình luận"
+            />
+            <IconButton onClick={async () => await handleSendComment()}>
+              <SendIcon sx={{ color: "#1976d2" }} />
+            </IconButton>
+          </Box>
+          : ""
+      }
       <Dialog
         open={openDeleteComment}
         onClose={() => !openDeleteComment}

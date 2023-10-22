@@ -157,7 +157,7 @@ const Home = () => {
           : { backgroundColor: "#0E1217", color: "rgb(255 242 242)" }),
       }}
     >
-      <Navbar />
+      <Navbar notShowCreate={user.ban} />
       <Sidebar />
       <div style={{ padding: "0 0 0 14%" }}>
 

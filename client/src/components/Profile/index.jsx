@@ -112,7 +112,7 @@ const index = () => {
           </Link> */}
         </Box>
       </Box>
-      <Box
+      {/* <Box
         display={"flex"}
         textAlign={"center"}
         sx={{
@@ -151,7 +151,7 @@ const index = () => {
             </span>
           </Typography>
         </Box>
-      </Box>
+      </Box> */}
       <Divider
         sx={{
           width: "98%",

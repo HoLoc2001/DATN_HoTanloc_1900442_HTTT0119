@@ -19,6 +19,7 @@ export class UserService {
         avatar: true,
         firstName: true,
         lastName: true,
+        ban: true,
         createdAt: true,
         _count: {
           select: {
@@ -39,6 +40,7 @@ export class UserService {
       select: {
         id: true,
         email: true,
+        ban: true,
         avatar: true,
         firstName: true,
         lastName: true,

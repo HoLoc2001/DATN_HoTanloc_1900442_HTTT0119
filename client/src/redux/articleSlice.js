@@ -43,7 +43,7 @@ export const getMyArticles = createAsyncThunk(
     try {
       const { myArticles } = getState().article;
       const res = await axiosPrivate.get(
-        `article/MyUser?limit=6&offset=${page}`
+        `article/MyUser?limit=6&offset=${page}&type=new`
       );
       if (page === 0) {
         return [...res.data];
@@ -118,7 +118,7 @@ export const getArticleByUserId = createAsyncThunk(
 
       const res = isAuthenticated
         ? await axiosPrivate.get(
-          `article/auth/user/${userId}?limit=6&offset=${page}`
+          `article/auth/user/${userId}?limit=6&offset=${page}&type=new`
         )
         : await axiosPublic.get(
           `article/user/${userId}?limit=6&offset=${page}`

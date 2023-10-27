@@ -171,7 +171,7 @@ const index = ({ articleId, uid }) => {
   return (
     <>
       <Box
-        height={"85%"}
+        height={"50vh"}
         borderTop={`1px solid ${themeColor === "light" ? "#a6aeb8" : "#2d3748"
           }`}
         sx={{

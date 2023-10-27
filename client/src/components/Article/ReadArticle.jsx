@@ -346,7 +346,7 @@ const ReadArticle = () => {
                 <Grid
                   container
                   justifyContent="center"
-                  spacing={12}
+                  spacing={"10%"}
                 // color={"rgb(245 245 245)"}
                 >
                   <Grid key={1} item display={"flex"} alignItems={"center"}>

@@ -135,7 +135,7 @@ services:
       CORS_METHODS: "GET,POST,PATCH,DELETE"
       EMAIL_FROM: "demo@hotanloc.xyz"
       EMAIL_TRANSPORT: "smtp"
-      EMAIL_SMTP_HOST: "mail.hotanloc.xyz"
+      EMAIL_SMTP_HOST: "hotanloc.xyz"
       EMAIL_SMTP_PORT: "465"
       EMAIL_SMTP_USER: "demo@hotanloc.xyz"
       EMAIL_SMTP_PASSWORD: "ARTant,#,25"

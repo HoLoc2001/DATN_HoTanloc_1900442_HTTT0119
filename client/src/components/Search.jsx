@@ -138,13 +138,13 @@ const SearchArticle = () => {
         sx={{ marginLeft: "calc(50vw - 14vw - 23vw)" }}
       >
         <Search sx={{ display: "flex" }}>
-          <input
+          <StyledInputBase
             value={query}
             onChange={handleSearch}
             onKeyDown={keyPress}
-            autoFocus
+            // autoFocus
             placeholder="Tìm kiếm"
-            inputProps={{ "aria-label": "search" }}
+          // inputProps={{ "aria-label": "search" }}
           />
           <IconButton onClick={handleClickSearch}>
             <SearchIcon />

@@ -122,13 +122,13 @@ const SearchArticle = () => {
 
   const StyledInputBase = styled(TextField)(({ theme }) => ({
     color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
+    "& .MuiInputBase-input": {
+      padding: theme.spacing(1, 1, 1, 0),
 
-    padding: theme.spacing(1, 1, 1, 0),
-
-    paddingLeft: `calc(1em )`,
-    transition: theme.transitions.create("width"),
-    width: "40vw",
-
+      paddingLeft: `calc(1em )`,
+      transition: theme.transitions.create("width"),
+      width: "40vw",
+    },
   }));
   return (
     <>
@@ -143,7 +143,7 @@ const SearchArticle = () => {
             onChange={handleSearch}
             onKeyDown={keyPress}
 
-            // autoFocus
+            autoFocus
             placeholder="Tìm kiếm"
           // inputProps={{ "aria-label": "search" }}
           />

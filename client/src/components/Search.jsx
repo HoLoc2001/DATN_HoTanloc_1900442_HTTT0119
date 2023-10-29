@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import React, { useState, useEffect } from "react";
 import { articleSearch } from "../redux/articleSlice";
 import Article from "./Article";
-import { Avatar, Button, Tabs } from "@mui/material";
+import { Avatar, Button, Tabs, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import { userSearch } from "../redux/userSlice";
 
@@ -120,7 +120,7 @@ const SearchArticle = () => {
     width: "45vw",
   }));
 
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  const StyledInputBase = styled(TextField)(({ theme }) => ({
     color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
     "& .MuiInputBase-input": {
       padding: theme.spacing(1, 1, 1, 0),

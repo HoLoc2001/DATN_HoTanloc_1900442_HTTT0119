@@ -15,6 +15,9 @@ export class SearchService {
         title: {
           search: searchQuery,
         },
+        content: {
+          search: searchQuery,
+        },
       },
       select: {
         bookmarks: {

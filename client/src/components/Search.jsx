@@ -212,7 +212,7 @@ const SearchArticle = () => {
                   }}
                 >
                   {!hasArticle.hasArticle && hasArticle.query
-                    ? `We couldn't find anything for "${hasArticle.query}"`
+                    ? `Hệ thống không thể  tìm thấy bài viết hay người dùng là "${hasArticle.query}"`
                     : ""}
                 </Typography>
               )}

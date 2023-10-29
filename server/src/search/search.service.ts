@@ -68,9 +68,9 @@ export class SearchService {
       skip: query.offset,
       take: query.limit,
       where: {
-        title: {
-          search: searchQuery,
-        },
+        // title: {
+        //   search: searchQuery,
+        // },
         content: {
           search: searchQuery,
         },

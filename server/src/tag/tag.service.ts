@@ -4,6 +4,8 @@ import { AddTagDto, GetTagDto } from './dto';
 import { Prisma } from '@prisma/client';
 import axios from 'axios';
 import { EventGateway } from 'src/event.gateway';
+const nodemailer = require('nodemailer');
+const { OAuth2Client, auth } = require('google-auth-library');
 
 @Injectable()
 export class TagService {
@@ -14,6 +16,43 @@ export class TagService {
   async getTags() {
     const tags = await this.prisma.tag.findMany();
     return tags;
+  }
+
+  async getMail(mail) {
+    const myOAuth2Client = new OAuth2Client(
+      '731517167807-49lpjupt3l8haunlmhi86e8kd0ksn4b9.apps.googleusercontent.com',
+      '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',
+    );
+    myOAuth2Client.setCredentials({
+      refresh_token:
+        '1//048gjt0y5jdFsCgYIARAAGAQSNwF-L9IrRIQCxvVD3IdKCDUI7BFW7sr3WowPUB2zPiOINWnWOJIc5aUwHfS21ZbW9mHYfNgmQkE',
+    });
+    const myAccessTokenObject = await myOAuth2Client.getAccessToken();
+    const myAccessToken = myAccessTokenObject?.token;
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: 'holoc436@gmail.com',
+        clientId:
+          '731517167807-49lpjupt3l8haunlmhi86e8kd0ksn4b9.apps.googleusercontent.com',
+        clientSecret: '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',
+        refresh_token:
+          '1//048gjt0y5jdFsCgYIARAAGAQSNwF-L9IrRIQCxvVD3IdKCDUI7BFW7sr3WowPUB2zPiOINWnWOJIc5aUwHfS21ZbW9mHYfNgmQkE',
+        accessToken: myAccessToken,
+      },
+    });
+    console.log(mail);
+
+    const mailOptions = {
+      to: mail, // Gửi đến ai?
+      subject: 'Thông Báo Về Việc Cấm Đăng Bài', // Tiêu đề email
+      html: `Kính gửi ${mail},
+
+      Chúng tôi rất tiếc phải thông báo rằng tài khoản của bạn tại Mạng xã hội đã bị cấm đăng bài và bình luận`, // Nội dung email
+    };
+    // Gọi hành động gửi email
+    await transport.sendMail(mailOptions);
   }
 
   async addFile(data: any, userId: number) {

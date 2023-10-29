@@ -136,7 +136,7 @@ services:
       EMAIL_FROM: "demo@hotanloc.xyz"
       EMAIL_TRANSPORT: "smtp"
       EMAIL_SMTP_HOST: "hotanloc.xyz"
-      EMAIL_SMTP_PORT: "587"
+      EMAIL_SMTP_PORT: "25"
       EMAIL_SMTP_USER: "demo@hotanloc.xyz"
       EMAIL_SMTP_PASSWORD: "ARTant,#,25"
       EMAIL_SMTP_IGNORE_TLS: true

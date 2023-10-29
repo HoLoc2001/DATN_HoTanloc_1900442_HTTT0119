@@ -505,7 +505,7 @@ export const articleSearch = createAsyncThunk(
 
       const res = isAuthenticated
         ? await axiosPrivate.get(
-          `search/auth?q=${query}&limit=6&offset=${page}`
+          `search/auth?q=${query}`
         )
         : await axiosPublic.get(`search?q=${query}&limit=6&offset=${page}`);
 

@@ -51,12 +51,12 @@ const SearchArticle = () => {
     if (page > 0) {
       (async () => {
         await dispatch(articleSearch({ page, query }));
-        setHasPost(() => {
-          if (articles?.length % 6 === 0 && articles?.length >= page) {
-            return true;
-          }
-          return false;
-        });
+        // setHasPost(() => {
+        //   if (articles?.length % 6 === 0 && articles?.length >= page) {
+        //     return true;
+        //   }
+        //   return false;
+        // });
       })();
     }
   }, [page, isSuccessAuth]);

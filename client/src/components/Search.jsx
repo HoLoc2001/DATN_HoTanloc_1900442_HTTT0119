@@ -143,7 +143,7 @@ const SearchArticle = () => {
             onChange={handleSearch}
             onKeyDown={keyPress}
             autoFocus
-            placeholder="Search…"
+            placeholder="Tìm kiếm"
             inputProps={{ "aria-label": "search" }}
           />
           <IconButton onClick={handleClickSearch}>
@@ -172,7 +172,7 @@ const SearchArticle = () => {
                 }}
               >
                 <Tab
-                  label="Articles"
+                  label="Bài viết"
                   value="1"
                   sx={{
                     color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
@@ -182,7 +182,7 @@ const SearchArticle = () => {
                   }}
                 />
                 <Tab
-                  label="Users"
+                  label="Người dùng"
                   value="2"
                   sx={{
                     color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
@@ -240,9 +240,8 @@ const SearchArticle = () => {
                         size="small"
                         style={{
                           textTransform: "none",
-                          color: `${
-                            themeColor === "light" ? "#1A2027" : "#fff"
-                          }`,
+                          color: `${themeColor === "light" ? "#1A2027" : "#fff"
+                            }`,
                           width: "250px",
                           ...{ justifyContent: "flex-start" },
                         }}
@@ -264,7 +263,7 @@ const SearchArticle = () => {
                   }}
                 >
                   {!hasUser.hasUser && hasUser.query
-                    ? `We couldn't find anything for "${hasUser.query}"`
+                    ? `Hệ thống không thể  tìm thấy bài viết hay người dùng là "${hasUser.query}"`
                     : ""}
                 </Typography>
               )}

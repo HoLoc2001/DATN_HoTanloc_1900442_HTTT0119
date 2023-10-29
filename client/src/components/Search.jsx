@@ -124,7 +124,7 @@ const SearchArticle = () => {
     color: `${themeColor === "light" ? "#1A2027" : "#fff"}`,
     "& .MuiInputBase-input": {
       padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
+
       paddingLeft: `calc(1em )`,
       transition: theme.transitions.create("width"),
       width: "40vw",
@@ -138,7 +138,7 @@ const SearchArticle = () => {
         sx={{ marginLeft: "calc(50vw - 14vw - 23vw)" }}
       >
         <Search sx={{ display: "flex" }}>
-          <StyledInputBase
+          <input
             value={query}
             onChange={handleSearch}
             onKeyDown={keyPress}

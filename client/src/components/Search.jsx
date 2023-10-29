@@ -67,7 +67,7 @@ const SearchArticle = () => {
 
   const handleSearch = (e) => {
     setQuery(e.target.value);
-    sessionStorage.setItem("query", e.target.value);
+    // sessionStorage.setItem("query", e.target.value);
   };
 
   const keyPress = async (e) => {
@@ -142,6 +142,7 @@ const SearchArticle = () => {
             value={query}
             onChange={handleSearch}
             onKeyDown={keyPress}
+
             // autoFocus
             placeholder="Tìm kiếm"
           // inputProps={{ "aria-label": "search" }}

@@ -6,7 +6,8 @@ import { SearchDto } from './dto';
 export class SearchService {
   constructor(private readonly prisma: PrismaService) {}
   async searchArticlesAuth(query: SearchDto, userId: number) {
-    const searchQuery = query.q.trim().replaceAll(/\s+/g, ' | ');
+    let searchQuery = query.q.trim().replaceAll(/\s+/g, ' | ');
+    searchQuery = `%${searchQuery}%`;
 
     const articles = await this.prisma.article.findMany({
       skip: query.offset,

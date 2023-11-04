@@ -148,6 +148,7 @@ const SignIn = () => {
         <Typography component="h1" fontSize={"50px"}>
           Trường Đại học kỹ thuật công nghệ Cần Thơ
         </Typography>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Logo_ctuet.png" alt="Company Logo" style={{ width: '200px', height: '200px' }}></img>
         <br />
         <Typography component="h4" fontSize={"30px"}>
           Đăng nhập
@@ -156,7 +157,7 @@ const SignIn = () => {
           component="form"
           sx={{
             width: "50%",
-            margin: "40px auto",
+            margin: "0px auto",
           }}
           spacing={3}
           noValidate
@@ -191,7 +192,7 @@ const SignIn = () => {
             // href="http://localhost:5000/api/auth/google-redirect"
             href="https://lv-server.hotanloc.xyz/api/auth/google-redirect"
             sx={{
-              mt: "10vw",
+              mt: "5vw",
               mb: "10vw",
             }}
           // onClick={handleClickGoogle}

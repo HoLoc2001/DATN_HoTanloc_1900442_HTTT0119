@@ -418,14 +418,14 @@ const UpdateArticle = () => {
             color: "#171717",
           }}
         >
-          Update Article
+          Lưu
         </Button>
       </Link>
       <AlertInfo
         err={errMissInput}
         setErr={setErrMissInput}
         severity="warning"
-        content="Please fill it out completely"
+        content="Vui lòng điền đầy đủ"
       />
     </>
   );

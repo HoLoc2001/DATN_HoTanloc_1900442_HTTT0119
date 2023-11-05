@@ -249,7 +249,7 @@ const UpdateArticle = () => {
       >
         <CssTextField
           onChange={handleChangeTitle}
-          label="Title"
+          label="Tiêu đề"
           fullWidth={true}
           value={title}
         />

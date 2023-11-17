@@ -40,7 +40,7 @@ export class AuthService {
 
     function checkEmailStudent(email: any) {
       const tail = email.substring(email.indexOf('@') + 1);
-      return tail === 'student.ctuet.edu.vn' || 'gmail.com';
+      return tail === 'student.ctuet.edu.vn';
     }
 
     let isStuentEmail = checkEmailStudent(req.user.email)

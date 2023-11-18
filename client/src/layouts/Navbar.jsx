@@ -145,11 +145,11 @@ const Navbar = ({ notShowCreate }) => {
                   noWrap
                   sx={{
                     ml: 2,
-                    fontFamily: "monospace",
+                    // fontFamily: "monospace",
                     color: `${themeColor === "light" ? "black" : "rgb(255 248 248)"
                       }`,
                     fontWeight: 700,
-                    letterSpacing: ".3rem",
+                    // letterSpacing: ".3rem",
                     textDecoration: "none",
                     fontSize: "30px",
                   }}

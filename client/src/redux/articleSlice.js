@@ -255,7 +255,7 @@ export const updateLike = createAsyncThunk(
   "article/updateLike",
   async (articleId, { getState }) => {
     try {
-      const { bookmarks, articles, userArticles, myArticles } =
+      const { bookmarks, articles, userArticles, myArticles, tintuc, hoidap, tuyendung } =
         getState().article;
 
       const res = await axiosPrivate.post(`like/${articleId}`);
@@ -271,12 +271,24 @@ export const updateLike = createAsyncThunk(
       const indexMyArticle = myArticles.findIndex(
         (article) => article.id === articleId
       );
+      const indexHoidap = hoidap.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexTintuc = tintuc.findIndex(
+        (article) => article.id === articleId
+      );
+      const indexTuyendung = tuyendung.findIndex(
+        (article) => article.id === articleId
+      );
 
       return {
         ...res.data,
         indexBookmark,
         indexArticle,
         articleId,
+        indexHoidap,
+        indexTintuc,
+        indexTuyendung,
         indexUserArticle,
         indexMyArticle,
       };
@@ -633,6 +645,27 @@ export const articleSlice = createSlice({
           state.myArticles[action.payload.indexMyArticle]._count.likes =
             action.payload?.likes;
         }
+
+        if (state.hoidap[action.payload.indexHoidap]) {
+          state.hoidap[action.payload.indexHoidap].isLiked =
+            action.payload?.isLiked;
+          state.hoidap[action.payload.indexHoidap]._count.likes =
+            action.payload?.likes;
+        }
+        if (state.tintuc[action.payload.indexTintuc]) {
+          state.tintuc[action.payload.indexTintuc].isLiked =
+            action.payload?.isLiked;
+          state.tintuc[action.payload.indexTintuc]._count.likes =
+            action.payload?.likes;
+        }
+        if (state.tuyendung[action.payload.indexTuyendung]) {
+          state.myArticles[action.payload.indexTuyendung].isLiked =
+            action.payload?.isLiked;
+          state.myArticles[action.payload.indexTuyendung]._count.likes =
+            action.payload?.likes;
+        }
+
+
         if (state.article?.id === action.payload.articleId) {
           state.article.isLiked = action.payload?.isLiked;
           state.article._count.likes = action.payload?.likes;

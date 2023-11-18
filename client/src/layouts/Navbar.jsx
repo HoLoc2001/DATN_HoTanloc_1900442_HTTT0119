@@ -157,7 +157,7 @@ const Navbar = ({ notShowCreate }) => {
                     window.scroll({ top: 0, left: 0, behavior: "smooth" })
                   }
                 >
-                  HTL
+                  WEBSITE CHIA SẺ KIẾN THỨC HỌC TẬP
                 </Typography>
               </Link>
             </Box>

@@ -10,6 +10,7 @@ import * as argon from 'argon2';
 import { AuthDto, SignUpAuthDto } from './dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -80,6 +81,13 @@ export class AuthService {
     if (!user) {
       throw new InternalServerErrorException('Error creating user');
     }
+
+    await axios.post(
+      'https://lv-directus.hotanloc.xyz/flows/trigger/bf147cb9-802d-4c6f-9a71-c9cd270c52e5',
+      {
+        id: user.id,
+      },
+    );
 
     const tokens = await this.signToken(user.id);
     await this.updateRefreshToken(user.id, tokens.refreshToken);

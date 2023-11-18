@@ -659,9 +659,9 @@ export const articleSlice = createSlice({
             action.payload?.likes;
         }
         if (state.tuyendung[action.payload.indexTuyendung]) {
-          state.myArticles[action.payload.indexTuyendung].isLiked =
+          state.tuyendung[action.payload.indexTuyendung].isLiked =
             action.payload?.isLiked;
-          state.myArticles[action.payload.indexTuyendung]._count.likes =
+          state.tuyendung[action.payload.indexTuyendung]._count.likes =
             action.payload?.likes;
         }
 

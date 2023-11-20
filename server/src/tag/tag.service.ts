@@ -20,12 +20,12 @@ export class TagService {
 
   async getMail(mail) {
     const myOAuth2Client = new OAuth2Client(
-      '731517167807-49lpjupt3l8haunlmhi86e8kd0ksn4b9.apps.googleusercontent.com',
-      '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',
+      '731517167807-gfs4u72rd3fcdntfs8escuq717a6lmkf.apps.googleusercontent.com',
+      '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',
     );
     myOAuth2Client.setCredentials({
       refresh_token:
-        '1//048gjt0y5jdFsCgYIARAAGAQSNwF-L9IrRIQCxvVD3IdKCDUI7BFW7sr3WowPUB2zPiOINWnWOJIc5aUwHfS21ZbW9mHYfNgmQkE',
+        '1//04sCOUbwrhBo8CgYIARAAGAQSNwF-L9IrXf-LeVhR26IR2bf2zuJTV3Z_dg0xabcx2MzHxbYnazsPnUPBuIazTWOXOGKDAu9JGAQ',
     });
     const myAccessTokenObject = await myOAuth2Client.getAccessToken();
     const myAccessToken = myAccessTokenObject?.token;
@@ -35,10 +35,10 @@ export class TagService {
         type: 'OAuth2',
         user: 'holoc436@gmail.com',
         clientId:
-          '731517167807-49lpjupt3l8haunlmhi86e8kd0ksn4b9.apps.googleusercontent.com',
-        clientSecret: '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',
+          '731517167807-gfs4u72rd3fcdntfs8escuq717a6lmkf.apps.googleusercontent.com',
+        clientSecret: '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',
         refresh_token:
-          '1//048gjt0y5jdFsCgYIARAAGAQSNwF-L9IrRIQCxvVD3IdKCDUI7BFW7sr3WowPUB2zPiOINWnWOJIc5aUwHfS21ZbW9mHYfNgmQkE',
+          '1//04sCOUbwrhBo8CgYIARAAGAQSNwF-L9IrXf-LeVhR26IR2bf2zuJTV3Z_dg0xabcx2MzHxbYnazsPnUPBuIazTWOXOGKDAu9JGAQ',
         accessToken: myAccessToken,
       },
     });
@@ -49,7 +49,7 @@ export class TagService {
       subject: 'Thông Báo Về Việc Cấm Đăng Bài', // Tiêu đề email
       html: `Kính gửi ${mail},
 
-      Chúng tôi rất tiếc phải thông báo rằng tài khoản của bạn tại Mạng xã hội đã bị cấm đăng bài và bình luận`, // Nội dung email
+      Chúng tôi rất tiếc phải thông báo rằng tài khoản của bạn tại Website chia sẻ kiến thức học tập đã bị cấm đăng bài và bình luận`, // Nội dung email
     };
     // Gọi hành động gửi email
     await transport.sendMail(mailOptions);

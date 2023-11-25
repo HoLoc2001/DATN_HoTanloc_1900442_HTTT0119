@@ -416,7 +416,7 @@ const AddArticle = () => {
             color: "#171717",
           }}
         >
-          Add Article
+          Lưu bài viết
         </Button>
       </Link>
       <AlertInfo

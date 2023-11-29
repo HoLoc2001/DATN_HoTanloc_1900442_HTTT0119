@@ -20,12 +20,12 @@ export class TagService {
 
   async getMail(mail) {
     const myOAuth2Client = new OAuth2Client(
-      '731517167807-gfs4u72rd3fcdntfs8escuq717a6lmkf.apps.googleusercontent.com',
-      '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',
+      '731517167807-gcur42co6quvj04cmogpcnpivc7s9djs.apps.googleusercontent.com',
+      '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',
     );
     myOAuth2Client.setCredentials({
       refresh_token:
-        '1//04sCOUbwrhBo8CgYIARAAGAQSNwF-L9IrXf-LeVhR26IR2bf2zuJTV3Z_dg0xabcx2MzHxbYnazsPnUPBuIazTWOXOGKDAu9JGAQ',
+        '1//04xSnYmUy7522CgYIARAAGAQSNwF-L9IrfpnhEnr-s5f_CvlZYfDsGu_oGXbfxfbJvi-xjjKDwLjMasKW4bau9k097H5SpaPMFoQ',
     });
     const myAccessTokenObject = await myOAuth2Client.getAccessToken();
     const myAccessToken = myAccessTokenObject?.token;
@@ -35,10 +35,10 @@ export class TagService {
         type: 'OAuth2',
         user: 'holoc436@gmail.com',
         clientId:
-          '731517167807-gfs4u72rd3fcdntfs8escuq717a6lmkf.apps.googleusercontent.com',
-        clientSecret: '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',
+          '731517167807-gcur42co6quvj04cmogpcnpivc7s9djs.apps.googleusercontent.com',
+        clientSecret: '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',
         refresh_token:
-          '1//04sCOUbwrhBo8CgYIARAAGAQSNwF-L9IrXf-LeVhR26IR2bf2zuJTV3Z_dg0xabcx2MzHxbYnazsPnUPBuIazTWOXOGKDAu9JGAQ',
+          '1//04xSnYmUy7522CgYIARAAGAQSNwF-L9IrfpnhEnr-s5f_CvlZYfDsGu_oGXbfxfbJvi-xjjKDwLjMasKW4bau9k097H5SpaPMFoQ',
         accessToken: myAccessToken,
       },
     });

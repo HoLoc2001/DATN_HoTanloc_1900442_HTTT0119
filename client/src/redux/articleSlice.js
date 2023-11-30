@@ -430,8 +430,7 @@ export const addFlieComment = createAsyncThunk(
         data: file,
         headers: {
           Accept: "application/json",
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer gxMtOafBAeY9SeByNghkKB5XysplUStn",
+          "Content-Type": "multipart/form-data"
         },
       });
 

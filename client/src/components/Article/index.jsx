@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
-// import "moment/locale/vi";
+import "moment/locale/vi";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -313,7 +313,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
                       </Typography>
                     </Tooltip>
                     <Typography paddingLeft={"10px"}>
-                      {/* {moment(article.createdAt, "YYYYMMDD").fromNow()} */ moment(article.createdAt).startOf("hour").fromNow()}
+                      {/* {moment(article.createdAt, "YYYYMMDD").fromNow()} */ moment(article.createdAt).locale('vi').startOf("hour").fromNow()}
                     </Typography>
                     <img
                       style={{

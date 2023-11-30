@@ -37,7 +37,7 @@ import InfiniteScroll from "./InfiniteScroll";
 import AlertInfo from "../AlertInfo";
 import { addBookmark, removeBookmark } from "../../redux/articleSlice";
 import { getUser } from "../../redux/userSlice";
-moment.locale("vi");
+moment.locale('vi');
 
 const index = ({ _articles, _setPage, _hasPost }) => {
   moment().format();
@@ -64,7 +64,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
     dispatch(updateType(e.target.value));
     setPage(0)
   }
-
+  console.log(moment().format('LLLL'), ' test');
 
   const handleClose = () => {
     setAnchorEl(null);

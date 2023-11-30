@@ -62,7 +62,7 @@ const index = ({ _articles, _setPage, _hasPost }) => {
   const handleChange2 = (e) => {
 
     dispatch(updateType(e.target.value));
-
+    setPage(0)
   }
 
 

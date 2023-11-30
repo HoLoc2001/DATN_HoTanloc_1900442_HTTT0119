@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
-import "moment/locale/vi";
+// import "moment/locale/vi";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
